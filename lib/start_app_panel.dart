@@ -14,7 +14,7 @@ class StartPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'MY CHAT',
+      title: TextResources.nameApp,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
         useMaterial3: true,
@@ -27,8 +27,6 @@ class StartPanel extends StatelessWidget {
 
 //Placeholder fajnie pokazuje wielksoci
 class MainPanel extends StatelessWidget {
-
-
 
   const MainPanel({super.key});
 
@@ -45,11 +43,9 @@ class MainPanel extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
-            const Expanded(child: SizedBox(),flex: 1,)
+            const Expanded(flex: 1,child: SizedBox(),)
             ,
-            Container(
-             child: const BigAppLogo(),
-            )
+            const BigAppLogo()
             ,
             const Spacer(),
             Container(
