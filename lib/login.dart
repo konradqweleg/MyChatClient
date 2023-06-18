@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_chat_client/resources/image_resources.dart';
 import 'package:my_chat_client/style/main_style.dart';
@@ -42,9 +43,53 @@ class MainPanel extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.end,
+
           children: <Widget>[
             const Expanded(flex: 1,child: SizedBox(),)
             ,
+            NameApp()
+            ,
+            Container(
+              margin: const EdgeInsets.only(left: 20.0, right: 20.0),
+            child: TextFormField(
+              decoration: const InputDecoration(
+                suffixIcon: Icon(Icons.message),
+                border: UnderlineInputBorder(),
+                labelText: 'Enter your email',
+
+              ),
+            ),
+            ),
+            const Spacer(),
+            TextFormField(
+              decoration: const InputDecoration(
+                suffixIcon: Icon(Icons.lock),
+                border: UnderlineInputBorder(),
+                labelText: 'Enter your username',
+              ),
+            ),
+            const Spacer(),
+            ElevatedButton(
+              onPressed: () {},
+              style: ButtonStyle(
+                foregroundColor:MaterialStateProperty.all( Color(0xffffffff)),
+                backgroundColor:  MaterialStateProperty.all(Color(0xff1184EF)),
+                padding:  MaterialStateProperty.all(EdgeInsets.only(left:100,right:100,top:5,bottom: 5)),
+                shape: MaterialStateProperty.all( RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(4.0),
+                )),
+              ),
+              child: const Text(
+                'LOGIN',
+                style: TextStyle(fontSize: 32),
+              ),
+            ),
+            const Spacer(),
+            const Text("CREATE NEW \n ACCOUNT"
+            ,
+              style: TextStyle(fontWeight: FontWeight.bold,fontSize: 17.0),
+              textAlign: TextAlign.center,
+            ),
             Container(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -60,7 +105,7 @@ class MainPanel extends StatelessWidget {
             )
             ,
             
-            const Spacer(),
+
             Container(
               margin: const EdgeInsets.all(20),
               child: Row(
@@ -182,11 +227,14 @@ class ButtonWhiteWithBorder extends StatelessWidget{
     return OutlinedButton(
       onPressed: null,
       style: ButtonStyle(
+        minimumSize: MaterialStateProperty.all( Size.zero), // Set this
+        padding: MaterialStateProperty.all(EdgeInsets.all(10.0)),
         foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
         shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0))),
         side: MaterialStateProperty.all (BorderSide(width: 1.0, color: Color(0xff1184EF))),
         textStyle: MaterialStateProperty.all(const TextStyle(
-            fontSize: 12.0,
+            fontSize: 9.0,
+          color: const Color(0xff000000)
         )),
       ),
       child:  Text(textButton),
