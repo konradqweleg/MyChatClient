@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,22 +10,49 @@ void main() {
   runApp(const StartPanel());
 }
 
-class StartPanel extends StatelessWidget {
+class StartPanel extends StatefulWidget {
   const StartPanel({super.key});
 
-  // This widget is the root of your application.
+  @override
+  State<StatefulWidget> createState() {
+    return _MyAppState();
+  }
+
+}
+
+
+class _MyAppState extends State<StartPanel> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: TextResources.nameApp,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
-        useMaterial3: true,
-      ),
-      home: const MainPanel(),
-    );
+
+    var isKeyboardShow = (MediaQuery.of(context).viewInsets.bottom > 200.0);
+    if(isKeyboardShow)
+    {
+
+         return MaterialApp(
+           title: TextResources.nameApp,
+           theme: ThemeData(
+             colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
+             useMaterial3: true,
+           ),
+           home: SizedBox.shrink(),
+         );
+    }
+    else
+    {
+      return MaterialApp(
+        title: TextResources.nameApp,
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
+          useMaterial3: true,
+        ),
+        home: const MainPanel(),
+      );
+
+
+
   }
-}
+}}
 
 
 //Placeholder fajnie pokazuje wielksoci
@@ -33,6 +62,10 @@ class MainPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    const KEYBOARD_HEIGHT =200.0;
+    var isKeyboardShow = (MediaQuery.of(context).viewInsets.bottom > KEYBOARD_HEIGHT);
+
 
     return Scaffold(
 
@@ -47,10 +80,17 @@ class MainPanel extends StatelessWidget {
           children: <Widget>[
             const Expanded(flex: 1,child: SizedBox(),)
             ,
-            NameApp()
-            ,
+
+
+        Container(
+              margin: const EdgeInsets.only(left: 30.0,top:30,bottom: 30),
+              alignment: Alignment.bottomLeft,
+              child: NameApp(isKey: isKeyboardShow,)
+            ),
+
             Container(
-              margin: const EdgeInsets.only(left: 20.0, right: 20.0),
+
+              margin: const EdgeInsets.only(left: 30.0, right: 30.0),
             child: TextFormField(
               decoration: const InputDecoration(
                 suffixIcon: Icon(Icons.message),
@@ -60,36 +100,58 @@ class MainPanel extends StatelessWidget {
               ),
             ),
             ),
-            const Spacer(),
-            TextFormField(
+
+        Container(
+          margin: const EdgeInsets.only(left: 30.0, right: 30.0),
+          child:  TextFormField(
               decoration: const InputDecoration(
                 suffixIcon: Icon(Icons.lock),
                 border: UnderlineInputBorder(),
                 labelText: 'Enter your username',
               ),
             ),
-            const Spacer(),
-            ElevatedButton(
-              onPressed: () {},
-              style: ButtonStyle(
-                foregroundColor:MaterialStateProperty.all( Color(0xffffffff)),
-                backgroundColor:  MaterialStateProperty.all(Color(0xff1184EF)),
-                padding:  MaterialStateProperty.all(EdgeInsets.only(left:100,right:100,top:5,bottom: 5)),
-                shape: MaterialStateProperty.all( RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(4.0),
-                )),
+        ),
+
+
+          Row(
+            children:[
+              Expanded(
+                   flex: 1
+                  ,child:
+                      Container(
+                        margin:EdgeInsets.all(30.0),
+                      child:  ElevatedButton(
+                        onPressed: () {
+                          log("Rozmiar"+MediaQuery.of(context).viewInsets.bottom.toString());
+                        },
+                        style: ButtonStyle(
+                          foregroundColor:MaterialStateProperty.all( Color(0xffffffff)),
+                          backgroundColor:  MaterialStateProperty.all(Color(0xff1184EF)),
+                          padding:  MaterialStateProperty.all(EdgeInsets.only(left:10,right:10,top:5,bottom: 5)),
+                          shape: MaterialStateProperty.all( RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4.0),
+                          )),
+                        ),
+                        child:
+                        (MediaQuery.of(context).viewInsets.bottom < 50.0 ?
+                        const Text(
+                          'LOGIN',
+                          style: TextStyle(fontSize: 32),
+                        ):null),
+                      )
+                            ,)
               ),
-              child: const Text(
-                'LOGIN',
-                style: TextStyle(fontSize: 32),
-              ),
-            ),
-            const Spacer(),
+            ],
+          )
+          ,
+
             const Text("CREATE NEW \n ACCOUNT"
             ,
               style: TextStyle(fontWeight: FontWeight.bold,fontSize: 17.0),
               textAlign: TextAlign.center,
             ),
+
+
             Container(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -104,23 +166,40 @@ class MainPanel extends StatelessWidget {
               ),
             )
             ,
-            
+
+        Expanded(flex: 1,child:
+            const Spacer(),
+        ),
 
             Container(
               margin: const EdgeInsets.all(20),
-              child: Row(
+              child:
+              (MediaQuery.of(context).viewInsets.bottom < 50.0 ?
+
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.all(10.0),
-                    child:ButtonWithImage( text:"Google",imageAsset: "assets/google_icon.png",color:const Color(0xffFF3333)),
+
+                children:
+
+
+                [
+                   Expanded(flex: 1,child:
+                    Container(
+                      margin: const EdgeInsets.all(10.0),
+                      child:ButtonWithImage( text:"GOOGLE",imageAsset: "assets/google_icon.png",color:const Color(0xffFF3333)),
+                    ),
                   ),
+                  Expanded(flex :1,child:
                   Container(
                      margin: const EdgeInsets.all(10.0),
-                     child: ButtonWithImage( text:"Facebook",imageAsset: "assets/facebook_icon.png",color:const Color(0xff3B5999)),
+                     child: ButtonWithImage( text:"FACEBOOK",imageAsset: "assets/facebook_icon.png",color:const Color(0xff3B5999)),
+                  ),
                   )
-                ],
+                ] ,
+
+
               )
+              :null)
 
               //ButtonWithImage( text:"Google",imageAsset: "assets/google_icon.png",color:const Color(0xffFF3333)),
             ),
@@ -153,23 +232,31 @@ class NameApp extends StatelessWidget {
   static const letterSpacingInNameApp = 0.5;
   static const nameAppFontSize = 30.0;
   static const nameAppNameMargin = 20.0;
+  late bool isKeyboardShow;
 
-  const NameApp({super.key});
+   NameApp({super.key,bool isKey = false}){
+    isKeyboardShow = isKey;
+   }
 
   @override
   Widget build(BuildContext context) {
 
-    return Text(
-      TextResources.nameApp,
-      style: GoogleFonts.inter(
-        textStyle: const TextStyle(
-            color: Color(MainAppStyle.mainColorApp),
-            letterSpacing: letterSpacingInNameApp,
-            fontSize: nameAppFontSize,
-            fontWeight: FontWeight.bold
+    log("BUDUJE NAZWE APLIKACJI");
+    if(isKeyboardShow){
+      return SizedBox.shrink();
+    }else {
+      return Text(
+        TextResources.nameApp,
+        style: GoogleFonts.inter(
+          textStyle: const TextStyle(
+              color: Color(MainAppStyle.mainColorApp),
+              letterSpacing: letterSpacingInNameApp,
+              fontSize: nameAppFontSize,
+              fontWeight: FontWeight.bold
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
 
 }
@@ -197,9 +284,7 @@ class ButtonWithImage extends StatelessWidget{
       ),
       label: Text(textButton), // <-- Text
       style: ElevatedButton.styleFrom(
-          padding: EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0), backgroundColor: colorBackground, foregroundColor: Color(0xffffffff),
-           minimumSize: Size(130, 50),
-           maximumSize: Size(130, 50),
+          padding: EdgeInsets.symmetric(horizontal: 0.0, vertical: 15.0), backgroundColor: colorBackground, foregroundColor: Color(0xffffffff),
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(5.0)
           )
@@ -207,9 +292,7 @@ class ButtonWithImage extends StatelessWidget{
     );
   }
 
-
 }
-
 
 class ButtonWhiteWithBorder extends StatelessWidget{
   late String textButton;
@@ -219,7 +302,6 @@ class ButtonWhiteWithBorder extends StatelessWidget{
     textButton = text;
     colorBackground = borderColor;
   }
-
 
 
   @override
