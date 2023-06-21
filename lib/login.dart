@@ -78,131 +78,12 @@ class MainPanel extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
 
           children: <Widget>[
-            const Expanded(flex: 1,child: SizedBox(),)
-            ,
-
-
-        Container(
-              margin: const EdgeInsets.only(left: 30.0,top:30,bottom: 30),
-              alignment: Alignment.bottomLeft,
-              child: NameApp(isKey: isKeyboardShow,)
-            ),
-
-            Container(
-
-              margin: const EdgeInsets.only(left: 30.0, right: 30.0),
-            child: TextFormField(
-              decoration: const InputDecoration(
-                suffixIcon: Icon(Icons.message),
-                border: UnderlineInputBorder(),
-                labelText: 'Enter your email',
-
-              ),
-            ),
-            ),
-
-        Container(
-          margin: const EdgeInsets.only(left: 30.0, right: 30.0),
-          child:  TextFormField(
-              decoration: const InputDecoration(
-                suffixIcon: Icon(Icons.lock),
-                border: UnderlineInputBorder(),
-                labelText: 'Enter your username',
-              ),
-            ),
-        ),
-
-
-          Row(
-            children:[
-              Expanded(
-                   flex: 1
-                  ,child:
-                      Container(
-                        margin:EdgeInsets.all(30.0),
-                      child:  ElevatedButton(
-                        onPressed: () {
-                          log("Rozmiar"+MediaQuery.of(context).viewInsets.bottom.toString());
-                        },
-                        style: ButtonStyle(
-                          foregroundColor:MaterialStateProperty.all( Color(0xffffffff)),
-                          backgroundColor:  MaterialStateProperty.all(Color(0xff1184EF)),
-                          padding:  MaterialStateProperty.all(EdgeInsets.only(left:10,right:10,top:5,bottom: 5)),
-                          shape: MaterialStateProperty.all( RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(4.0),
-                          )),
-                        ),
-                        child:
-                        (MediaQuery.of(context).viewInsets.bottom < 50.0 ?
-                        const Text(
-                          'LOGIN',
-                          style: TextStyle(fontSize: 32),
-                        ):null),
-                      )
-                            ,)
-              ),
-            ],
-          )
-          ,
-
-            const Text("CREATE NEW \n ACCOUNT"
-            ,
-              style: TextStyle(fontWeight: FontWeight.bold,fontSize: 17.0),
-              textAlign: TextAlign.center,
-            ),
-
-
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("----------"),
-                  Container(
-                    margin: const EdgeInsets.all(10.0),
-                    child: ButtonWhiteWithBorder(text: "I FORGOT MY PASSWORD", borderColor: const Color(0xff3B5999),),
-                  ),
-                  Text("----------")
-                ],
-              ),
-            )
-            ,
-
-        Expanded(flex: 1,child:
-            const Spacer(),
-        ),
-
-            Container(
-              margin: const EdgeInsets.all(20),
-              child:
-              (MediaQuery.of(context).viewInsets.bottom < 50.0 ?
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-
-                children:
-
-
-                [
-                   Expanded(flex: 1,child:
-                    Container(
-                      margin: const EdgeInsets.all(10.0),
-                      child:ButtonWithImage( text:"GOOGLE",imageAsset: "assets/google_icon.png",color:const Color(0xffFF3333)),
-                    ),
-                  ),
-                  Expanded(flex :1,child:
-                  Container(
-                     margin: const EdgeInsets.all(10.0),
-                     child: ButtonWithImage( text:"FACEBOOK",imageAsset: "assets/facebook_icon.png",color:const Color(0xff3B5999)),
-                  ),
-                  )
-                ] ,
-
-
-              )
-              :null)
-
-              //ButtonWithImage( text:"Google",imageAsset: "assets/google_icon.png",color:const Color(0xffFF3333)),
-            ),
+            Spacer(),
+           loginData(),
+            login(),
+            otherActionWithAccount(),
+            Spacer(),
+            loginWithGoogleOrFaceboook(),
           ],
         ),
       ),
@@ -210,6 +91,171 @@ class MainPanel extends StatelessWidget {
     );
   }
 }
+
+
+
+class loginData extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+
+
+    Container(
+    margin: const EdgeInsets.only(left: 30.0,top:30,bottom: 30),
+    alignment: Alignment.bottomLeft,
+    child: NameApp(isKey: false,)
+    ),
+
+    Container(
+
+    margin: const EdgeInsets.only(left: 30.0, right: 30.0),
+    child: TextFormField(
+    decoration: const InputDecoration(
+    suffixIcon: Icon(Icons.message),
+    border: UnderlineInputBorder(),
+    labelText: 'Enter your email',
+
+    ),
+    ),
+    ),
+
+    Container(
+    margin: const EdgeInsets.only(left: 30.0, right: 30.0),
+    child:  TextFormField(
+    decoration: const InputDecoration(
+    suffixIcon: Icon(Icons.lock),
+    border: UnderlineInputBorder(),
+    labelText: 'Enter your username',
+    ),
+    ),
+    ),]
+    );
+  }
+
+}
+
+class login extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+   return Row(
+      children:[
+        Expanded(
+            flex: 1
+            ,child:
+        Container(
+          margin:EdgeInsets.all(30.0),
+          child:  ElevatedButton(
+            onPressed: () {
+              log("Rozmiar"+MediaQuery.of(context).viewInsets.bottom.toString());
+            },
+            style: ButtonStyle(
+              foregroundColor:MaterialStateProperty.all( Color(0xffffffff)),
+              backgroundColor:  MaterialStateProperty.all(Color(0xff1184EF)),
+              padding:  MaterialStateProperty.all(EdgeInsets.only(left:10,right:10,top:5,bottom: 5)),
+              shape: MaterialStateProperty.all( RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(4.0),
+              )),
+            ),
+            child:
+            (MediaQuery.of(context).viewInsets.bottom < 50.0 ?
+            const Text(
+              'LOGIN',
+              style: TextStyle(fontSize: 32),
+            ):null),
+          )
+          ,)
+        ),
+      ],
+    );
+  }
+
+}
+
+class otherActionWithAccount extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children:[
+      const Text("CREATE NEW \n ACCOUNT"
+        ,
+        style: TextStyle(fontWeight: FontWeight.bold,fontSize: 17.0),
+        textAlign: TextAlign.center,
+      ),
+
+
+      Container(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("----------"),
+            Container(
+              margin: const EdgeInsets.all(10.0),
+              child: ButtonWhiteWithBorder(text: "I FORGOT MY PASSWORD", borderColor: const Color(0xff3B5999),),
+            ),
+            Text("----------")
+          ],
+        ),
+      )
+      ,
+
+
+      // Expanded(flex: 1,child:
+      // const Spacer(),
+      // ),
+    ],
+    );
+  }
+
+}
+
+
+
+
+class loginWithGoogleOrFaceboook extends StatelessWidget{
+
+  @override
+  Widget build(BuildContext context) {
+   return  Container(
+        margin: const EdgeInsets.all(20),
+        child:
+
+
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children:
+
+          [
+            Expanded(flex: 1,child:
+            Container(
+              margin: const EdgeInsets.all(10.0),
+              child:ButtonWithImage( text:"GOOGLE",imageAsset: "assets/google_icon.png",color:const Color(0xffFF3333)),
+            ),
+            ),
+            Expanded(flex :1,child:
+            Container(
+              margin: const EdgeInsets.all(10.0),
+              child: ButtonWithImage( text:"FACEBOOK",imageAsset: "assets/facebook_icon.png",color:const Color(0xff3B5999)),
+            ),
+            )
+          ] ,
+
+        )
+
+    );
+  }
+
+
+}
+
+
+
+
+
+
 
 
 class BigAppLogo extends StatelessWidget{
