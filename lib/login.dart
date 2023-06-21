@@ -25,22 +25,13 @@ class _MyAppState extends State<StartPanel> {
   @override
   Widget build(BuildContext context) {
 
-    var isKeyboardShow = (MediaQuery.of(context).viewInsets.bottom > 200.0);
-    if(isKeyboardShow)
-    {
 
-         return MaterialApp(
-           title: TextResources.nameApp,
-           theme: ThemeData(
-             colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
-             useMaterial3: true,
-           ),
-           home: SizedBox.shrink(),
-         );
-    }
-    else
-    {
-      return MaterialApp(
+
+
+      return
+
+
+        MaterialApp(
         title: TextResources.nameApp,
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
@@ -51,7 +42,7 @@ class _MyAppState extends State<StartPanel> {
 
 
 
-  }
+
 }}
 
 
@@ -63,32 +54,68 @@ class MainPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    const KEYBOARD_HEIGHT =200.0;
+    const KEYBOARD_HEIGHT =100.0;
     var isKeyboardShow = (MediaQuery.of(context).viewInsets.bottom > KEYBOARD_HEIGHT);
 
+   // isKeyboardShow = false;
+    log("Czy klawiatura:"+isKeyboardShow.toString());
 
-    return Scaffold(
+    if(isKeyboardShow){
+      return Scaffold(
 
-      body: Center(
+        body: Center(
 
-        child: Column(
+          child: Column(
 
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.end,
 
-          children: <Widget>[
-            Spacer(),
-           loginData(),
-            login(),
-            otherActionWithAccount(),
-            Spacer(),
-            loginWithGoogleOrFaceboook(),
-          ],
+            children: <Widget>[
+              Spacer(),
+              loginData(),
+              login(),
+          Visibility(child:
+          otherActionWithAccount(),
+
+
+            visible: false,
+          ),
+              Spacer(),
+              Visibility(child:
+              loginWithGoogleOrFaceboook()
+              ,visible: false,
+              ),
+            ],
+          ),
         ),
-      ),
 
-    );
+      );
+    }else {
+      return Scaffold(
+
+        body: Center(
+
+          child: Column(
+
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.end,
+
+            children: <Widget>[
+
+              Spacer(),
+              loginData(),
+              login(),
+              otherActionWithAccount(),
+              Spacer(),
+              loginWithGoogleOrFaceboook(),
+            ],
+          ),
+        ),
+
+      );
+    }
   }
 }
 
@@ -126,10 +153,11 @@ class loginData extends StatelessWidget{
     Container(
     margin: const EdgeInsets.only(left: 30.0, right: 30.0),
     child:  TextFormField(
+      obscureText: true,
     decoration: const InputDecoration(
     suffixIcon: Icon(Icons.lock),
     border: UnderlineInputBorder(),
-    labelText: 'Enter your username',
+    labelText: 'Enter your password',
     ),
     ),
     ),]
@@ -161,11 +189,10 @@ class login extends StatelessWidget{
               )),
             ),
             child:
-            (MediaQuery.of(context).viewInsets.bottom < 50.0 ?
             const Text(
               'LOGIN',
               style: TextStyle(fontSize: 32),
-            ):null),
+            ),
           )
           ,)
         ),
@@ -288,9 +315,7 @@ class NameApp extends StatelessWidget {
   Widget build(BuildContext context) {
 
     log("BUDUJE NAZWE APLIKACJI");
-    if(isKeyboardShow){
-      return SizedBox.shrink();
-    }else {
+
       return Text(
         TextResources.nameApp,
         style: GoogleFonts.inter(
@@ -302,7 +327,7 @@ class NameApp extends StatelessWidget {
           ),
         ),
       );
-    }
+
   }
 
 }
