@@ -28,16 +28,16 @@ class _MyAppState extends State<StartPanel> {
 
 
 
-      return
+    return
 
 
-        MaterialApp(
-        title: TextResources.nameApp,
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
-          useMaterial3: true,
-        ),
-        home:
+      MaterialApp(
+          title: TextResources.nameApp,
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
+            useMaterial3: true,
+          ),
+          home:
 
           const MainPanel()
 
@@ -46,7 +46,7 @@ class _MyAppState extends State<StartPanel> {
 
 
 
-}}
+  }}
 
 
 //Placeholder fajnie pokazuje wielksoci
@@ -60,69 +60,129 @@ class MainPanel extends StatelessWidget {
     const KEYBOARD_HEIGHT =100.0;
     var isKeyboardShow = (MediaQuery.of(context).viewInsets.bottom > KEYBOARD_HEIGHT);
 
-   // isKeyboardShow = false;
+    // isKeyboardShow = false;
     log("Czy klawiatura:"+isKeyboardShow.toString());
 
-    if(isKeyboardShow){
-
-    return
-      Scaffold(
-
-        body: Center(
-
-          child: Column(
-
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.end,
-
-            children: <Widget>[
-              Spacer(),
-              loginData(),
-              login(),
-          Visibility(child:
-          otherActionWithAccount(),
 
 
-            visible: false,
-          ),
-              Spacer(),
-              Visibility(child:
-              loginWithGoogleOrFaceboook()
-              ,visible: false,
+      return
+        Scaffold(
+
+          body: Center(
+
+            child: Column(
+
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.end,
+
+              children: <Widget>[
+                Container(
+                  margin:  new EdgeInsets.all(20.0),
+                  child:searchPanel()
+                ),
+
+                  Container(
+                      margin:  new EdgeInsets.all(20.0),
+                  child:
+                      Align(
+                   alignment: Alignment.centerLeft,
+                   child: Text(
+                  "Messages",
+
+                  style: GoogleFonts.inter(
+                  textStyle: const TextStyle(
+
+              letterSpacing: 0.4,
+              fontSize: 17.0,
+              fontWeight: FontWeight.normal
               ),
-            ],
+              ))
+                  )),
+
+                user(),
+                user(),
+                user(),
+
+                Spacer(),
+
+
+
+              ],
+            ),
           ),
-        ),
-            );
-    }else {
-      return Scaffold(
+        );
 
-        body: Center(
-
-          child: Column(
-
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.end,
-
-            children: <Widget>[
-
-              Spacer(),
-              loginData(),
-              login(),
-              otherActionWithAccount(),
-              Spacer(),
-              loginWithGoogleOrFaceboook(),
-            ],
-          ),
-        ),
-
-      );
     }
-  }
+
 }
 
+
+
+class user extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+    return
+      Container(
+        margin:  new EdgeInsets.all(20.0),
+    child:Row(
+      children: [
+        CircleAvatar(
+          radius: 20,
+          child: Text('KG'),
+        ),
+        Expanded(
+            flex: 1
+            ,child:
+        Column(
+          children: [
+        Container(
+        margin:  new EdgeInsets.only(left:20.0),
+            child:
+            Align(
+            alignment: Alignment.centerLeft,
+            child:
+            Text("Konrad Groń" ,  style: GoogleFonts.inter(
+                textStyle: const TextStyle(
+
+                    letterSpacing: 0.4,
+                    fontSize: 17.0,
+                    fontWeight: FontWeight.bold
+                ))))),
+        Container(
+            margin:  new EdgeInsets.only(left:20.0),
+            child:
+          Align(
+              alignment: Alignment.centerLeft,
+              child:
+              Text("Ostatnio w twojej sprawie nie było dobrze")))
+          ]),
+
+         )
+      ],
+    ));
+  }
+
+}
+
+class searchPanel extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+      Expanded(
+      flex: 1
+      ,child:
+    TextFormField(
+    decoration: const InputDecoration(
+    labelText: "Search",
+      suffixIcon: Icon(Icons.search),
+    ),))
+      ],
+    );
+  }
+
+}
 
 
 class loginData extends StatelessWidget{
@@ -133,38 +193,38 @@ class loginData extends StatelessWidget{
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.end,
-      children: <Widget>[
+        children: <Widget>[
 
-    Container(
-    margin: const EdgeInsets.only(left: 30.0,top:30,bottom: 30),
-    alignment: Alignment.bottomLeft,
-    child: NameApp(isKey: false,)
-    ),
+          Container(
+              margin: const EdgeInsets.only(left: 30.0,top:30,bottom: 30),
+              alignment: Alignment.bottomLeft,
+              child: NameApp(isKey: false,)
+          ),
 
-    Container(
+          Container(
 
-    margin: const EdgeInsets.only(left: 30.0, right: 30.0),
-    child: TextFormField(
-    decoration: const InputDecoration(
-    suffixIcon: Icon(Icons.message),
-    border: UnderlineInputBorder(),
-    labelText: 'Enter your email',
+            margin: const EdgeInsets.only(left: 30.0, right: 30.0),
+            child: TextFormField(
+              decoration: const InputDecoration(
+                suffixIcon: Icon(Icons.message),
+                border: UnderlineInputBorder(),
+                labelText: 'Enter your email',
 
-    ),
-    ),
-    ),
+              ),
+            ),
+          ),
 
-    Container(
-    margin: const EdgeInsets.only(left: 30.0, right: 30.0),
-    child:  TextFormField(
-      obscureText: true,
-    decoration: const InputDecoration(
-    suffixIcon: Icon(Icons.lock),
-    border: UnderlineInputBorder(),
-    labelText: 'Enter your password',
-    ),
-    ),
-    ),]
+          Container(
+            margin: const EdgeInsets.only(left: 30.0, right: 30.0),
+            child:  TextFormField(
+              obscureText: true,
+              decoration: const InputDecoration(
+                suffixIcon: Icon(Icons.lock),
+                border: UnderlineInputBorder(),
+                labelText: 'Enter your password',
+              ),
+            ),
+          ),]
     );
   }
 
@@ -177,7 +237,7 @@ class loginData extends StatelessWidget{
 class login extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
-   return Row(
+    return Row(
       children:[
         Expanded(
             flex: 1
@@ -215,33 +275,33 @@ class otherActionWithAccount extends StatelessWidget{
   Widget build(BuildContext context) {
     return Column(
       children:[
-      const Text("CREATE NEW \n ACCOUNT"
-        ,
-        style: TextStyle(fontWeight: FontWeight.bold,fontSize: 17.0),
-        textAlign: TextAlign.center,
-      ),
-
-
-      Container(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text("----------"),
-            Container(
-              margin: const EdgeInsets.all(10.0),
-              child: ButtonWhiteWithBorder(text: "I FORGOT MY PASSWORD", borderColor: const Color(0xff3B5999),),
-            ),
-            Text("----------")
-          ],
+        const Text("CREATE NEW \n ACCOUNT"
+          ,
+          style: TextStyle(fontWeight: FontWeight.bold,fontSize: 17.0),
+          textAlign: TextAlign.center,
         ),
-      )
-      ,
 
 
-      // Expanded(flex: 1,child:
-      // const Spacer(),
-      // ),
-    ],
+        Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text("----------"),
+              Container(
+                margin: const EdgeInsets.all(10.0),
+                child: ButtonWhiteWithBorder(text: "I FORGOT MY PASSWORD", borderColor: const Color(0xff3B5999),),
+              ),
+              Text("----------")
+            ],
+          ),
+        )
+        ,
+
+
+        // Expanded(flex: 1,child:
+        // const Spacer(),
+        // ),
+      ],
     );
   }
 
@@ -254,7 +314,7 @@ class loginWithGoogleOrFaceboook extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-   return  Container(
+    return  Container(
         margin: const EdgeInsets.all(20),
         child:
 
@@ -315,26 +375,26 @@ class NameApp extends StatelessWidget {
   static const nameAppNameMargin = 20.0;
   late bool isKeyboardShow;
 
-   NameApp({super.key,bool isKey = false}){
+  NameApp({super.key,bool isKey = false}){
     isKeyboardShow = isKey;
-   }
+  }
 
   @override
   Widget build(BuildContext context) {
 
     log("BUDUJE NAZWE APLIKACJI");
 
-      return Text(
-        TextResources.nameApp,
-        style: GoogleFonts.inter(
-          textStyle: const TextStyle(
-              color: Color(MainAppStyle.mainColorApp),
-              letterSpacing: letterSpacingInNameApp,
-              fontSize: nameAppFontSize,
-              fontWeight: FontWeight.bold
-          ),
+    return Text(
+      TextResources.nameApp,
+      style: GoogleFonts.inter(
+        textStyle: const TextStyle(
+            color: Color(MainAppStyle.mainColorApp),
+            letterSpacing: letterSpacingInNameApp,
+            fontSize: nameAppFontSize,
+            fontWeight: FontWeight.bold
         ),
-      );
+      ),
+    );
 
   }
 
@@ -345,9 +405,9 @@ class ButtonWithImage extends StatelessWidget{
   late String imageButton;
   late Color colorBackground;
   ButtonWithImage({required String text,required String imageAsset,required Color color,super.key}){
-      textButton = text;
-      imageButton = imageAsset;
-      colorBackground = color;
+    textButton = text;
+    imageButton = imageAsset;
+    colorBackground = color;
   }
 
 
@@ -357,7 +417,7 @@ class ButtonWithImage extends StatelessWidget{
     return ElevatedButton.icon(
       onPressed: () {},
       icon:  ImageIcon(
-          AssetImage(imageButton),
+        AssetImage(imageButton),
         color: null,
 
       ),
@@ -395,7 +455,7 @@ class ButtonWhiteWithBorder extends StatelessWidget{
         side: MaterialStateProperty.all (BorderSide(width: 1.0, color: Color(0xff1184EF))),
         textStyle: MaterialStateProperty.all(const TextStyle(
             fontSize: 9.0,
-          color: const Color(0xff000000)
+            color: const Color(0xff000000)
         )),
       ),
       child:  Text(textButton),
