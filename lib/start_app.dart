@@ -3,78 +3,93 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:my_chat_client/resources/image_resources.dart';
 import 'package:my_chat_client/style/main_style.dart';
 import 'package:my_chat_client/resources/text_resources.dart';
+
+import 'login.dart';
+
 void main() {
-  runApp(const StartPanel());
-}
-
-class StartPanel extends StatelessWidget {
-  const StartPanel({super.key});
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
+  runApp(
+    MaterialApp(
       title: TextResources.nameApp,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
         useMaterial3: true,
       ),
-      home: const MainPanel(),
-    );
+      home: const Scaffold(body: StartPanel()),
+    ),
+  );
+}
+
+class StartPanel extends StatefulWidget {
+  const StartPanel({super.key});
+
+  @override
+  State<StatefulWidget> createState() {
+    return StartPanelState();
   }
 }
 
+class StartPanelState extends State<StartPanel> {
+  late BuildContext contextA;
+
+  @override
+  void initState() {
+    Future.delayed(const Duration(seconds: 1), () {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const LoginPanel(),
+        ),
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    contextA = context;
+    return MainPanel();
+  }
+}
 
 //Placeholder fajnie pokazuje wielksoci
 class MainPanel extends StatelessWidget {
-
   const MainPanel({super.key});
 
   @override
   Widget build(BuildContext context) {
-
-    return Scaffold(
-
-      body: Center(
-
-        child: Column(
-
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            const Expanded(flex: 1,child: SizedBox(),)
-            ,
-            const BigAppLogo()
-            ,
-            const Spacer(),
-            Container(
-              margin: const EdgeInsets.all(20),
-              child: const NameApp(),
-            ),
-          ],
-        ),
+    return Center(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          const Expanded(
+            flex: 1,
+            child: SizedBox(),
+          ),
+          const BigAppLogo(),
+          const Spacer(),
+          Container(
+            margin: const EdgeInsets.all(20),
+            child: const NameApp(),
+          ),
+        ],
       ),
-
     );
   }
 }
 
-
-class BigAppLogo extends StatelessWidget{
-  static const logoMarginTop = 150.0;
+class BigAppLogo extends StatelessWidget {
   static const imageDimension = 250.0;
+
   const BigAppLogo({super.key});
 
   @override
   Widget build(BuildContext context) {
-   return const Image(
+    return const Image(
       image: AssetImage(ImageResources.logoApp),
       width: imageDimension,
       height: imageDimension,
     );
   }
-
 }
 
 class NameApp extends StatelessWidget {
@@ -86,18 +101,15 @@ class NameApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-   return Text(
+    return Text(
       TextResources.nameApp,
       style: GoogleFonts.inter(
         textStyle: const TextStyle(
             color: Color(MainAppStyle.mainColorApp),
             letterSpacing: letterSpacingInNameApp,
             fontSize: nameAppFontSize,
-            fontWeight: FontWeight.bold
-        ),
+            fontWeight: FontWeight.bold),
       ),
     );
   }
-
 }

@@ -7,11 +7,11 @@ import 'package:my_chat_client/resources/image_resources.dart';
 import 'package:my_chat_client/style/main_style.dart';
 import 'package:my_chat_client/resources/text_resources.dart';
 void main() {
-  runApp(const StartPanel());
+  runApp(const LoginPanel());
 }
 
-class StartPanel extends StatefulWidget {
-  const StartPanel({super.key});
+class LoginPanel extends StatefulWidget {
+  const LoginPanel({super.key});
 
   @override
   State<StatefulWidget> createState() {
@@ -21,7 +21,7 @@ class StartPanel extends StatefulWidget {
 }
 
 
-class _MyAppState extends State<StartPanel> {
+class _MyAppState extends State<LoginPanel> {
   @override
   Widget build(BuildContext context) {
 
