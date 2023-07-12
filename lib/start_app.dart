@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:my_chat_client/resources/image_resources.dart';
 import 'package:my_chat_client/style/main_style.dart';
 import 'package:my_chat_client/resources/text_resources.dart';
-
+import 'PageRouteTransition.dart';
 import 'login.dart';
 
 void main() {
@@ -29,23 +29,16 @@ class StartPanel extends StatefulWidget {
 }
 
 class StartPanelState extends State<StartPanel> {
-  late BuildContext contextA;
-
   @override
   void initState() {
-    Future.delayed(const Duration(seconds: 1), () {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => const LoginPanel(),
-        ),
-      );
-    });
+    PageRouteTransition.transitionAfterDelay(
+        context: context, destination: const LoginPanel()
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    contextA = context;
-    return MainPanel();
+    return const MainPanel();
   }
 }
 

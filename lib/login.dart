@@ -31,13 +31,8 @@ class _MyAppState extends State<LoginPanel> {
       return
 
 
-        MaterialApp(
-        title: TextResources.nameApp,
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
-          useMaterial3: true,
-        ),
-        home:
+        Scaffold(
+      body:
 
           const MainPanel()
 
