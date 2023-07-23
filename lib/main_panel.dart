@@ -388,7 +388,7 @@ class NameApp extends StatelessWidget {
       TextResources.nameApp,
       style: GoogleFonts.inter(
         textStyle: const TextStyle(
-            color: Color(MainAppStyle.mainColorApp),
+            color: MainAppStyle.mainColorApp,
             letterSpacing: letterSpacingInNameApp,
             fontSize: nameAppFontSize,
             fontWeight: FontWeight.bold

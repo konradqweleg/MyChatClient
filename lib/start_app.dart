@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:my_chat_client/resources/text_resources.dart';
 import 'animations/PageRouteTransition.dart';
-import 'login.dart';
+import 'login_and_registration/login/login.dart';
+import 'main_app_resources/logo.dart';
+import 'main_app_resources/name_app.dart';
 
-import 'login/logintest.dart';
+
+
 
 void main() {
   runApp(
@@ -13,7 +16,7 @@ void main() {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
         useMaterial3: true,
       ),
-      home: const Scaffold(body: StartPanel()),
+      home: const Scaffold(body: Login()),
     ),
   );
 }
