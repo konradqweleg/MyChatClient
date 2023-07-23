@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class PageRouteTransition{
   static Route _createPageRouteTransitionSlideFromDown(Widget destinationWidget) {
     return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => destinationWidget,
+      pageBuilder: (context, animation, secondaryAnimation) => Scaffold(body:destinationWidget),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(0.0, 1.0);
         const end = Offset.zero;
@@ -26,7 +26,7 @@ class PageRouteTransition{
   }
 
   static void transitionAfterDelay({required BuildContext context, required Widget destination,int delayInSeconds=1}){
-    Future.delayed(const Duration(seconds: 1), () {
+    Future.delayed(Duration(seconds: delayInSeconds), () {
       Navigator.of(context).push(
           _createPageRouteTransitionSlideFromDown(destination)
       );
