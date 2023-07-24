@@ -26,8 +26,17 @@ class MainActionButtonState extends State<MainActionButton> {
           child: ElevatedButton(
             onPressed: widget.action,
             style: ButtonStyle(
+              overlayColor: MaterialStateProperty.resolveWith<Color?>(
+                (Set<MaterialState> states) {
+                  if (states.contains(MaterialState.pressed)) {
+                    return MainAppStyle.darkMainColorApp;
+                  }
+                  return null;
+                },
+              ),
               foregroundColor: MaterialStateProperty.all(Colors.white),
-              backgroundColor: MaterialStateProperty.all(MainAppStyle.mainColorApp),
+              backgroundColor:
+                  MaterialStateProperty.all(MainAppStyle.mainColorApp),
               padding: MaterialStateProperty.all(
                 const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
               ),

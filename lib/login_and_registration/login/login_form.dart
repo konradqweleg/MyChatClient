@@ -1,5 +1,7 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:my_chat_client/login_and_registration/common/input_login.dart';
+import 'package:my_chat_client/login_and_registration/common/input_mail.dart';
 import 'package:my_chat_client/login_and_registration/common/input_password.dart';
 import 'package:my_chat_client/login_and_registration/common/main_action_button.dart';
 
@@ -21,7 +23,12 @@ class LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
+
+    TextEditingController emailController = TextEditingController();
+    TextEditingController passwordController = TextEditingController();
+
     //return Placeholder();
+    String email;
     return Scaffold(
       body: Form(
           key: _formKey,
@@ -33,10 +40,24 @@ class LoginFormState extends State<LoginForm> {
                 child:  const NameApp(),
               ),
               SizedBox(height: breakBetweenNameAppAndForm),
-              const InputLogin(),
+              InputEmail(emailController),
               const InputPassword(),
               const SizedBox(height: 10,),
-              MainActionButton(text: 'Login', action: ()=>{}),
+              MainActionButton(text: 'Login', action: (){ //When function has ()=>{} is one line //(){} is anonymus multiline
+
+
+               log(emailController!.text);
+                final String textt =emailController!.text;
+
+              if (_formKey.currentState!.validate()) {
+
+                  ScaffoldMessenger.of(context).showSnackBar( SnackBar(content:  Text(textt!.toString())));
+              }
+
+
+
+              }
+              ),
 
             ],
           )),

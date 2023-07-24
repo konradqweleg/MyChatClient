@@ -1,14 +1,15 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:my_chat_client/resources/text_resources.dart';
+import 'package:my_chat_client/style/main_style.dart';
 import 'animations/PageRouteTransition.dart';
 import 'login_and_registration/login/login.dart';
 import 'main_app_resources/logo.dart';
 import 'main_app_resources/name_app.dart';
 
-
-
-
 void main() {
+  log('StartTransition');
   runApp(
     MaterialApp(
       title: TextResources.nameApp,
@@ -16,7 +17,7 @@ void main() {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
         useMaterial3: true,
       ),
-      home: const Scaffold(body: Login()),
+      home: const Scaffold(body: StartPanel()),
     ),
   );
 }
@@ -63,8 +64,8 @@ class StartAppView extends StatelessWidget {
           const BigAppLogo(),
           const Spacer(),
           Container(
-            margin: const EdgeInsets.all(20),
-            child: NameApp(),
+            padding: MainAppStyle.defaultMainPadding,
+            child: const NameApp(),
           ),
         ],
       ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:my_chat_client/login_and_registration/login/login_facebook.dart';
-import 'package:my_chat_client/login_and_registration/login/login_google.dart';
+
+import 'login_facebook.dart';
+import 'login_google.dart';
+
 
 class LoginWithGoogleOrFacebook extends StatelessWidget {
   const LoginWithGoogleOrFacebook({super.key});
