@@ -46,7 +46,7 @@ class LoginState extends State<Login> {
                   const SizedBox(height: 50),
                   Container(
                     // Another fixed-height child.
-                    height: 380.0,
+                    height: 410.0,
                     alignment: Alignment.center,
                     child: const LoginForm(),
                   ),
