@@ -1,15 +1,16 @@
+//
+
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:my_chat_client/login_and_registration/style/style_login_and_registration.dart';
 
-class InputData extends StatelessWidget {
-  InputData(this.controller,this.text,this.iconData ,{super.key});
+class InputCode extends StatelessWidget {
+  InputCode(this.controller,{super.key});
 
   TextEditingController controller;
-  String text;
-  IconData iconData;
 
-  int minTextLength = 2;
+
+  int minTextLength = 4;
   String getErrorWhenTextIsTooShort(String? text){
 
     if(text == null){
@@ -28,14 +29,15 @@ class InputData extends StatelessWidget {
     return SizedBox(
       height: StyleLoginAndRegistration.defaultInputHeight,
       child: TextFormField(
+        keyboardType: TextInputType.number,
         controller: controller,
         validator: (emailAddress) {
           return getErrorWhenTextIsTooShort(emailAddress);
         },
         decoration:  InputDecoration(
-          suffixIcon: Icon(iconData),
+          suffixIcon: Icon(Icons.numbers),
           border: const UnderlineInputBorder(),
-          labelText: text,
+          labelText: 'Code',
         ),
       ),
     );

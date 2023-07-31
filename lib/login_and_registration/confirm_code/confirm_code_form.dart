@@ -8,18 +8,19 @@ import 'package:my_chat_client/login_and_registration/confirm_code/confirm_regis
 
 import '../../animations/PageRouteTransition.dart';
 import '../../main_app_resources/name_app.dart';
+import '../common/input_code.dart';
 import '../common/input_personal_data.dart';
 
-class RegisterForm extends StatefulWidget {
-  const RegisterForm({super.key});
+class ConfirmCodeForm extends StatefulWidget {
+  const ConfirmCodeForm({super.key});
 
   @override
-  RegisterFormState createState() {
-    return RegisterFormState();
+  ConfirmCodeFormState createState() {
+    return ConfirmCodeFormState();
   }
 }
 
-class RegisterFormState extends State<RegisterForm> {
+class ConfirmCodeFormState extends State<ConfirmCodeForm> {
   final _formKey = GlobalKey<FormState>();
   static double breakBetweenNameAppAndForm = 20.0;
 
@@ -43,17 +44,17 @@ class RegisterFormState extends State<RegisterForm> {
                 child: const NameApp(),
               ),
               SizedBox(height: breakBetweenNameAppAndForm),
-              InputEmail(emailController),
-              InputData(usernameController, "Username", Icons.person),
-              InputData(surnameController, "Surname", Icons.person),
-              InputPassword(passwordController),
-              const SizedBox(
-                height: 10,
-              ),
+              InputCode(usernameController),
+
               Text(
                 isErrorLoginTry ? "incorrect login details" : "",
                 style: const TextStyle(color: Colors.red),
               ),
+              MainActionButton(text: "Resend code", action: (){
+
+              },backgroudColor: Colors.orange,pressBackgroundColor: Colors.deepOrange,)
+
+              ,
               MainActionButton(
                   text: 'Register',
                   action: () {
@@ -65,8 +66,8 @@ class RegisterFormState extends State<RegisterForm> {
                     if (_formKey.currentState!.validate()) {
 
 
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(SnackBar(content: Text("LOGGED")));
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(SnackBar(content: Text("LOGGED")));
                     }else{
                       setState(() {
                         isErrorLoginTry = true;

@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import '../../style/main_style.dart';
 
 class MainActionButton extends StatefulWidget {
-  MainActionButton({super.key, required this.text, required this.action});
+  MainActionButton({super.key, required this.text, required this.action,this.backgroudColor=MainAppStyle.mainColorApp,this.pressBackgroundColor=MainAppStyle.darkMainColorApp});
 
   String text = "";
+  Color backgroudColor;
+  Color pressBackgroundColor;
   void Function() action;
 
   @override
@@ -29,14 +31,14 @@ class MainActionButtonState extends State<MainActionButton> {
               overlayColor: MaterialStateProperty.resolveWith<Color?>(
                 (Set<MaterialState> states) {
                   if (states.contains(MaterialState.pressed)) {
-                    return MainAppStyle.darkMainColorApp;
+                    return widget.pressBackgroundColor;
                   }
                   return null;
                 },
               ),
               foregroundColor: MaterialStateProperty.all(Colors.white),
               backgroundColor:
-                  MaterialStateProperty.all(MainAppStyle.mainColorApp),
+                  MaterialStateProperty.all(widget.backgroudColor),
               padding: MaterialStateProperty.all(
                 const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
               ),
