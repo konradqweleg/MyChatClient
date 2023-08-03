@@ -2,6 +2,7 @@
 
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:my_chat_client/login_and_registration/style/style_login_and_registration.dart';
 
 class InputCode extends StatelessWidget {
@@ -29,6 +30,10 @@ class InputCode extends StatelessWidget {
     return SizedBox(
       height: StyleLoginAndRegistration.defaultInputHeight,
       child: TextFormField(
+        inputFormatters: [
+          new LengthLimitingTextInputFormatter(4),
+        ],
+        style: TextStyle(fontSize: 25.0),
         keyboardType: TextInputType.number,
         controller: controller,
         validator: (emailAddress) {
