@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import '../../style/main_style.dart';
 
 class MainActionButton extends StatefulWidget {
-  MainActionButton({super.key, required this.text, required this.action,this.backgroudColor=MainAppStyle.mainColorApp,this.pressBackgroundColor=MainAppStyle.darkMainColorApp});
+  MainActionButton({super.key, required this.text, required void Function()? this.action,this.backgroudColor=MainAppStyle.mainColorApp,this.pressBackgroundColor=MainAppStyle.darkMainColorApp});
 
   String text = "";
   Color backgroudColor;
   Color pressBackgroundColor;
-  void Function() action;
+  void Function()? action;
 
   @override
   State<StatefulWidget> createState() {

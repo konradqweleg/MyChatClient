@@ -57,7 +57,7 @@ class ConfirmCodeFormState extends State<ConfirmCodeForm> {
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
 
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar( backgroundColor: MainAppStyle.mainColorApp,
                                 content: Text("Send confirm code")));
                           }),
                   ],
@@ -73,6 +73,7 @@ class ConfirmCodeFormState extends State<ConfirmCodeForm> {
 
               MainActionButton(
                   text: 'Register',
+
                   action: () {
                     //When function has ()=>{} is one line //(){} is anonymus multiline
 

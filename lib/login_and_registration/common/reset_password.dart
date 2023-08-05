@@ -1,6 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
+import '../../animations/PageRouteTransition.dart';
 import '../../style/main_style.dart';
+import '../reset_password/reset_password.dart';
 
 class ResetPassword extends StatefulWidget {
   const ResetPassword({super.key});
@@ -14,20 +18,32 @@ class ResetPassword extends StatefulWidget {
 class ResetPasswordState extends State<ResetPassword> {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Text("----------"),
-        Container(
-          height: 28,
-          margin: const EdgeInsets.all(10.0),
-          child: const ButtonWhiteWithBorder(
-            text: "I FORGOT MY PASSWORD",
+    return
+      GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          PageRouteTransition.transitionAfterDelay(
+            context: context,
+            destination: const ResetPasswordView(),
+          );
+        },
+        child:  Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text("----------"),
+          Container(
+            height: 28,
+            margin: const EdgeInsets.all(10.0),
+            child: const ButtonWhiteWithBorder(
+              text: "I FORGOT MY PASSWORD",
+            ),
           ),
-        ),
-        const Text("----------")
-      ],
-    );
+          const Text("----------")
+        ],
+      ),
+      );
+
+
   }
 }
 
