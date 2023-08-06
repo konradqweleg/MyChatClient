@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
 
-import '../../animations/PageRouteTransition.dart';
-import '../register/register.dart';
+import '../../../navigation/page_route_navigation.dart';
+import '../../register/register.dart';
 
 class CreateNewAccount extends StatefulWidget {
   const CreateNewAccount({super.key});
 
   @override
   State<StatefulWidget> createState() {
-    return CreateNewAccountState();
+    return _CreateNewAccountState();
   }
 }
 
-class CreateNewAccountState extends State<CreateNewAccount> {
+class _CreateNewAccountState extends State<CreateNewAccount> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 50,
       child: InkWell(
         onTap: () {
-          PageRouteTransition.transitionAfterDelay(
+          PageRouteNavigation.navigationTransitionSlideFromDown(
             context: context,
             destination: const Register(),
           );

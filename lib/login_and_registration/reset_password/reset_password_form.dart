@@ -1,15 +1,15 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:my_chat_client/login_and_registration/common/input_mail.dart';
-import 'package:my_chat_client/login_and_registration/common/input_password.dart';
-import 'package:my_chat_client/login_and_registration/common/main_action_button.dart';
+import 'package:my_chat_client/login_and_registration/common/input/input_mail.dart';
+import 'package:my_chat_client/login_and_registration/common/input/input_password.dart';
+import 'package:my_chat_client/login_and_registration/common/button/main_action_button.dart';
 import 'package:my_chat_client/login_and_registration/reset_password/new_password/new_password.dart';
 
-import '../../animations/PageRouteTransition.dart';
-import '../../main_app_resources/name_app.dart';
+import '../../navigation/page_route_navigation.dart';
+import '../../common/name_app.dart';
 import '../../style/main_style.dart';
-import '../common/input_code.dart';
+import '../common/input/input_code.dart';
 
 class ResetPasswordForm extends StatefulWidget {
   const ResetPasswordForm({super.key});
@@ -81,7 +81,7 @@ class ResetPasswordFormState extends State<ResetPasswordForm> {
                   text: 'Reset password',
                   backgroudColor:  !isSendEmail ? Colors.grey : MainAppStyle.mainColorApp,
                   action: (){
-                    PageRouteTransition.transitionAfterDelay(
+                    PageRouteNavigation.navigationTransitionSlideFromDown(
                       context: context,
                       destination: const NewPassword(),
                     );

@@ -1,10 +1,10 @@
 
 import 'package:flutter/material.dart';
-import 'package:my_chat_client/login_and_registration/common/create_new_account.dart';
-import 'package:my_chat_client/login_and_registration/common/reset_password.dart';
+import 'package:my_chat_client/login_and_registration/login/button/create_new_account.dart';
+import 'package:my_chat_client/login_and_registration/login/button/reset_password_button.dart';
 import 'package:my_chat_client/login_and_registration/login/other_form_login/login_with_google_or_facebook.dart';
 import 'package:my_chat_client/login_and_registration/register/register_form.dart';
-import '../../main_app_resources/undo_button.dart';
+import '../../common/undo_button.dart';
 import '../../style/main_style.dart';
 import '../login/login_form.dart';
 

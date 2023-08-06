@@ -1,30 +1,28 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
+import '../../../navigation/page_route_navigation.dart';
+import '../../../style/main_style.dart';
+import '../../reset_password/reset_password.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../animations/PageRouteTransition.dart';
-import '../../style/main_style.dart';
-import '../reset_password/reset_password.dart';
-
-class ResetPassword extends StatefulWidget {
-  const ResetPassword({super.key});
+class ResetPasswordButton extends StatefulWidget {
+  const ResetPasswordButton({super.key});
 
   @override
   State<StatefulWidget> createState() {
-    return ResetPasswordState();
+    return _ResetPasswordButtonState();
   }
 }
 
-class ResetPasswordState extends State<ResetPassword> {
+class _ResetPasswordButtonState extends State<ResetPasswordButton> {
   @override
   Widget build(BuildContext context) {
     return
       GestureDetector(
         behavior: HitTestBehavior.translucent,
         onTap: () {
-          PageRouteTransition.transitionAfterDelay(
+          PageRouteNavigation.navigation(
             context: context,
-            destination: const ResetPasswordView(),
+            destination: const ResetPassword(),
           );
         },
         child:  Row(
@@ -34,8 +32,8 @@ class ResetPasswordState extends State<ResetPassword> {
           Container(
             height: 28,
             margin: const EdgeInsets.all(10.0),
-            child: const ButtonWhiteWithBorder(
-              text: "I FORGOT MY PASSWORD",
+            child:  _ButtonWhiteWithBorder(
+              text:  AppLocalizations.of(context)!.forgotPassword,
             ),
           ),
           const Text("----------")
@@ -43,13 +41,12 @@ class ResetPasswordState extends State<ResetPassword> {
       ),
       );
 
-
   }
 }
 
 
-class ButtonWhiteWithBorder extends StatelessWidget {
-  const ButtonWhiteWithBorder({required this.text, super.key});
+class _ButtonWhiteWithBorder extends StatelessWidget {
+  const _ButtonWhiteWithBorder({required this.text, super.key});
 
   final String text;
 

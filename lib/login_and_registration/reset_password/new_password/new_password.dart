@@ -4,7 +4,7 @@ import 'package:my_chat_client/login_and_registration/register/register_form.dar
 import 'package:my_chat_client/login_and_registration/reset_password/new_password/new_password_form.dart';
 import 'package:my_chat_client/login_and_registration/reset_password/reset_password_form.dart';
 
-import '../../../main_app_resources/undo_button.dart';
+import '../../../common/undo_button.dart';
 import '../../../style/main_style.dart';
 
 

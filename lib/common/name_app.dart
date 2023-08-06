@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../resources/text_resources.dart';
 import '../style/main_style.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NameApp extends StatelessWidget {
   static const letterSpacingInNameApp = 0.5;
@@ -16,13 +16,14 @@ class NameApp extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(top: topNameAppMargin),
       child: Text(
-        TextResources.nameApp,
+        AppLocalizations.of(context)!.nameApp,
         style: GoogleFonts.inter(
           textStyle: const TextStyle(
-              color: MainAppStyle.mainColorApp,
-              letterSpacing: letterSpacingInNameApp,
-              fontSize: nameAppFontSize,
-              fontWeight: FontWeight.bold),
+            color: MainAppStyle.mainColorApp,
+            letterSpacing: letterSpacingInNameApp,
+            fontSize: nameAppFontSize,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );

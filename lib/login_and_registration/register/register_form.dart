@@ -1,14 +1,14 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:my_chat_client/login_and_registration/common/input_mail.dart';
-import 'package:my_chat_client/login_and_registration/common/input_password.dart';
-import 'package:my_chat_client/login_and_registration/common/main_action_button.dart';
+import 'package:my_chat_client/login_and_registration/common/input/input_mail.dart';
+import 'package:my_chat_client/login_and_registration/common/input/input_password.dart';
+import 'package:my_chat_client/login_and_registration/common/button/main_action_button.dart';
 import 'package:my_chat_client/login_and_registration/confirm_code/confirm_register_code.dart';
 
-import '../../animations/PageRouteTransition.dart';
-import '../../main_app_resources/name_app.dart';
-import '../common/input_personal_data.dart';
+import '../../navigation/page_route_navigation.dart';
+import '../../common/name_app.dart';
+import '../common/input/input_personal_data.dart';
 
 class RegisterForm extends StatefulWidget {
   const RegisterForm({super.key});
@@ -59,7 +59,7 @@ class RegisterFormState extends State<RegisterForm> {
                   action: () {
                     //When function has ()=>{} is one line //(){} is anonymus multiline
 
-                    PageRouteTransition.transitionAfterDelay(
+                    PageRouteNavigation.navigationTransitionSlideFromDown(
                         context: context, destination:  ConfirmRegisterCode()
                     );
                     if (_formKey.currentState!.validate()) {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_chat_client/login_and_registration/confirm_code/confirm_code_form.dart';
 import 'package:my_chat_client/login_and_registration/register/register_form.dart';
-import '../../main_app_resources/undo_button.dart';
+import '../../common/undo_button.dart';
 import '../../style/main_style.dart';
 
 void main() => runApp(const ConfirmRegisterCode());

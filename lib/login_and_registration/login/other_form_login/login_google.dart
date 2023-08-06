@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_chat_client/login_and_registration/common/button_with_image.dart';
+import 'package:my_chat_client/login_and_registration/common/button/button_with_image.dart';
 
 import '../../style/style_login_and_registration.dart';
 
