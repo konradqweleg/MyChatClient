@@ -40,6 +40,7 @@ class _StartPanelState extends State<StartPanel> {
       context: context,
       destination: const Login(),
       delayInSeconds: 1,
+      isClearBackStack: true
     );
   }
 

@@ -14,17 +14,21 @@ class ResetPasswordButton extends StatefulWidget {
 }
 
 class _ResetPasswordButtonState extends State<ResetPasswordButton> {
+
+
+  void navigateToResetPasswordForm(){
+    PageRouteNavigation.navigation(
+      context: context,
+      destination: const ResetPassword(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return
       GestureDetector(
         behavior: HitTestBehavior.translucent,
-        onTap: () {
-          PageRouteNavigation.navigation(
-            context: context,
-            destination: const ResetPassword(),
-          );
-        },
+        onTap: navigateToResetPasswordForm,
         child:  Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

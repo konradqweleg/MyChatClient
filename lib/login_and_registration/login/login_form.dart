@@ -1,11 +1,11 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
+import 'package:my_chat_client/conversation/conversation.dart';
 import 'package:my_chat_client/login_and_registration/common/input/input_mail.dart';
 import 'package:my_chat_client/login_and_registration/common/input/input_password.dart';
 import 'package:my_chat_client/login_and_registration/common/button/main_action_button.dart';
-
 import '../../common/name_app.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../navigation/page_route_navigation.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -17,19 +17,65 @@ class LoginForm extends StatefulWidget {
 }
 
 class LoginFormState extends State<LoginForm> {
-  final _formKey = GlobalKey<FormState>();
+  final _loginFormKey = GlobalKey<FormState>();
   static double breakBetweenNameAppAndForm = 20.0;
+  bool isErrorWhenTryToLogIn = false;
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
-  bool isErrorLoginTry = false;
+  void setErrorLoginDataState() {
+    setState(() {
+      isErrorWhenTryToLogIn = true;
+    });
+  }
+
+  String getErrorMessageWhenErrorInTryLogin() {
+    String noError = "";
+    return isErrorWhenTryToLogIn
+        ? AppLocalizations.of(context)!.incorrectLoginDetails
+        : noError;
+  }
+
+  bool validateLoginData() {
+    return _loginFormKey.currentState!.validate();
+  }
+
+
+  bool checkLoginCredentialsOnServer(String email, String password) {
+    if (email == "polska699@interia.eu" && password == "qwerty") {
+      return true;
+    }
+    return false;
+  }
+
+  void logIn() {
+    PageRouteNavigation.navigation(
+      context: context,
+      destination: const Conversation(),
+      isClearBackStack: true,
+    );
+  }
+
+  void checkLoginData() {
+    bool isPassValidationLoginData = validateLoginData();
+    if (!isPassValidationLoginData) {
+      return;
+    }
+
+    bool isTheCorrectLoginCredentials =
+        checkLoginCredentialsOnServer(emailController.text, passwordController.text);
+    if (isTheCorrectLoginCredentials) {
+      logIn();
+    } else {
+      setErrorLoginDataState();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController emailController = TextEditingController();
-    TextEditingController passwordController = TextEditingController();
-
     return Scaffold(
       body: Form(
-          key: _formKey,
+          key: _loginFormKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -44,32 +90,12 @@ class LoginFormState extends State<LoginForm> {
                 height: 10,
               ),
               Text(
-                isErrorLoginTry ? "incorrect login details" : "",
+                getErrorMessageWhenErrorInTryLogin(),
                 style: const TextStyle(color: Colors.red),
               ),
               MainActionButton(
-                  text: 'Login',
-                  action: () {
-                    //When function has ()=>{} is one line //(){} is anonymus multiline
-
-                    if (_formKey.currentState!.validate()) {
-                      String login = emailController.text;
-                      String password = passwordController.text;
-                      if (login == "polska699@interia.eu" && password == "qwerty") {
-
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text("LOGGED")));
-
-
-                      } else {
-                        setState(() {
-                          isErrorLoginTry = true;
-                        });
-                      }
-
-
-                    }
-                  }),
+                  text: AppLocalizations.of(context)!.login,
+                  action: checkLoginData),
             ],
           )),
     );

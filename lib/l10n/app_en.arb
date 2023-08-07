@@ -1,0 +1,29 @@
+{
+  "nameApp": "MY CHAT",
+
+  "forgotPassword": "I FORGOT MY PASSWORD",
+  "@forgotPassword": {
+    "description": "Text indicating that the user has forgotten his password"
+  },
+
+  "incorrectLoginDetails": "Incorrect login Details",
+  "@incorrectLoginDetails": {
+    "incorrectLoginDetails": "Information about entering incorrect login data"
+  },
+
+  "login": "Login",
+  "@login": {
+    "incorrectLoginDetails": "Text of the button that causes the login attempt"
+  },
+
+  "createNewAccount": "CREATE NEW \n ACCOUNT",
+  "@createNewAccount": {
+    "incorrectLoginDetails": "Text of the button that causes navigate to register form"
+  },
+
+
+  "helloWorld": "Hello World!",
+  "@helloWorld": {
+    "description": "The conventional newborn programmer greeting"
+  }
+}

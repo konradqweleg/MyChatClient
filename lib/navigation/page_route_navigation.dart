@@ -25,21 +25,25 @@ class PageRouteNavigation {
     );
   }
 
-  static void navigationTransitionSlideFromDown({required BuildContext context, required Widget destination, int delayInSeconds = 0}) {
+
+  static void _navigateTo({required Route route,required BuildContext context, bool isClearBackStack = false }){
+    if(isClearBackStack){
+      Navigator.pushReplacement(context, route);
+    }else{
+      Navigator.of(context).push(route);
+    }
+  }
+
+  static void navigationTransitionSlideFromDown({required BuildContext context, required Widget destination, int delayInSeconds = 0,bool isClearBackStack = false}) {
     Future.delayed(
       Duration(seconds: delayInSeconds),
       () {
-        Navigator.of(context).push(
-          _createPageRouteTransitionSlideFromDown(destination),
-        );
+        _navigateTo(route: _createPageRouteTransitionSlideFromDown(destination), context:context,isClearBackStack: isClearBackStack);
       },
     );
   }
 
-  static void navigation({required BuildContext context, required Widget destination}) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => destination),
-    );
+  static void navigation({required BuildContext context, required Widget destination,bool isClearBackStack = false}) {
+    _navigateTo(route: MaterialPageRoute(builder: (context) => destination), context:context,isClearBackStack: isClearBackStack);
   }
 }

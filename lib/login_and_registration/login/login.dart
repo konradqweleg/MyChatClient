@@ -1,9 +1,7 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:my_chat_client/login_and_registration/login/button/create_new_account.dart';
 import 'package:my_chat_client/login_and_registration/login/button/reset_password_button.dart';
 import 'package:my_chat_client/login_and_registration/login/other_form_login/login_with_google_or_facebook.dart';
-
 import '../../style/main_style.dart';
 import 'login_form.dart';
 
@@ -14,6 +12,7 @@ class Login extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
+
     return LoginState();
   }
 }
@@ -34,10 +33,10 @@ class LoginState extends State<Login> {
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  const SizedBox(height: 50),
+                  const SizedBox(height: 40),
                   Container(
                     // Another fixed-height child.
-                    height: 410.0,
+                    height: 400.0,
                     alignment: Alignment.center,
                     child: const LoginForm(),
                   ),
@@ -46,12 +45,11 @@ class LoginState extends State<Login> {
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        CreateNewAccount(),
+                        CreateNewAccountButton(),
                         ResetPasswordButton(),
                       ]),
                   const SizedBox(height: 20),
                   const LoginWithGoogleOrFacebook()
-
                 ],
               ),
             ),

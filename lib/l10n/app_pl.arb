@@ -1,5 +1,11 @@
 {
   "nameApp": "MY CHAT",
   "forgotPassword": "ZAPOMNIAŁEM HASŁA",
+  "incorrectLoginDetails": "Wprowadzono niepoprawne dane logowania",
+  "login": "Zaloguj",
+  "createNewAccount": "UTWÓRZ NOWE \n KONTO",
+
+
+
   "helloWorld": "¡Hola Mundo!"
 }
