@@ -4,7 +4,20 @@
   "incorrectLoginDetails": "Wprowadzono niepoprawne dane logowania",
   "login": "Zaloguj",
   "createNewAccount": "UTWÓRZ NOWE \n KONTO",
-
+  "enterEmail": "Wprowadź adres email",
+  "invalidEmailFormat": "Podany adres email ma nieprawidłowy format",
+  "descriptionInputEnterEmail": "Wprowadź email",
+  "pleaseEnterPassword": "Wprowadź hasło",
+  "enterPassword": "Wprowadź hasło",
+  "pleaseEnterCode": "Wprowadź kod",
+  "notEnoughCharactersInCode": "Za mało cyfr w kodzie",
+  "descriptionInputCodeForm": "Wprowadź kod",
+  "notEnoughLettersEntered": "Wprowadzono za mało znaków",
+  "informUserAboutSendCodeOnMail": "Wysłaliśmy na adres email 4-cyfrowy kod. Wprowadź go aby utworzyć konto.",
+  "resendCode": "Wyślij kod ponowanie",
+  "sendConfirmCode": "Wysłano kod",
+  "errorConfirmCode": "Wprowadzono zły kod",
+  "registerButtonText": "Zarejestruj",
 
 
   "helloWorld": "¡Hola Mundo!"

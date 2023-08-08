@@ -1,30 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:my_chat_client/login_and_registration/style/style_login_and_registration.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class InputPassword extends StatefulWidget {
-  InputPassword(this.passwordController,{super.key});
+  const InputPassword(this.controller,{super.key});
 
-  TextEditingController passwordController;
+  final TextEditingController controller;
 
   @override
   State<StatefulWidget> createState() {
-    return InputPasswordState();
+    return _InputPasswordState();
   }
 }
 
-class InputPasswordState extends State<InputPassword> {
+class _InputPasswordState extends State<InputPassword> {
 
   bool passwordVisible = false;
 
-
-  String? getErrorMessageInvalidPasswordFormat(String? password) {
+  String? _validatePasswordFormat(String? password) {
     const validFormat = null;
 
     if (password == null || password.isEmpty) {
-      return 'Please enter password';
+      return AppLocalizations.of(context)!.pleaseEnterPassword;
     }
 
     return validFormat;
+  }
+
+  void _changeVisibilityPassword(){
+    setState(() {
+          passwordVisible = !passwordVisible;
+    });
   }
 
   @override
@@ -32,24 +38,16 @@ class InputPasswordState extends State<InputPassword> {
     return SizedBox(
       height: StyleLoginAndRegistration.defaultInputHeight,
       child: TextFormField(
-        controller: widget.passwordController,
-        validator: (password) {
-          return getErrorMessageInvalidPasswordFormat(password);
-        },
+        controller: widget.controller,
+        validator: _validatePasswordFormat,
         obscureText: !passwordVisible,
         decoration: InputDecoration(
           suffixIcon: IconButton(
             icon: Icon(passwordVisible ? Icons.lock_open : Icons.lock),
-            onPressed: () {
-              setState(
-                () {
-                  passwordVisible = !passwordVisible;
-                },
-              );
-            },
+            onPressed: _changeVisibilityPassword,
           ),
           border: const UnderlineInputBorder(),
-          labelText: 'Enter your password',
+          labelText: AppLocalizations.of(context)!.enterPassword,
         ),
       ),
     );

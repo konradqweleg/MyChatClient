@@ -58,17 +58,20 @@ class LoginFormState extends State<LoginForm> {
 
   void checkLoginData() {
     bool isPassValidationLoginData = validateLoginData();
+
     if (!isPassValidationLoginData) {
       return;
     }
 
     bool isTheCorrectLoginCredentials =
         checkLoginCredentialsOnServer(emailController.text, passwordController.text);
+
     if (isTheCorrectLoginCredentials) {
       logIn();
     } else {
       setErrorLoginDataState();
     }
+
   }
 
   @override

@@ -21,9 +21,89 @@
     "incorrectLoginDetails": "Text of the button that causes navigate to register form"
   },
 
+  "enterEmail": "Please enter an email",
+  "@enterEmail": {
+    "incorrectLoginDetails": "Text describing the need for the user to enter an email in the form"
+  },
+
+  "invalidEmailFormat": "The email address is in an invalid format",
+  "@invalidEmailFormat": {
+    "incorrectLoginDetails": "Text informing the user that they entered an email address in the wrong format"
+  },
+
+  "descriptionInputEnterEmail": "Enter your email",
+  "@descriptionInputEnterEmail": {
+    "incorrectLoginDetails": "Text describing the email input field"
+  },
+
+
+  "pleaseEnterPassword": "Please enter your password",
+  "@pleaseEnterPassword": {
+    "incorrectLoginDetails": "Text describing the need for the user to enter password in the form"
+  },
+
+  "enterPassword": "Enter your password",
+  "@enterPassword": {
+    "incorrectLoginDetails": "Text describing the password input field"
+  },
+
+  "pleaseEnterCode": "Please enter code",
+  "@pleaseEnterCode": {
+    "incorrectLoginDetails": "Text informing the user that he has not entered the code"
+  },
+
+  "notEnoughCharactersInCode": "Not enough characters in the code",
+  "@notEnoughCharactersInCode": {
+    "incorrectLoginDetails": "Text informing the user that the code he provided is too short"
+  },
+
+  "descriptionInputCodeForm": "Enter code",
+  "@descriptionInputCodeForm": {
+    "incorrectLoginDetails": "Text describing the code entry form"
+  },
+
+  "notEnoughLettersEntered": "Not enough letters entered",
+  "@notEnoughLettersEntered": {
+    "incorrectLoginDetails": "Test describing that user entered too few characters"
+  },
+
+  "notEnteredCharacters": "Please enter text",
+  "@notEnteredCharacters": {
+    "incorrectLoginDetails": "Text informing the user that he has not entered characters"
+  },
+
+  "informUserAboutSendCodeOnMail": "We sent you an email with a 4-digit code. Enter it to create an account.",
+  "@informUserAboutSendCodeOnMail": {
+    "incorrectLoginDetails": "Text informing the user that a confirmation code has been sent to the email address"
+  },
+
+  "resendCode": "Resend code",
+  "@resendCode": {
+    "incorrectLoginDetails": "Text informing the user that a confirmation code has been resent to the email address"
+  },
+
+  "sendConfirmCode": "Send confirm code",
+  "@sendConfirmCode": {
+    "incorrectLoginDetails": "Text informing the user that a confirmation code has been  sent a moment ago to the email address"
+  },
+
+  "errorConfirmCode": "Error confirm code",
+  "@errorConfirmCode": {
+    "incorrectLoginDetails": "Text informing the user that the wrong code has been entered"
+  },
+
+
+  "registerButtonText": "Register",
+  "@registerButtonText": {
+    "incorrectLoginDetails": "Description of the user registration action button"
+  },
+
 
   "helloWorld": "Hello World!",
   "@helloWorld": {
     "description": "The conventional newborn programmer greeting"
   }
 }
+
+
+

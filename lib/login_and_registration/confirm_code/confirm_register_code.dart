@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_chat_client/login_and_registration/confirm_code/confirm_code_form.dart';
+import 'package:my_chat_client/login_and_registration/confirm_code/confirm_code_register_form.dart';
 import 'package:my_chat_client/login_and_registration/register/register_form.dart';
 import '../../common/undo_button.dart';
 import '../../style/main_style.dart';
@@ -44,7 +44,7 @@ class ConfirmRegisterCodeState extends State<ConfirmRegisterCode> {
                     // Another fixed-height child.
                     height: 600.0,
                     alignment: Alignment.topLeft,
-                    child: const ConfirmCodeForm(),
+                    child: const ConfirmCodeRegisterForm(),
                   ),
 
 

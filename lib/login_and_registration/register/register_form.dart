@@ -8,7 +8,7 @@ import 'package:my_chat_client/login_and_registration/confirm_code/confirm_regis
 
 import '../../navigation/page_route_navigation.dart';
 import '../../common/name_app.dart';
-import '../common/input/input_personal_data.dart';
+import '../common/input/input_data.dart';
 
 class RegisterForm extends StatefulWidget {
   const RegisterForm({super.key});

@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 import '../../../style/main_style.dart';
 
 class MainActionButton extends StatefulWidget {
-  MainActionButton({super.key, required this.text, required void Function()? this.action,this.backgroudColor=MainAppStyle.mainColorApp,this.pressBackgroundColor=MainAppStyle.darkMainColorApp});
+  MainActionButton({super.key, required this.text, required this.action,this.backgroundColor=MainAppStyle.mainColorApp,this.pressBackgroundColor=MainAppStyle.darkMainColorApp});
 
   String text = "";
-  Color backgroudColor;
+  Color backgroundColor;
   Color pressBackgroundColor;
   void Function()? action;
 
   @override
   State<StatefulWidget> createState() {
-    return MainActionButtonState();
+    return _MainActionButtonState();
   }
 }
 
-class MainActionButtonState extends State<MainActionButton> {
+class _MainActionButtonState extends State<MainActionButton> {
   static const double _fontSize = 32.0;
 
   @override
@@ -38,7 +38,7 @@ class MainActionButtonState extends State<MainActionButton> {
               ),
               foregroundColor: MaterialStateProperty.all(Colors.white),
               backgroundColor:
-                  MaterialStateProperty.all(widget.backgroudColor),
+                  MaterialStateProperty.all(widget.backgroundColor),
               padding: MaterialStateProperty.all(
                 const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
               ),

@@ -1,27 +1,25 @@
-//
-
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:my_chat_client/login_and_registration/style/style_login_and_registration.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class InputCode extends StatelessWidget {
-  InputCode(this.controller,{super.key});
+  const InputCode(this.controller,{super.key});
 
-  TextEditingController controller;
+  final TextEditingController controller;
+  static const int codeCorrectLength = 4;
 
-
-  int minTextLength = 4;
-  String getErrorWhenTextIsTooShort(String? text){
+  String? _validateInputCode(BuildContext context,String? text){
+    const  correctCode = null;
 
     if(text == null){
-      return "Not enough letters entered";
+      return AppLocalizations.of(context)!.pleaseEnterCode;
     }
 
-    if(text!.length <= minTextLength){
-      return "Not enough letters entered";
+    if(text.length < codeCorrectLength){
+      return AppLocalizations.of(context)!.notEnoughCharactersInCode;
     }
-    return "";
+    return correctCode;
   }
 
 
@@ -31,18 +29,16 @@ class InputCode extends StatelessWidget {
       height: StyleLoginAndRegistration.defaultInputHeight,
       child: TextFormField(
         inputFormatters: [
-          new LengthLimitingTextInputFormatter(4),
+          LengthLimitingTextInputFormatter(codeCorrectLength),
         ],
-        style: TextStyle(fontSize: 25.0),
+        style: const TextStyle(fontSize: 25.0),
         keyboardType: TextInputType.number,
         controller: controller,
-        validator: (emailAddress) {
-          return getErrorWhenTextIsTooShort(emailAddress);
-        },
-        decoration:  InputDecoration(
-          suffixIcon: Icon(Icons.numbers),
+        validator:(code)=> _validateInputCode(context,code),
+        decoration:   InputDecoration(
+          suffixIcon: const Icon(Icons.numbers),
           border: const UnderlineInputBorder(),
-          labelText: 'Code',
+          labelText: AppLocalizations.of(context)!.descriptionInputCodeForm,
         ),
       ),
     );

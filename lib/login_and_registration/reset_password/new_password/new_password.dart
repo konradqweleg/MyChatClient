@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_chat_client/login_and_registration/confirm_code/confirm_code_form.dart';
+import 'package:my_chat_client/login_and_registration/confirm_code/confirm_code_register_form.dart';
 import 'package:my_chat_client/login_and_registration/register/register_form.dart';
 import 'package:my_chat_client/login_and_registration/reset_password/new_password/new_password_form.dart';
 import 'package:my_chat_client/login_and_registration/reset_password/reset_password_form.dart';

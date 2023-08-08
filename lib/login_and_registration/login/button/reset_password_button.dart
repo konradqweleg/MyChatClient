@@ -16,7 +16,7 @@ class ResetPasswordButton extends StatefulWidget {
 class _ResetPasswordButtonState extends State<ResetPasswordButton> {
 
 
-  void navigateToResetPasswordForm(){
+  void _navigateToResetPasswordForm(){
     PageRouteNavigation.navigation(
       context: context,
       destination: const ResetPassword(),
@@ -28,7 +28,7 @@ class _ResetPasswordButtonState extends State<ResetPasswordButton> {
     return
       GestureDetector(
         behavior: HitTestBehavior.translucent,
-        onTap: navigateToResetPasswordForm,
+        onTap: _navigateToResetPasswordForm,
         child:  Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

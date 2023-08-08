@@ -1,19 +1,20 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:my_chat_client/login_and_registration/style/style_login_and_registration.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class InputEmail extends StatelessWidget {
-  InputEmail(this.emailController, {super.key});
+  InputEmail(this.controller, {super.key});
 
-  TextEditingController emailController;
+  TextEditingController controller;
 
-  String? getErrorMessageInvalidMailFormat(String? email) {
+  String? _validateEmailFormat(BuildContext context,String? email) {
     const validFormat = null;
 
     if (email == null || email.isEmpty) {
-      return 'Please enter an email';
+      return AppLocalizations.of(context)!.enterEmail;
     } else if (!EmailValidator.validate(email)) {
-      return 'The email address is in an invalid format';
+      return AppLocalizations.of(context)!.invalidEmailFormat;
     }
 
     return validFormat;
@@ -24,14 +25,12 @@ class InputEmail extends StatelessWidget {
     return SizedBox(
       height: StyleLoginAndRegistration.defaultInputHeight,
       child: TextFormField(
-        controller: emailController,
-        validator: (emailAddress) {
-          return getErrorMessageInvalidMailFormat(emailAddress);
-        },
-        decoration: const InputDecoration(
-          suffixIcon: Icon(Icons.message),
-          border: UnderlineInputBorder(),
-          labelText: 'Enter your email',
+        controller: controller,
+        validator:(mail)=>_validateEmailFormat(context,mail),
+        decoration:  InputDecoration(
+          suffixIcon: const Icon(Icons.message),
+          border: const UnderlineInputBorder(),
+          labelText: AppLocalizations.of(context)!.descriptionInputEnterEmail,
         ),
       ),
     );

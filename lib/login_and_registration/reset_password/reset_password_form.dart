@@ -79,7 +79,7 @@ class ResetPasswordFormState extends State<ResetPasswordForm> {
               ),
               MainActionButton(
                   text: 'Reset password',
-                  backgroudColor:  !isSendEmail ? Colors.grey : MainAppStyle.mainColorApp,
+                  backgroundColor:  !isSendEmail ? Colors.grey : MainAppStyle.mainColorApp,
                   action: (){
                     PageRouteNavigation.navigationTransitionSlideFromDown(
                       context: context,
