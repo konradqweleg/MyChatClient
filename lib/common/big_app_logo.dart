@@ -9,6 +9,7 @@ class BigAppLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Image(
+      key: Key("bigAppLogo"),
       image: AssetImage(ImageResources.logoApp),
       width: imageDimension,
       height: imageDimension,

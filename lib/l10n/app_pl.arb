@@ -18,6 +18,10 @@
   "sendConfirmCode": "Wysłano kod",
   "errorConfirmCode": "Wprowadzono zły kod",
   "registerButtonText": "Zarejestruj",
+  "username": "Imię",
+  "surname": "Nazwisko",
+  "alreadyUseEmail": "Konto użytkownika o takim mailu już istnieje",
+  "enterNewPassword": "Wprowadź nowe hasło",
 
 
   "helloWorld": "¡Hola Mundo!"

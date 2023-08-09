@@ -1,27 +1,19 @@
-import 'dart:developer';
-
-
 import 'package:flutter/material.dart';
-import 'package:my_chat_client/login_and_registration/common/input/input_mail.dart';
 import 'package:my_chat_client/login_and_registration/common/input/input_password.dart';
 import 'package:my_chat_client/login_and_registration/common/button/main_action_button.dart';
-
 import '../../../common/name_app.dart';
 import '../../../style/main_style.dart';
-import '../../common/input/input_code.dart';
-
-
 
 class NewPasswordForm extends StatefulWidget {
   const NewPasswordForm({super.key});
 
   @override
-  NewPasswordFormState createState() {
-    return NewPasswordFormState();
+  State<NewPasswordForm> createState() {
+    return _NewPasswordFormState();
   }
 }
 
-class NewPasswordFormState extends State<NewPasswordForm> {
+class _NewPasswordFormState extends State<NewPasswordForm> {
   final _formKey = GlobalKey<FormState>();
   static double breakBetweenNameAppAndForm = 20.0;
 

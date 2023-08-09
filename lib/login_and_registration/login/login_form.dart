@@ -11,44 +11,44 @@ class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
 
   @override
-  LoginFormState createState() {
-    return LoginFormState();
+  _LoginFormState createState() {
+    return _LoginFormState();
   }
 }
 
-class LoginFormState extends State<LoginForm> {
+class _LoginFormState extends State<LoginForm> {
   final _loginFormKey = GlobalKey<FormState>();
   static double breakBetweenNameAppAndForm = 20.0;
   bool isErrorWhenTryToLogIn = false;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-  void setErrorLoginDataState() {
+  void _setErrorLoginDataState() {
     setState(() {
       isErrorWhenTryToLogIn = true;
     });
   }
 
-  String getErrorMessageWhenErrorInTryLogin() {
+  String _getErrorMessageWhenErrorInTryLogin() {
     String noError = "";
     return isErrorWhenTryToLogIn
         ? AppLocalizations.of(context)!.incorrectLoginDetails
         : noError;
   }
 
-  bool validateLoginData() {
+  bool _validateLoginData() {
     return _loginFormKey.currentState!.validate();
   }
 
 
-  bool checkLoginCredentialsOnServer(String email, String password) {
+  bool _checkLoginCredentialsOnServer(String email, String password) {
     if (email == "polska699@interia.eu" && password == "qwerty") {
       return true;
     }
     return false;
   }
 
-  void logIn() {
+  void _logIn() {
     PageRouteNavigation.navigation(
       context: context,
       destination: const Conversation(),
@@ -56,20 +56,20 @@ class LoginFormState extends State<LoginForm> {
     );
   }
 
-  void checkLoginData() {
-    bool isPassValidationLoginData = validateLoginData();
+  void _checkLoginData() {
+    bool isPassValidationLoginData = _validateLoginData();
 
     if (!isPassValidationLoginData) {
       return;
     }
 
     bool isTheCorrectLoginCredentials =
-        checkLoginCredentialsOnServer(emailController.text, passwordController.text);
+        _checkLoginCredentialsOnServer(emailController.text, passwordController.text);
 
     if (isTheCorrectLoginCredentials) {
-      logIn();
+      _logIn();
     } else {
-      setErrorLoginDataState();
+      _setErrorLoginDataState();
     }
 
   }
@@ -93,12 +93,12 @@ class LoginFormState extends State<LoginForm> {
                 height: 10,
               ),
               Text(
-                getErrorMessageWhenErrorInTryLogin(),
+                _getErrorMessageWhenErrorInTryLogin(),
                 style: const TextStyle(color: Colors.red),
               ),
               MainActionButton(
                   text: AppLocalizations.of(context)!.login,
-                  action: checkLoginData),
+                  action: _checkLoginData),
             ],
           )),
     );

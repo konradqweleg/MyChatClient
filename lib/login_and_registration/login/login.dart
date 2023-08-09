@@ -27,30 +27,32 @@ class LoginState extends State<Login> {
             constraints: BoxConstraints(
               minHeight: viewportConstraints.maxHeight,
             ),
-            child: Padding(
-              padding:  MainAppStyle.defaultMainPadding,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  const SizedBox(height: 40),
-                  Container(
-                    // Another fixed-height child.
-                    height: 400.0,
-                    alignment: Alignment.center,
-                    child: const LoginForm(),
-                  ),
-                  const SizedBox(height: 30),
-                  const Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        CreateNewAccountButton(),
-                        ResetPasswordButton(),
-                      ]),
-                  const SizedBox(height: 20),
-                  const LoginWithGoogleOrFacebook()
-                ],
+            child: Material(
+              child: Padding(
+                padding:  MainAppStyle.defaultMainPadding,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    const SizedBox(height: 40),
+                    Container(
+                      // Another fixed-height child.
+                      height: 400.0,
+                      alignment: Alignment.center,
+                      child: const LoginForm(),
+                    ),
+                    const SizedBox(height: 30),
+                    const Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          CreateNewAccountButton(),
+                          ResetPasswordButton(),
+                        ]),
+                    const SizedBox(height: 20),
+                    const LoginWithGoogleOrFacebook()
+                  ],
+                ),
               ),
             ),
           ),
