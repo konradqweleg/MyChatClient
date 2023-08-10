@@ -22,6 +22,10 @@
   "surname": "Nazwisko",
   "alreadyUseEmail": "Konto użytkownika o takim mailu już istnieje",
   "enterNewPassword": "Wprowadź nowe hasło",
+  "descriptionSendMailWithResetPasswordCode": "Wprowadź adres email konta dla którego chcesz zresetować hasło. ",
+  "sendResetPasswordCode": "Wyślij kod ",
+  "noUserWithThisEmail": "W serwisie nie ma konta użytkownika o podanym adresie email",
+  "passwordResetCodeSend": "Wysłano kod resetowania hasła",
 
 
   "helloWorld": "¡Hola Mundo!"

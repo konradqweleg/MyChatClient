@@ -10,11 +10,11 @@ class ResetPassword extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return ResetPasswordState();
+    return _ResetPasswordState();
   }
 }
 
-class ResetPasswordState extends State<ResetPassword> {
+class _ResetPasswordState extends State<ResetPassword> {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(

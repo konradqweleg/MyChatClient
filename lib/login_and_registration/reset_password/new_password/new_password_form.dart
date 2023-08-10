@@ -18,12 +18,11 @@ class _NewPasswordFormState extends State<NewPasswordForm> {
   static double breakBetweenNameAppAndForm = 20.0;
 
   bool isErrorLoginTry = false;
-  bool isSendEmail =false;
+  bool isSendCode =false;
+  final TextEditingController controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController emailController = TextEditingController();
-    TextEditingController passwordController = TextEditingController();
 
     return Scaffold(
         body:Column(
@@ -36,8 +35,8 @@ class _NewPasswordFormState extends State<NewPasswordForm> {
             SizedBox(height: breakBetweenNameAppAndForm),
             Text("Enter a new password"),
             Form(key : _formKey,child:
-            InputPassword(emailController)),
-            InputPassword(emailController),
+            InputPassword(controller)),
+            InputPassword(controller),
             MainActionButton(
                 text: 'Reset password',
                 action: () {
@@ -50,7 +49,7 @@ class _NewPasswordFormState extends State<NewPasswordForm> {
                       content: Text("Send reset password code")));
 
                   setState(() {
-                    isSendEmail = true;
+                    isSendCode = true;
                   });
 
 

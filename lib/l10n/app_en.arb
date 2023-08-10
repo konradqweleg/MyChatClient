@@ -118,6 +118,27 @@
     "description": "Message asking the user to enter a new password"
   },
 
+  "descriptionSendMailWithResetPasswordCode": "Enter the email address of the account for which you want to reset the password. ",
+  "@descriptionSendMailWithResetPasswordCode": {
+    "description": "Text informing the user that a password reset code has been sent to them"
+  },
+
+  "sendResetPasswordCode": "Send code",
+  "@sendResetPasswordCode": {
+    "description": "Description of the button that sends the code to restart the password"
+  },
+
+  "noUserWithThisEmail": "A user with such an email address is not in the application database",
+  "@noUserWithThisEmail": {
+    "description": "Message about the lack of a user with the specified email registered in the service"
+  },
+
+  "passwordResetCodeSend": "Password reset code has been sent",
+  "@passwordResetCodeSend": {
+    "description": "Information that a password reset code has been sent"
+  },
+
+
 
   "helloWorld": "Hello World!",
   "@helloWorld": {
