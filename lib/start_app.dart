@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_chat_client/resources/text_resources.dart';
 import 'package:my_chat_client/style/main_style.dart';
 import 'navigation/page_route_navigation.dart';
 import 'login_and_registration/login/login.dart';
@@ -9,18 +8,30 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() {
   runApp(
-    MaterialApp(
-      title: "MY CHAT",
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: MainAppStyle.mainColorApp),
-        useMaterial3: true,
-      ),
-      home: const Scaffold(body: StartPanel()),
-    ),
+    const App()
   );
 }
+
+class App extends StatelessWidget{
+  const App({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+     return MaterialApp(
+     title: "MY CHAT",
+     localizationsDelegates: AppLocalizations.localizationsDelegates,
+     supportedLocales: AppLocalizations.supportedLocales,
+     theme: ThemeData(
+       colorScheme: ColorScheme.fromSeed(seedColor: MainAppStyle.mainColorApp),
+       useMaterial3: true,
+     ),
+     home: const Scaffold(body: StartPanel()),
+   );
+  }
+
+
+}
+
 
 class StartPanel extends StatefulWidget {
   const StartPanel({super.key});
