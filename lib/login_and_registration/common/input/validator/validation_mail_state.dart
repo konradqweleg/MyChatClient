@@ -6,15 +6,15 @@ enum ValidatedEmailState {
   emptyText,
   badFormat;
 
-  String mapStateToErrorMessage(BuildContext context) {
-    String noError = "";
+  String? mapStateToErrorMessage(BuildContext context) {
+    String? noError = null;
 
-    if (index == 0) {
-      return noError;
-    } else if (index == 1) {
+     if (index == 1) {
       return AppLocalizations.of(context)!.enterEmail;
-    } else {
+    } else if(index == 2) {
       return AppLocalizations.of(context)!.invalidEmailFormat;
-    }
+    }else{
+       return noError;
+     }
   }
 }

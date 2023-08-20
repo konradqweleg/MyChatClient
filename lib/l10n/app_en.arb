@@ -6,7 +6,7 @@
     "description": "Text indicating that the user has forgotten his password"
   },
 
-  "incorrectLoginDetails": "Incorrect login Details",
+  "incorrectLoginDetails": "Incorrect login details",
   "@incorrectLoginDetails": {
     "description": "Information about entering incorrect login data"
   },

@@ -1,8 +1,13 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:my_chat_client/login_and_registration/login/button/create_new_account.dart';
+import 'package:my_chat_client/login_and_registration/login/button/reset_password_button.dart';
 import 'package:my_chat_client/login_and_registration/login/login.dart';
-import 'helping/localizations_inject.dart';
+import 'package:my_chat_client/login_and_registration/register/register.dart';
+import 'package:my_chat_client/login_and_registration/reset_password/reset_password.dart';
+
+import '../helping/localizations_inject.dart';
 
 Future<void> showLoginView(WidgetTester tester) async {
   await tester.pumpWidget(const LocalizationsInject(child: Login()));
@@ -43,6 +48,36 @@ void main() {
       expect(exitCode, 0);
     });
 
+
+    testWidgets(
+        "Account creation button takes you to the account creation view",
+            (tester) async {
+          //given
+          await showLoginView(tester);
+
+          //when
+          await tester.tap(find.byType(CreateNewAccountButton));
+          await tester.pump();
+          await tester.pumpAndSettle();
+
+          //then
+          expect(find.byType(Register), findsOneWidget);
+        });
+
+    testWidgets(
+        "Account forgot password button takes you to the reset password view",
+            (tester) async {
+          //given
+          await showLoginView(tester);
+
+          //when
+          await tester.tap(find.byType(ResetPasswordButton));
+          await tester.pump();
+          await tester.pumpAndSettle();
+
+          //then
+          expect(find.byType(ResetPassword), findsOneWidget);
+        });
 
 
   });

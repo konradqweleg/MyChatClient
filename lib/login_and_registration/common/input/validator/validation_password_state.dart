@@ -5,8 +5,8 @@ enum ValidatedPasswordState {
   ok,
   emptyText;
 
-  String mapStateToErrorMessage(BuildContext context) {
-    String noError = "";
+  String? mapStateToErrorMessage(BuildContext context) {
+    String? noError = null;
 
     if (index == 1) {
       return AppLocalizations.of(context)!.pleaseEnterPassword;

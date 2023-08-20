@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:my_chat_client/conversation/conversation.dart';
 import 'package:my_chat_client/login_and_registration/common/input/input_mail.dart';
@@ -43,13 +45,6 @@ class _LoginFormState extends State<LoginForm> {
   }
 
 
-  // bool _checkLoginCredentialsOnServer(String email, String password) {
-  //   if (email == "polska699@interia.eu" && password == "qwerty") {
-  //     return true;
-  //   }
-  //   return false;
-  // }
-
   void _logIn() {
     PageRouteNavigation.navigation(
       context: context,
@@ -59,8 +54,8 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   void _checkLoginData() {
-    bool isPassValidationLoginData = _validateLoginData();
 
+    bool isPassValidationLoginData = _validateLoginData();
     if (!isPassValidationLoginData) {
       return;
     }
