@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:my_chat_client/login_and_registration/common/input/validator/password_validate.dart';
 import 'package:my_chat_client/login_and_registration/style/style_login_and_registration.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class InputPassword extends StatefulWidget {
-  const InputPassword(this.controller,{super.key});
+  InputPassword(this.controller,{super.key});
 
   final TextEditingController controller;
+  final PasswordValidate passwordValidate = PasswordValidate();
 
   @override
   State<StatefulWidget> createState() {
@@ -16,16 +18,6 @@ class InputPassword extends StatefulWidget {
 class _InputPasswordState extends State<InputPassword> {
 
   bool passwordVisible = false;
-
-  String? _validatePasswordFormat(String? password) {
-    const validFormat = null;
-
-    if (password == null || password.isEmpty) {
-      return AppLocalizations.of(context)!.pleaseEnterPassword;
-    }
-
-    return validFormat;
-  }
 
   void _changeVisibilityPassword(){
     setState(() {
@@ -39,7 +31,7 @@ class _InputPasswordState extends State<InputPassword> {
       height: StyleLoginAndRegistration.defaultInputHeight,
       child: TextFormField(
         controller: widget.controller,
-        validator: _validatePasswordFormat,
+        validator:(password)=> widget.passwordValidate.validate(password).mapStateToErrorMessage(context),
         obscureText: !passwordVisible,
         decoration: InputDecoration(
           suffixIcon: IconButton(

@@ -3,12 +3,14 @@ import 'package:my_chat_client/conversation/conversation.dart';
 import 'package:my_chat_client/login_and_registration/common/input/input_mail.dart';
 import 'package:my_chat_client/login_and_registration/common/input/input_password.dart';
 import 'package:my_chat_client/login_and_registration/common/button/main_action_button.dart';
+import 'package:my_chat_client/login_and_registration/login/check_credentials.dart';
 import '../../common/name_app.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../navigation/page_route_navigation.dart';
 
 class LoginForm extends StatefulWidget {
-  const LoginForm({super.key});
+  const LoginForm({required this.checkCredentials,super.key});
+  final CheckCredentials checkCredentials;
 
   @override
   State<LoginForm> createState() {
@@ -41,12 +43,12 @@ class _LoginFormState extends State<LoginForm> {
   }
 
 
-  bool _checkLoginCredentialsOnServer(String email, String password) {
-    if (email == "polska699@interia.eu" && password == "qwerty") {
-      return true;
-    }
-    return false;
-  }
+  // bool _checkLoginCredentialsOnServer(String email, String password) {
+  //   if (email == "polska699@interia.eu" && password == "qwerty") {
+  //     return true;
+  //   }
+  //   return false;
+  // }
 
   void _logIn() {
     PageRouteNavigation.navigation(
@@ -64,7 +66,7 @@ class _LoginFormState extends State<LoginForm> {
     }
 
     bool isTheCorrectLoginCredentials =
-        _checkLoginCredentialsOnServer(emailController.text, passwordController.text);
+        widget.checkCredentials.isValidCredentials(emailController.text, passwordController.text);
 
     if (isTheCorrectLoginCredentials) {
       _logIn();
