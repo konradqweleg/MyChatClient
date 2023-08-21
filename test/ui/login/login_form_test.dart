@@ -7,38 +7,18 @@ import 'package:my_chat_client/login_and_registration/login/check_credentials.da
 import 'package:my_chat_client/login_and_registration/login/login_form.dart';
 
 import '../helping/localizations_inject.dart';
-
+import '../helping/utils.dart';
 
 Future<void> enterEmail(WidgetTester tester, String text) async {
-  await tester.tap(find.byType(InputEmail));
-  await tester.pump();
-
-  await tester.pump();
-  await tester.enterText(find.byType(TextFormField).first, text);
-  await tester.pump();
-  await tester.pumpAndSettle();
+  await Utils.enterText(tester, find.byType(TextFormField).first, text);
 }
 
 Future<void> enterPassword(WidgetTester tester, String text) async {
-  await tester.tap(find.byType(InputPassword));
-  await tester.pump();
-
-  await tester.pump();
-  await tester.enterText(find.byType(TextFormField).last, text);
-  await tester.pump();
-  await tester.pumpAndSettle();
-}
-
-
-Future<void> showLoginFormView(WidgetTester tester) async {
-  await tester.pumpWidget(LocalizationsInject(
-      child: LoginForm(checkCredentials: CorrectExampleUserCredentials())));
-  await tester.pumpAndSettle();
+  await Utils.enterText(tester, find.byType(TextFormField).last, text);
 }
 
 Future<void> clickLoginButton(WidgetTester tester) async {
-  await tester.tap(find.byType(MainActionButton));
-  await tester.pump();
+  await Utils.click(tester, MainActionButton);
 }
 
 class CorrectExampleUserCredentials implements CheckCredentials {
@@ -48,112 +28,139 @@ class CorrectExampleUserCredentials implements CheckCredentials {
   }
 }
 
+
+
+
 void main() {
   group('LoginFormTests', () {
-
     testWidgets(
         "When the user does not enter an email address, a message should appear asking the user to enter an email address",
-            (tester) async {
-          //given
-          await showLoginFormView(tester);
-          //when
-          await enterEmail(tester, "");
-          await clickLoginButton(tester);
+        (tester) async {
+      //given
+      await Utils.showView(
+          tester,
+          LoginForm(
+            checkCredentials: CorrectExampleUserCredentials(),
+          ));
+      //when
+      await enterEmail(tester, "");
+      await clickLoginButton(tester);
 
-          //then
-          expect(find.text("Please enter an email"), findsOneWidget);
-        });
+      //then
+      expect(find.text("Please enter an email"), findsOneWidget);
+    });
 
     testWidgets(
         "Checking if an invalid e-mail message appears when the user enters bad format e-mail",
-            (tester) async {
-          //given
-          await showLoginFormView(tester);
-          //when
-          await enterEmail(tester, "email.bad.format");
-          await clickLoginButton(tester);
+        (tester) async {
+      //given
+      await Utils.showView(
+          tester,
+          LoginForm(
+            checkCredentials: CorrectExampleUserCredentials(),
+          ));
+      //when
+      await enterEmail(tester, "email.bad.format");
+      await clickLoginButton(tester);
 
-          //then
-          expect(find.text("The email address is in an invalid format"),
-              findsOneWidget);
-        });
-
-    testWidgets(
-        "When the user does not enter an password, a message should appear asking the user to enter an password",
-            (tester) async {
-          //given
-          await showLoginFormView(tester);
-          //when
-          await enterPassword(tester, "");
-          await clickLoginButton(tester);
-
-          //then
-          expect(find.text("Please enter your password"), findsOneWidget);
-        });
+      //then
+      expect(find.text("The email address is in an invalid format"),
+          findsOneWidget);
+    });
 
     testWidgets(
         "When the user does not enter an password, a message should appear asking the user to enter an password",
-            (tester) async {
-          //given
-          await showLoginFormView(tester);
-          //when
-          await enterPassword(tester, "");
-          await clickLoginButton(tester);
+        (tester) async {
+      //given
+      await Utils.showView(
+          tester,
+          LoginForm(
+            checkCredentials: CorrectExampleUserCredentials(),
+          ));
+      //when
+      await enterPassword(tester, "");
+      await clickLoginButton(tester);
 
-          //then
-          expect(find.text("Please enter your password"), findsOneWidget);
-        });
+      //then
+      expect(find.text("Please enter your password"), findsOneWidget);
+    });
+
+    testWidgets(
+        "When the user does not enter an password, a message should appear asking the user to enter an password",
+        (tester) async {
+      //given
+      await Utils.showView(
+          tester,
+          LoginForm(
+            checkCredentials: CorrectExampleUserCredentials(),
+          ));
+      //when
+      await enterPassword(tester, "");
+      await clickLoginButton(tester);
+
+      //then
+      expect(find.text("Please enter your password"), findsOneWidget);
+    });
 
     //Update then after create main view app
     testWidgets(
         "When the user entered the correct login details he was logged into the system",
-            (tester) async {
-          //given
-          await showLoginFormView(tester);
-          await enterPassword(tester, "password123");
-          await enterEmail(tester, "example@mail.pl");
+        (tester) async {
+      //given
+      await Utils.showView(
+          tester,
+          LoginForm(
+            checkCredentials: CorrectExampleUserCredentials(),
+          ));
+      await enterPassword(tester, "password123");
+      await enterEmail(tester, "example@mail.pl");
 
-          //when
-          await clickLoginButton(tester);
-          await tester.pumpAndSettle();
+      //when
+      await clickLoginButton(tester);
+      await tester.pumpAndSettle();
 
-          //then
-          expect(find.text("Logged"), findsOneWidget);
-        });
-
+      //then
+      expect(find.text("Logged"), findsOneWidget);
+    });
 
     testWidgets(
         "When a user enters the wrong mail no exist in system, the system displays an error",
-            (tester) async {
-          //given
-          await showLoginFormView(tester);
-          await enterPassword(tester, "password123");
-          await enterEmail(tester, "badmail@mail.pl");
+        (tester) async {
+      //given
+      await Utils.showView(
+          tester,
+          LoginForm(
+            checkCredentials: CorrectExampleUserCredentials(),
+          ));
+      await enterPassword(tester, "password123");
+      await enterEmail(tester, "badmail@mail.pl");
 
-          //when
-          await clickLoginButton(tester);
-          await tester.pumpAndSettle();
+      //when
+      await clickLoginButton(tester);
+      await tester.pumpAndSettle();
 
-          //then
-          expect(find.text("Incorrect login details"), findsOneWidget);
-        });
+      //then
+      expect(find.text("Incorrect login details"), findsOneWidget);
+    });
 
     testWidgets(
         "When a user enters the wrong password user in system, the system displays an error",
-            (tester) async {
-          //given
-          await showLoginFormView(tester);
-          await enterPassword(tester, "passwordbad");
-          await enterEmail(tester, "example@mail.pl");
+        (tester) async {
+      //given
+      await Utils.showView(
+          tester,
+          LoginForm(
+            checkCredentials: CorrectExampleUserCredentials(),
+          ));
+      await enterPassword(tester, "passwordbad");
+      await enterEmail(tester, "example@mail.pl");
 
-          //when
-          await clickLoginButton(tester);
-          await tester.pumpAndSettle();
+      //when
+      await clickLoginButton(tester);
+      await tester.pumpAndSettle();
 
-          //then
-          expect(find.text("Incorrect login details"), findsOneWidget);
-        });
-
-
+      //then
+      expect(find.text("Incorrect login details"), findsOneWidget);
+    });
   });
 }

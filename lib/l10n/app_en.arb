@@ -62,7 +62,7 @@
     "description": "Text describing the code entry form"
   },
 
-  "notEnoughLettersEntered": "Not enough letters entered",
+  "notEnoughLettersEntered": "Please enter data",
   "@notEnoughLettersEntered": {
     "description": "Test describing that user entered too few characters"
   },

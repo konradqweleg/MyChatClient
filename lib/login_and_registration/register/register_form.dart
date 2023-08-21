@@ -20,7 +20,7 @@ class RegisterForm extends StatefulWidget {
 class _RegisterFormState extends State<RegisterForm> {
   final _formKey = GlobalKey<FormState>();
   static const double _breakBetweenNameAppAndForm = 20.0;
-  bool _isErrorLoginTry = false;
+
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
@@ -38,34 +38,15 @@ class _RegisterFormState extends State<RegisterForm> {
         context: context, destination: const ConfirmRegisterCode());
   }
 
-  bool _checkCredentialsOnServer() {
-    return true;
-  }
 
-  void _showErrorCredentials() {
-    setState(() {
-      _isErrorLoginTry = true;
-    });
-  }
-
-  String _getErrorMessage() {
-    const noError = "";
-    return _isErrorLoginTry ? AppLocalizations.of(context)!.alreadyUseEmail : noError;
-  }
 
   void _register() {
     bool isValidateFormData = isValidateForm();
     if (!isValidateFormData) {
       return;
     }
+    _goToConfirmAccount();
 
-    bool isValidCredentials = _checkCredentialsOnServer();
-
-    if (isValidCredentials) {
-      _goToConfirmAccount();
-    } else {
-      _showErrorCredentials();
-    }
   }
 
   @override
@@ -95,10 +76,6 @@ class _RegisterFormState extends State<RegisterForm> {
               InputPassword(_passwordController),
               const SizedBox(
                 height: 10,
-              ),
-              Text(
-                _getErrorMessage(),
-                style: const TextStyle(color: Colors.red),
               ),
               MainActionButton(
                 text: AppLocalizations.of(context)!.registerButtonText,

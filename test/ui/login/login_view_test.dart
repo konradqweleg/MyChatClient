@@ -7,11 +7,16 @@ import 'package:my_chat_client/login_and_registration/login/login.dart';
 import 'package:my_chat_client/login_and_registration/register/register.dart';
 import 'package:my_chat_client/login_and_registration/reset_password/reset_password.dart';
 
-import '../helping/localizations_inject.dart';
+import '../helping/utils.dart';
 
-Future<void> showLoginView(WidgetTester tester) async {
-  await tester.pumpWidget(const LocalizationsInject(child: Login()));
-  await tester.pumpAndSettle();
+
+
+Future<void> clickCreateNewAccountButton(WidgetTester tester) async{
+ await Utils.click(tester, CreateNewAccountButton);
+}
+
+Future<void> clickResetPassword(WidgetTester tester) async{
+  await Utils.click(tester, ResetPasswordButton);
 }
 
 void main() {
@@ -21,7 +26,7 @@ void main() {
         (WidgetTester tester) async {
       //given
       //when
-      await showLoginView(tester);
+      await Utils.showView(tester, const Login());
 
       //then
       expect(find.text("Enter your email"), findsOneWidget);
@@ -37,48 +42,39 @@ void main() {
         "Checking if the back button closes applications on the login screen",
         (tester) async {
       //given
-      await showLoginView(tester);
-      final NavigatorState navigator = tester.state(find.byType(Navigator));
+      await Utils.showView(tester, const Login());
 
       //when
-      navigator.pop();
-      await tester.pump();
+      await Utils.backOsButton(tester);
 
       //then
       expect(exitCode, 0);
     });
 
-
     testWidgets(
         "Account creation button takes you to the account creation view",
-            (tester) async {
-          //given
-          await showLoginView(tester);
+        (tester) async {
+      //given
+      await Utils.showView(tester, const Login());
 
-          //when
-          await tester.tap(find.byType(CreateNewAccountButton));
-          await tester.pump();
-          await tester.pumpAndSettle();
+      //when
+      await clickCreateNewAccountButton(tester);
 
-          //then
-          expect(find.byType(Register), findsOneWidget);
-        });
+      //then
+      expect(find.byType(Register), findsOneWidget);
+    });
 
     testWidgets(
         "Account forgot password button takes you to the reset password view",
-            (tester) async {
-          //given
-          await showLoginView(tester);
+        (tester) async {
+      //given
+      await Utils.showView(tester, const Login());
 
-          //when
-          await tester.tap(find.byType(ResetPasswordButton));
-          await tester.pump();
-          await tester.pumpAndSettle();
+      //when
+      await clickResetPassword(tester);
 
-          //then
-          expect(find.byType(ResetPassword), findsOneWidget);
-        });
-
-
+      //then
+      expect(find.byType(ResetPassword), findsOneWidget);
+    });
   });
 }
