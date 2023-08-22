@@ -35,7 +35,7 @@ class _RegisterFormState extends State<RegisterForm> {
 
   void _goToConfirmAccount() {
     PageRouteNavigation.navigation(
-        context: context, destination: const ConfirmRegisterCode());
+        context: context, destination: const ConfirmRegisterCode(),isClearBackStack: true);
   }
 
 
