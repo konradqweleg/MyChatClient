@@ -15,6 +15,16 @@ Future<void> clickExitButton(WidgetTester tester) async {
   await tester.pumpAndSettle();
 }
 
+Future<void> enterConfirmCode(WidgetTester tester, String text) async {
+  await Utils.enterText(tester, find.byType(TextFormField).first, text);
+}
+
+Future<void> clickRegisterButton(WidgetTester tester) async {
+  await Utils.click(tester, MainActionButton);
+  await tester.pump();
+  await tester.pumpAndSettle();
+}
+
 void main() {
   group('ConfirmCodeRegister', () {
     testWidgets(
@@ -82,6 +92,52 @@ void main() {
 
           //then
           expect(find.text("Send confirm code"), findsOneWidget);
+        });
+
+    testWidgets(
+        "When you clicked the registration button without entering the code, the system should display a message asking you to enter the code",
+            (tester) async {
+          //given
+          await Utils.showView(tester, const ConfirmRegisterCode());
+
+          //when
+          await enterConfirmCode(tester, "");
+          await clickRegisterButton(tester);
+
+          //then
+          expect(find.text("Please enter code"), findsOneWidget);
+          expect(find.byType(ConfirmRegisterCode), findsOneWidget);
+        });
+
+    testWidgets(
+        "When the registration button was clicked with a code that was too short, the system should display a message stating that the code was given too short",
+            (tester) async {
+          //given
+          await Utils.showView(tester, const ConfirmRegisterCode());
+
+          //when
+          await enterConfirmCode(tester, "34");
+          await clickRegisterButton(tester);
+
+          //then
+          expect(find.text("Not enough characters in the code"), findsOneWidget);
+          expect(find.byType(ConfirmRegisterCode), findsOneWidget);
+        });
+
+    testWidgets(
+        "When the registration button was clicked with a code that was ok length, the system no should display a message from validator ",
+            (tester) async {
+          //given
+          await Utils.showView(tester, const ConfirmRegisterCode());
+
+          //when
+          await enterConfirmCode(tester, "3455");
+          await clickRegisterButton(tester);
+
+          //then
+          expect(find.text("Not enough characters in the code"), findsNothing);
+          expect(find.text("Please enter code"), findsNothing);
+          expect(find.byType(ConfirmRegisterCode), findsOneWidget);
         });
 
   });
