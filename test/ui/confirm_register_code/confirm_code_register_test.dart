@@ -84,6 +84,5 @@ void main() {
           expect(find.text("Send confirm code"), findsOneWidget);
         });
 
-
   });
 }

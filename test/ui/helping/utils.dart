@@ -5,9 +5,12 @@ import 'localizations_inject.dart';
 
 class Utils {
   static Future<void> showView(WidgetTester tester, Widget view) async {
-    await tester.pumpWidget(LocalizationsInject(
-      child: view,
-    ));
+    await tester.pumpWidget(Material(
+      child: LocalizationsInject(
+        child: view,
+      ),
+    )
+    );
     await tester.pumpAndSettle();
   }
 
