@@ -3,14 +3,22 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:my_chat_client/conversation/conversation.dart';
 import 'package:my_chat_client/login_and_registration/common/button/main_action_button.dart';
+import 'package:my_chat_client/login_and_registration/confirm_code/create_account_data.dart';
 import 'package:my_chat_client/style/main_style.dart';
 import '../../navigation/page_route_navigation.dart';
 import '../../common/name_app.dart';
 import '../common/input/input_code.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../register/user_register_data.dart';
+import 'validate_confirm_code.dart';
+
+
+
 
 class ConfirmCodeRegisterForm extends StatefulWidget {
-  const ConfirmCodeRegisterForm({super.key});
+  const ConfirmCodeRegisterForm( this.userRegisterData,this.checkConfirmCode, {super.key});
+  final UserRegisterData userRegisterData;
+  final ValidateConfirmCode checkConfirmCode;
 
   @override
   State<ConfirmCodeRegisterForm> createState() {
@@ -54,7 +62,9 @@ class _ConfirmCodeRegisterFormState extends State<ConfirmCodeRegisterForm> {
   }
 
   bool _isCorrectCodeOnServer() {
-    return controller.text == "0000";
+    CreateAccountData createAccountData = CreateAccountData(widget.userRegisterData, controller.text);
+    bool isCreatedAccount =  widget.checkConfirmCode.isValidConfirmCode(createAccountData);
+    return isCreatedAccount;
   }
 
   void _logIn() {

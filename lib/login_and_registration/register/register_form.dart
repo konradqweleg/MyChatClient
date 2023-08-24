@@ -3,6 +3,7 @@ import 'package:my_chat_client/login_and_registration/common/input/input_mail.da
 import 'package:my_chat_client/login_and_registration/common/input/input_password.dart';
 import 'package:my_chat_client/login_and_registration/common/button/main_action_button.dart';
 import 'package:my_chat_client/login_and_registration/confirm_code/confirm_register_code.dart';
+import 'package:my_chat_client/login_and_registration/register/user_register_data.dart';
 import '../../navigation/page_route_navigation.dart';
 import '../../common/name_app.dart';
 import '../common/input/input_data.dart';
@@ -34,11 +35,17 @@ class _RegisterFormState extends State<RegisterForm> {
   }
 
   void _goToConfirmAccount() {
+    UserRegisterData registerData = UserRegisterData(
+        _emailController.text,
+        _usernameController.text,
+        _surnameController.text,
+        _passwordController.text);
+
     PageRouteNavigation.navigation(
-        context: context, destination: const ConfirmRegisterCode(),isClearBackStack: true);
+        context: context,
+        destination: ConfirmRegisterCode(registerData),
+        isClearBackStack: true);
   }
-
-
 
   void _register() {
     bool isValidateFormData = isValidateForm();
@@ -46,7 +53,6 @@ class _RegisterFormState extends State<RegisterForm> {
       return;
     }
     _goToConfirmAccount();
-
   }
 
   @override
