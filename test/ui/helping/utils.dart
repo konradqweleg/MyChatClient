@@ -1,27 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'localizations_inject.dart';
+import 'package:my_chat_client/style/main_style.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Utils {
   static Future<void> showView(WidgetTester tester, Widget view) async {
-    await tester.pumpWidget(Material(
-      child: LocalizationsInject(
-        child: view,
+    await tester.pumpWidget(MaterialApp(
+      title: "MY CHAT",
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: MainAppStyle.mainColorApp),
+        useMaterial3: true,
       ),
-    )
-    );
+      home: Scaffold(body: view),
+    ));
     await tester.pumpAndSettle();
   }
 
-
-  static Future<void> click(WidgetTester tester,Type typeClickedElement) async{
+  static Future<void> click(
+      WidgetTester tester, Type typeClickedElement) async {
     await tester.tap(find.byType(typeClickedElement));
     await tester.pump();
     await tester.pumpAndSettle();
   }
 
-  static Future<void> enterText(WidgetTester tester,Finder element,String text) async{
+  static Future<void> enterText(
+      WidgetTester tester, Finder element, String text) async {
     await tester.tap(element);
     await tester.pump();
 
@@ -31,13 +36,10 @@ class Utils {
     await tester.pumpAndSettle();
   }
 
-  static Future<void> backOsButton(WidgetTester tester) async{
+  static Future<void> backOsButton(WidgetTester tester) async {
     final NavigatorState navigator = tester.state(find.byType(Navigator));
     navigator.pop();
     await tester.pump();
     await tester.pumpAndSettle();
   }
-
-
-
 }
