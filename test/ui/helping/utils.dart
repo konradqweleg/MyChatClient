@@ -25,6 +25,15 @@ class Utils {
     await tester.pumpAndSettle();
   }
 
+  static Future<void> clickButtonFind(
+      WidgetTester tester, Finder finder) async {
+    await tester.tap(finder);
+    await tester.pump();
+    await tester.pumpAndSettle();
+  }
+
+
+
   static Future<void> enterText(
       WidgetTester tester, Finder element, String text) async {
     await tester.tap(element);
