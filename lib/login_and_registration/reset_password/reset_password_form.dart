@@ -1,40 +1,41 @@
-import 'dart:developer';
-
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:my_chat_client/login_and_registration/common/input/input_mail.dart';
-import 'package:my_chat_client/login_and_registration/common/input/input_password.dart';
 import 'package:my_chat_client/login_and_registration/common/button/main_action_button.dart';
+import 'package:my_chat_client/login_and_registration/reset_password/check/checkExsistsEmail.dart';
 import 'package:my_chat_client/login_and_registration/reset_password/new_password/new_password.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:my_chat_client/login_and_registration/reset_password/check/reset_code.dart';
 import 'package:my_chat_client/login_and_registration/reset_password/reset_password_state.dart';
+import 'package:my_chat_client/login_and_registration/reset_password/check/validate_code.dart';
 import '../../navigation/page_route_navigation.dart';
 import '../../common/name_app.dart';
 import '../../style/main_style.dart';
 import '../common/input/input_code.dart';
 
 class ResetPasswordForm extends StatefulWidget {
-  const ResetPasswordForm({super.key});
+  const ResetPasswordForm(
+      this.resetCode, this.validateCode, this.checkExistsEmail,
+      {super.key});
+
+  final ResetCode resetCode;
+  final ValidateCode validateCode;
+  final CheckExistsEmail checkExistsEmail;
 
   @override
-  ResetPasswordFormState createState() {
-    return ResetPasswordFormState();
+  State<ResetPasswordForm> createState() {
+    return _ResetPasswordFormState();
   }
 }
 
-class ResetPasswordFormState extends State<ResetPasswordForm> {
+class _ResetPasswordFormState extends State<ResetPasswordForm> {
   final _formKeyMail = GlobalKey<FormState>();
-  static double breakBetweenNameAppAndForm = 20.0;
+  final _formKeyCode = GlobalKey<FormState>();
+  static const double breakBetweenNameAppAndForm = 20.0;
 
   ResetPasswordState _state = ResetPasswordState.start;
-
-  bool isEmailExistsOnServer = false;
-  bool isSendEmail = false;
-  bool isSendCode = false;
-
   TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  TextEditingController codeController = TextEditingController();
 
   bool _isValidFormatEmail() {
     if (!_formKeyMail.currentState!.validate()) {
@@ -43,47 +44,72 @@ class ResetPasswordFormState extends State<ResetPasswordForm> {
     return true;
   }
 
-  bool isEmailExistInService() {
-    return emailController.text == "polska699@interia.eu";
+  bool _isValidFormatCode() {
+    if (!_formKeyCode.currentState!.validate()) {
+      return false;
+    }
+    return true;
   }
 
-  void goToVerification() {
-    setState(() {
-      isSendCode = true;
-    });
-
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        backgroundColor: MainAppStyle.mainColorApp,
-        content: Text(AppLocalizations.of(context)!.passwordResetCodeSend)));
-
-    //PageRouteNavigation.navigation(context: context, destination: NewPassword());
+  bool _isEmailExistInService() {
+    return widget.checkExistsEmail.isEmailExistsInService(emailController.text);
   }
 
-  void setStateNoExistsEmailInService() {
+  void _setStateNoExistsEmailInService() {
     setState(() {
       _state = ResetPasswordState.noExistsEmail;
     });
   }
 
-  void setStateSentCode() {
+  void _setStateSentCode() {
     setState(() {
       _state = ResetPasswordState.sendCode;
     });
   }
 
-  void sendResetPasswordCode() {
+  void _sendResetPasswordCode() {
     bool isValidFormatMail = _isValidFormatEmail();
 
     if (!isValidFormatMail) {
       return;
     }
 
-    if (!isEmailExistInService()) {
-      setStateNoExistsEmailInService();
+    if (!_isEmailExistInService()) {
+      _setStateNoExistsEmailInService();
     } else {
-      setStateSentCode();
-      goToVerification();
+      _setStateSentCode();
+      widget.resetCode.sendCode(context, emailController.text);
     }
+  }
+
+  void _goToInsertNewPassword() {
+    PageRouteNavigation.navigationTransitionSlideFromDown(
+        context: context,
+        destination: NewPassword(emailController.text),
+        isClearBackStack: true);
+  }
+
+  void _resetPassword() {
+    bool isValidFormatCode = _isValidFormatCode();
+
+    if (!isValidFormatCode) {
+      return;
+    }
+
+    bool isGoodCode = widget.validateCode
+        .isValidCode(codeController.text, emailController.text);
+
+    if (isGoodCode) {
+      _goToInsertNewPassword();
+    } else {
+      setState(() {
+        _state = ResetPasswordState.badCode;
+      });
+    }
+  }
+
+  void _sendResetPasswordCodeOnEmail() {
+    widget.resetCode.sendCode(context, emailController.text);
   }
 
   @override
@@ -96,17 +122,19 @@ class ResetPasswordFormState extends State<ResetPasswordForm> {
           alignment: Alignment.topLeft,
           child: const NameApp(),
         ),
-        SizedBox(height: breakBetweenNameAppAndForm),
+        const SizedBox(height: breakBetweenNameAppAndForm),
         Text.rich(TextSpan(
             text: AppLocalizations.of(context)!
                 .descriptionSendMailWithResetPasswordCode,
             children: <InlineSpan>[
               TextSpan(
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: MainAppStyle.mainColorApp),
-                  text: _state.getResendCodeText(context),
-                  recognizer: TapGestureRecognizer()..onTap = () {})
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: MainAppStyle.mainColorApp),
+                text: _state.getResendCodeText(context),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = _sendResetPasswordCodeOnEmail,
+              )
             ])),
         Form(key: _formKeyMail, child: InputEmail(emailController)),
         Text(
@@ -114,52 +142,33 @@ class ResetPasswordFormState extends State<ResetPasswordForm> {
           style: const TextStyle(color: Colors.red),
         ),
         MainActionButton(
-            text: AppLocalizations.of(context)!.sendResetPasswordCode,
-            action: isSendCode ? null : sendResetPasswordCode,
-            backgroundColor:
-               _state.colorSendCodeButton
-            //     () {
-            //   //When function has ()=>{} is one line //(){} is anonymus multiline
-            //
-            //   if (_formKeyMail.currentState!.validate()) {}
-            //
-            //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            //       backgroundColor: MainAppStyle.mainColorApp,
-            //       content: Text("Send reset password code")));
-            //
-            //   setState(() {
-            //     isSendEmail = true;
-            //   });
-            // }
-
-            ),
-        SizedBox(height: 15),
-        const Text(
-          "Enter the code\n received in the email",
+          text: AppLocalizations.of(context)!.sendResetPasswordCode,
+          action:
+              _state.isSendCodeButtonEnabled ? _sendResetPasswordCode : null,
+          backgroundColor: _state.colorSendCodeButton,
+        ),
+        const SizedBox(height: 15),
+        Text(
+          AppLocalizations.of(context)!.enterCodeReceivedOnEmail,
           textAlign: TextAlign.center,
         ),
-        InputCode(passwordController,isEnabled: _state.isEnableEnterCode,),
+        Form(
+            key: _formKeyCode,
+            child: InputCode(
+              codeController,
+              isEnabled: _state.isEnableEnterCode,
+            )),
         const SizedBox(
           height: 10,
         ),
         Text(
-          isEmailExistsOnServer ? "incorrect login details" : "",
+          _state.getMessageBadCode(context),
           style: const TextStyle(color: Colors.red),
         ),
         MainActionButton(
-            text: 'Reset password',
-            action: null,
-             backgroundColor: _state.colorResetPasswordButton
-            //     !isSendEmail ? Colors.grey : MainAppStyle.mainColorApp,
-            // action: () {
-            //   PageRouteNavigation.navigationTransitionSlideFromDown(
-            //     context: context,
-            //     destination: const NewPassword(),
-            //   );
-            // }
-
-
-            ),
+            text: AppLocalizations.of(context)!.resetPassword,
+            action: _state.isResetPasswordButtonEnabled ? _resetPassword : null,
+            backgroundColor: _state.colorResetPasswordButton),
       ],
     ));
   }

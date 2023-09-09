@@ -139,6 +139,24 @@
   },
 
 
+  "enterCodeReceivedOnEmail" : "Enter the code\n received in the email",
+  "@enterCodeReceivedOnEmail": {
+    "description": "Text asking the user to enter the code received by e-mail"
+  },
+
+  "resetPassword" : "Reset password",
+  "@resetPassword": {
+    "description": "Text for the password change button"
+  },
+  "errorCode" : "Invalid code entered",
+  "@errorCode": {
+    "description": "Text informing that the user has entered an incorrect code"
+  },
+
+  "sendPasswordResetCode": "A password reset code has been sent",
+  "@sendPasswordResetCode": {
+    "description": "Text informing the user that a code needed to reset their password has been sent"
+  },
 
   "helloWorld": "Hello World!",
   "@helloWorld": {

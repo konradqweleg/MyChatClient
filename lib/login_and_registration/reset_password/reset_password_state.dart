@@ -1,14 +1,12 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-
 import '../../style/main_style.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 enum ResetPasswordState {
-  start(false,false,false,Colors.grey,MainAppStyle.mainColorApp,false,true),
-  noExistsEmail(false,false,true,Colors.grey,MainAppStyle.mainColorApp,true,false),
-  sendCode(true,true,false,MainAppStyle.mainColorApp,Colors.grey,false,true);
+  start(false,false,false,Colors.grey,MainAppStyle.mainColorApp,false,true,false),
+  noExistsEmail(false,false,true,Colors.grey,MainAppStyle.mainColorApp,true,false,false),
+  sendCode(true,true,false,MainAppStyle.mainColorApp,Colors.grey,true,true,false),
+  badCode(true,true,false,MainAppStyle.mainColorApp,Colors.grey,true,true,true);
 
 
   String getNoExistsEmailText(BuildContext context){
@@ -27,10 +25,18 @@ enum ResetPasswordState {
     }
   }
 
+  String getMessageBadCode(BuildContext context){
+    if(isBadCode){
+      return AppLocalizations.of(context)!.errorCode;
+    }else{
+      return "";
+    }
+  }
+
    const ResetPasswordState(this.isActiveResendCode, this.isEnableEnterCode,
       this.isExistsEmailInService, this.colorResetPasswordButton,
       this.colorSendCodeButton, this.isResetPasswordButtonEnabled,
-      this.isSendCodeButtonEnabled);
+      this.isSendCodeButtonEnabled,this.isBadCode);
 
   final bool isActiveResendCode;
   final bool isEnableEnterCode;
@@ -39,6 +45,8 @@ enum ResetPasswordState {
   final Color colorSendCodeButton;
   final bool isSendCodeButtonEnabled;
   final bool isResetPasswordButtonEnabled;
+  final bool isBadCode;
+
 
 
 }

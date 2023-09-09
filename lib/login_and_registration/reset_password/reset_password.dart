@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:my_chat_client/login_and_registration/reset_password/check/checkExistsEmailOnServer.dart';
+import 'package:my_chat_client/login_and_registration/reset_password/check/reset_code_on_server.dart';
 import 'package:my_chat_client/login_and_registration/reset_password/reset_password_form.dart';
+import 'package:my_chat_client/login_and_registration/reset_password/check/validate_code_on_server.dart';
 import '../../common/undo_button.dart';
 import '../../style/main_style.dart';
 
@@ -41,7 +44,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                   Container(
                     height: 600.0,
                     alignment: Alignment.topLeft,
-                    child: const ResetPasswordForm(),
+                    child:  ResetPasswordForm(ResetCodeOnServer(),ValidateCodeOnServer(),CheckEmailExistsOnServer()),
                   ),
                 ],
               ),

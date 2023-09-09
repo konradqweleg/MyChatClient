@@ -26,7 +26,9 @@
   "sendResetPasswordCode": "Wyślij kod ",
   "noUserWithThisEmail": "W serwisie nie ma konta użytkownika o podanym adresie email",
   "passwordResetCodeSend": "Wysłano kod resetowania hasła",
-
-
+  "enterCodeReceivedOnEmail" : "Wprowadź kod \n otrzymany na adres email",
+  "resetPassword" : "Zmień hasło",
+  "errorCode" : "Błędny kod",
+  "sendPasswordResetCode": "Kod resetowania hasła został wysłany na podany adres email",
   "helloWorld": "¡Hola Mundo!"
 }

@@ -8,11 +8,13 @@ import '../../../common/undo_button.dart';
 import '../../../style/main_style.dart';
 
 
-void main() => runApp(const NewPassword());
+void main() => runApp( NewPassword("emptyEmail"));
 
 
 class NewPassword extends StatefulWidget {
-  const NewPassword({super.key});
+   NewPassword(this.emailUser, {super.key});
+
+  String emailUser;
 
   @override
   State<StatefulWidget> createState() {
