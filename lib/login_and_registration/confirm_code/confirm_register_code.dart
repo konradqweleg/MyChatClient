@@ -53,7 +53,7 @@ class ConfirmRegisterCodeState extends State<ConfirmRegisterCode> {
                     )
                     ,
                     Container(
-                      height: 600.0,
+                      height: 650.0,
                       alignment: Alignment.topLeft,
                       child:  ConfirmCodeRegisterForm(widget.userRegisterData,ValidateConfirmCodeOnServer()),
                     ),

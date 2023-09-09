@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:my_chat_client/login_and_registration/common/input/input_mail.dart';
@@ -7,6 +8,7 @@ import 'package:my_chat_client/login_and_registration/common/input/input_passwor
 import 'package:my_chat_client/login_and_registration/common/button/main_action_button.dart';
 import 'package:my_chat_client/login_and_registration/reset_password/new_password/new_password.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:my_chat_client/login_and_registration/reset_password/reset_password_state.dart';
 import '../../navigation/page_route_navigation.dart';
 import '../../common/name_app.dart';
 import '../../style/main_style.dart';
@@ -25,6 +27,8 @@ class ResetPasswordFormState extends State<ResetPasswordForm> {
   final _formKeyMail = GlobalKey<FormState>();
   static double breakBetweenNameAppAndForm = 20.0;
 
+  ResetPasswordState _state = ResetPasswordState.start;
+
   bool isEmailExistsOnServer = false;
   bool isSendEmail = false;
   bool isSendCode = false;
@@ -39,41 +43,51 @@ class ResetPasswordFormState extends State<ResetPasswordForm> {
     return true;
   }
 
-  bool isEmailExistOnServer(){
-    return emailController!.text == "polska699@interia.eu";
+  bool isEmailExistInService() {
+    return emailController.text == "polska699@interia.eu";
   }
 
-  void goToVerficationCode(){
+  void goToVerification() {
     setState(() {
       isSendCode = true;
     });
 
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          backgroundColor: MainAppStyle.mainColorApp,
-          content: Text(AppLocalizations.of(context)!.passwordResetCodeSend)));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        backgroundColor: MainAppStyle.mainColorApp,
+        content: Text(AppLocalizations.of(context)!.passwordResetCodeSend)));
 
     //PageRouteNavigation.navigation(context: context, destination: NewPassword());
   }
 
-  void sendResetPasswordCode(){
+  void setStateNoExistsEmailInService() {
+    setState(() {
+      _state = ResetPasswordState.noExistsEmail;
+    });
+  }
+
+  void setStateSentCode() {
+    setState(() {
+      _state = ResetPasswordState.sendCode;
+    });
+  }
+
+  void sendResetPasswordCode() {
     bool isValidFormatMail = _isValidFormatEmail();
 
-    if(!isValidFormatMail){
+    if (!isValidFormatMail) {
       return;
     }
 
-    if(!isEmailExistOnServer()){
-      isEmailExistsOnServer = true;
-    }else{
-     goToVerficationCode();
+    if (!isEmailExistInService()) {
+      setStateNoExistsEmailInService();
+    } else {
+      setStateSentCode();
+      goToVerification();
     }
-
   }
 
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
         body: Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -87,20 +101,23 @@ class ResetPasswordFormState extends State<ResetPasswordForm> {
             text: AppLocalizations.of(context)!
                 .descriptionSendMailWithResetPasswordCode,
             children: <InlineSpan>[
-               TextSpan(
+              TextSpan(
                   style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       color: MainAppStyle.mainColorApp),
-                  text: isSendCode ?   AppLocalizations.of(context)!.resendCode : "",
+                  text: _state.getResendCodeText(context),
                   recognizer: TapGestureRecognizer()..onTap = () {})
             ])),
         Form(key: _formKeyMail, child: InputEmail(emailController)),
-        Text(isEmailExistsOnServer ?  AppLocalizations.of(context)!.noUserWithThisEmail: "",style: TextStyle(color: Colors.red),),
+        Text(
+          _state.getNoExistsEmailText(context),
+          style: const TextStyle(color: Colors.red),
+        ),
         MainActionButton(
-            text:AppLocalizations.of(context)!.sendResetPasswordCode,
+            text: AppLocalizations.of(context)!.sendResetPasswordCode,
             action: isSendCode ? null : sendResetPasswordCode,
             backgroundColor:
-        isSendCode ? Colors.grey : MainAppStyle.mainColorApp
+               _state.colorSendCodeButton
             //     () {
             //   //When function has ()=>{} is one line //(){} is anonymus multiline
             //
@@ -121,7 +138,7 @@ class ResetPasswordFormState extends State<ResetPasswordForm> {
           "Enter the code\n received in the email",
           textAlign: TextAlign.center,
         ),
-        InputCode(passwordController),
+        InputCode(passwordController,isEnabled: _state.isEnableEnterCode,),
         const SizedBox(
           height: 10,
         ),
@@ -131,14 +148,18 @@ class ResetPasswordFormState extends State<ResetPasswordForm> {
         ),
         MainActionButton(
             text: 'Reset password',
-            backgroundColor:
-                !isSendEmail ? Colors.grey : MainAppStyle.mainColorApp,
-            action: () {
-              PageRouteNavigation.navigationTransitionSlideFromDown(
-                context: context,
-                destination: const NewPassword(),
-              );
-            }),
+            action: null,
+             backgroundColor: _state.colorResetPasswordButton
+            //     !isSendEmail ? Colors.grey : MainAppStyle.mainColorApp,
+            // action: () {
+            //   PageRouteNavigation.navigationTransitionSlideFromDown(
+            //     context: context,
+            //     destination: const NewPassword(),
+            //   );
+            // }
+
+
+            ),
       ],
     ));
   }

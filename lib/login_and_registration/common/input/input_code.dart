@@ -5,10 +5,11 @@ import 'package:my_chat_client/login_and_registration/style/style_login_and_regi
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class InputCode extends StatelessWidget {
-  InputCode(this.controller,{super.key});
+  InputCode(this.controller,{this.isEnabled = true ,super.key});
 
   final TextEditingController controller;
   static const int codeCorrectLength = 4;
+  bool isEnabled;
 
   final InputCodeValidate validator = InputCodeValidate();
 
@@ -18,6 +19,7 @@ class InputCode extends StatelessWidget {
     return SizedBox(
       height: StyleLoginAndRegistration.defaultInputHeight,
       child: TextFormField(
+        enabled: isEnabled,
         inputFormatters: [
           LengthLimitingTextInputFormatter(codeCorrectLength),
         ],

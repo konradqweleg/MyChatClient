@@ -1,6 +1,7 @@
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:my_chat_client/conversation/conversation.dart';
 import 'package:my_chat_client/login_and_registration/common/button/main_action_button.dart';
 import 'package:my_chat_client/login_and_registration/confirm_code/create_account_data.dart';
@@ -10,9 +11,37 @@ import '../../common/name_app.dart';
 import '../common/input/input_code.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../register/user_register_data.dart';
+import 'check_confirm_code_on_server.dart';
 import 'validate_confirm_code.dart';
 
 
+
+
+class LocalizationsInject extends StatelessWidget {
+  final Widget child;
+  const LocalizationsInject({Key? key, required this.child}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en', ''),
+      ],
+      home: child,
+    );
+  }
+}
+
+
+void main() => runApp(
+    LocalizationsInject(child:
+    ConfirmCodeRegisterForm(UserRegisterData("","","",""),ValidateConfirmCodeOnServer())));
 
 
 class ConfirmCodeRegisterForm extends StatefulWidget {
