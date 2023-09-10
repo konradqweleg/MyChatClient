@@ -5,8 +5,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 enum ResetPasswordState {
   start(false,false,false,Colors.grey,MainAppStyle.mainColorApp,false,true,false),
   noExistsEmail(false,false,true,Colors.grey,MainAppStyle.mainColorApp,true,false,false),
-  sendCode(true,true,false,MainAppStyle.mainColorApp,Colors.grey,true,true,false),
-  badCode(true,true,false,MainAppStyle.mainColorApp,Colors.grey,true,true,true);
+  sendCode(true,true,false,MainAppStyle.mainColorApp,Colors.grey,true,false,false),
+  badCode(true,true,false,MainAppStyle.mainColorApp,Colors.grey,true,false,true);
 
 
   String getNoExistsEmailText(BuildContext context){

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_chat_client/login_and_registration/common/button/main_action_button.dart';
+import 'package:my_chat_client/login_and_registration/common/input/input_code.dart';
 import 'package:my_chat_client/login_and_registration/reset_password/reset_password.dart';
 import '../helping/utils.dart';
 
@@ -39,7 +40,7 @@ void main() {
         });
 
     testWidgets(
-        'Checking if the password reset button is locked initially',
+        'Checking if the password reset button and entered code is locked initially',
             (WidgetTester tester) async {
           //given
           //when
@@ -47,6 +48,7 @@ void main() {
 
           //then
           expect(tester.widget<ElevatedButton>(find.byType(ElevatedButton).last).enabled, isFalse);
+          expect(tester.widget<InputCode>(find.byType(InputCode).last).isEnabled, isFalse);
         });
 
     testWidgets(
