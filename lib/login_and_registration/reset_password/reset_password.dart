@@ -23,34 +23,35 @@ class _ResetPasswordState extends State<ResetPassword> {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints viewportConstraints) {
         return SingleChildScrollView(
-            child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minHeight: viewportConstraints.maxHeight,
-          ),
-          child: Container(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            child: Padding(
-              padding: MainAppStyle.defaultMainPadding,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  const SizedBox(height: 25),
-                  Container(
-                    height: 20,
-                    alignment: Alignment.topLeft,
-                    child: const UndoButton(),
-                  ),
-                  Container(
-                    height: 600.0,
-                    alignment: Alignment.topLeft,
-                    child:  ResetPasswordForm(ResetCodeOnServer(),ValidateCodeOnServer(),CheckEmailExistsOnServer()),
-                  ),
-                ],
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: viewportConstraints.maxHeight,
+            ),
+            child: Container(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              child: Padding(
+                padding: MainAppStyle.defaultMainPadding,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    const SizedBox(height: 25),
+                    Container(
+                        height: 20,
+                        alignment: Alignment.topLeft,
+                        child: const UndoButton()),
+                    Container(
+                      // Another fixed-height child.
+                      height: 600.0,
+                      alignment: Alignment.topLeft,
+                      child:  ResetPasswordForm(ResetCodeOnServer(),ValidateCodeOnServer(),CheckEmailExistsOnServer()),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ));
+        );
       },
     );
   }

@@ -116,7 +116,6 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Container(
           alignment: Alignment.topLeft,

@@ -17,7 +17,7 @@ class _ResetPasswordButtonState extends State<ResetPasswordButton> {
 
 
   void _navigateToResetPasswordForm(){
-    PageRouteNavigation.navigation(
+    PageRouteNavigation.navigationTransitionSlideFromDown(
       context: context,
       destination: const ResetPassword(),
     );
