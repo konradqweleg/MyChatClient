@@ -19,6 +19,8 @@ class InputCode extends StatelessWidget {
     return SizedBox(
       height: StyleLoginAndRegistration.defaultInputHeight,
       child: TextFormField(
+        scrollPadding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom + 150),
         enabled: isEnabled,
         inputFormatters: [
           LengthLimitingTextInputFormatter(codeCorrectLength),

@@ -135,7 +135,7 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
                   ..onTap = _sendResetPasswordCodeOnEmail,
               )
             ])),
-        Form(key: _formKeyMail, child: InputEmail(emailController)),
+        Form(key: _formKeyMail, child: InputEmail(emailController,isEnabled: _state.isSendCodeButtonEnabled,)),
         Text(
           _state.getNoExistsEmailText(context),
           style: const TextStyle(color: Colors.red),
@@ -168,6 +168,7 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
             text: AppLocalizations.of(context)!.resetPassword,
             action: _state.isResetPasswordButtonEnabled ? _resetPassword : null,
             backgroundColor: _state.colorResetPasswordButton),
+
       ],
     ));
   }
