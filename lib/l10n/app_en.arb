@@ -158,6 +158,11 @@
     "description": "Text informing the user that a code needed to reset their password has been sent"
   },
 
+  "passwordHasBenReset": "Password has been changed",
+  "@passwordHasBenReset": {
+    "description": "Text explaining to the user that the password has been changed"
+  },
+
   "helloWorld": "Hello World!",
   "@helloWorld": {
     "description": "The conventional newborn programmer greeting"

@@ -30,5 +30,6 @@
   "resetPassword" : "Zmień hasło",
   "errorCode" : "Błędny kod",
   "sendPasswordResetCode": "Kod resetowania hasła został wysłany na podany adres email",
+  "passwordHasBenReset": "Hasło zostało zmienione",
   "helloWorld": "¡Hola Mundo!"
 }

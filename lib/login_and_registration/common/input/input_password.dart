@@ -30,6 +30,8 @@ class _InputPasswordState extends State<InputPassword> {
     return SizedBox(
       height: StyleLoginAndRegistration.defaultInputHeight,
       child: TextFormField(
+        scrollPadding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom + 150),
         controller: widget.controller,
         validator:(password)=> widget.passwordValidate.validate(password).mapStateToErrorMessage(context),
         obscureText: !passwordVisible,
