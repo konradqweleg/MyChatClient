@@ -40,7 +40,7 @@ class _NewPasswordFormState extends State<NewPasswordForm> {
 
   void _showMessagePasswordHasBeenChange(){
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(behavior: SnackBarBehavior.floating,
-        margin: EdgeInsets.only(
+        margin: const EdgeInsets.only(
             bottom: 100,
             right: 20,
             left: 20),

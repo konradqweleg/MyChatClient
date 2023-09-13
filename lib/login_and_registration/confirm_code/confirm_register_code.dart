@@ -18,11 +18,11 @@ class ConfirmRegisterCode extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return ConfirmRegisterCodeState();
+    return _ConfirmRegisterCodeState();
   }
 }
 
-class ConfirmRegisterCodeState extends State<ConfirmRegisterCode> {
+class _ConfirmRegisterCodeState extends State<ConfirmRegisterCode> {
 
   void _backToLogin(BuildContext context){
     PageRouteNavigation.navigation(context: context,destination: const Login());

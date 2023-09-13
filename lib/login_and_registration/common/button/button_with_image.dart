@@ -22,7 +22,7 @@ class ButtonWithImage extends StatelessWidget {
         AssetImage(image),
         color: null,
       ),
-      label: Text(text), // <-- Text
+      label: Text(text), // Text
       style: ElevatedButton.styleFrom(
         padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 15.0),
         backgroundColor: backgroundColor,

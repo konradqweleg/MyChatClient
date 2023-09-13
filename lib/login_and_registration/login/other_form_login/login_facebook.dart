@@ -8,6 +8,10 @@ import '../../style/style_login_and_registration.dart';
 class LoginFacebook extends StatelessWidget {
   const LoginFacebook({super.key});
 
+  void _loginViaFacebook(){
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -15,10 +19,11 @@ class LoginFacebook extends StatelessWidget {
       child: Container(
         padding:const EdgeInsets.only(left:10.0,right:10) ,
         height: 50,
-        child: const ButtonWithImage(
+        child:  ButtonWithImage(
           text: "FACEBOOK",
+          action: _loginViaFacebook,
           image: "assets/facebook_icon.png",
-          backgroundColor: Color(StyleLoginAndRegistration.facebookColor),
+          backgroundColor: const Color(StyleLoginAndRegistration.facebookColor),
         ),
       ),
     );
