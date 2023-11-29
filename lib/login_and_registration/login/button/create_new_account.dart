@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_chat_client/login_and_registration/register/request/register_user_http.dart';
 import '../../../navigation/page_route_navigation.dart';
 import '../../register/register.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -18,7 +19,7 @@ class _CreateNewAccountButtonState extends State<CreateNewAccountButton> {
   void navigationToRegisterForm(){
     PageRouteNavigation.navigationTransitionSlideFromDown(
       context: context,
-      destination: const Register(),
+      destination: Register(RegisterUserHttp()),
     );
   }
 
