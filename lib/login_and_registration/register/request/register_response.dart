@@ -1,0 +1,1 @@
+enum RegisterResponse { ok, userAlreadyExists, error }

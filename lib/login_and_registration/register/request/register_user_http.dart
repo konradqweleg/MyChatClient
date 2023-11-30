@@ -1,40 +1,59 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:my_chat_client/login_and_registration/register/request/error_message.dart';
+import 'package:my_chat_client/login_and_registration/register/request/register_response.dart';
 import 'package:my_chat_client/login_and_registration/register/request/register_user_request.dart';
+import 'package:my_chat_client/login_and_registration/register/request/status.dart';
 import 'package:my_chat_client/login_and_registration/register/user_register_data.dart';
+
+import '../../../requests/Requests.dart';
 
 class RegisterUserHttp extends RegisterUserRequest{
 
   @override
-    Future<bool> register(UserRegisterData userRegisterData) async {
-    var url = Uri.parse('https://example.com/api/endpoint'); // Zmień na właściwy adres URL
+    Future<RegisterResponse> register(UserRegisterData userRegisterData) async {
+    var urlRequestRegister = Uri.parse(Requests.register);
 
-    var body = json.encode({
-      'key1': 'value1',
-      'key2': 'value2',
-      // Dodaj inne dane do przesłania w żądaniu POST
-    });
+    var bodyUserRegisterData = jsonEncode(userRegisterData);
 
-    var response = await http.post(
-      url,
+    var request = await http.post(
+      urlRequestRegister,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        // Dodaj inne nagłówki według potrzeb
       },
-      body: body,
+      body: bodyUserRegisterData,
     );
 
-    if (response.statusCode == 200) {
-      print('Żądanie POST zostało wysłane pomyślnie.');
-      print('Odpowiedź: ${response.body}');
+    if (request.statusCode == 200) {
+     Map parsedResponse = json.decode(request.body);
+     Status status =  Status.fromJson(parsedResponse);
+
+     if(status.correctResponse){
+       return RegisterResponse.ok;
+     }else{
+       return RegisterResponse.error;
+     }
+
     } else {
-      print('Wystąpił problem podczas wysyłania żądania POST.');
-      print('Status kodu: ${response.statusCode}');
-      print('Treść błędu: ${response.body}');
+      print('Treść błędu: ${request.body}');
+      Map parsedResponse = json.decode(request.body);
+      ErrorMessage error =  ErrorMessage.fromJson(parsedResponse);
+
+      if(error.errorMessage == " User already exist "){
+        return RegisterResponse.userAlreadyExists;
+      }else{
+        return RegisterResponse.error;
+      }
+
+      // print('Wystąpił problem podczas wysyłania żądania POST.');
+      // print('Status kodu: ${request.statusCode}');
+      // print('Treść błędu: ${request.body}');
+
+
     }
 
-    return true;
+   // return true;
 
   }
 

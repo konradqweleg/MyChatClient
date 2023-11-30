@@ -5,4 +5,13 @@ class UserRegisterData{
   final String surname;
 
   UserRegisterData(this.email,this.name,this.surname,this.password,);
+
+  Map toJson() => {
+    'name': name,
+    'surname': surname,
+    'email' : email,
+    'password' : password
+  };
+
+
 }

@@ -3,6 +3,7 @@ import 'package:my_chat_client/login_and_registration/common/input/input_mail.da
 import 'package:my_chat_client/login_and_registration/common/input/input_password.dart';
 import 'package:my_chat_client/login_and_registration/common/button/main_action_button.dart';
 import 'package:my_chat_client/login_and_registration/confirm_code/confirm_register_code.dart';
+import 'package:my_chat_client/login_and_registration/register/request/register_response.dart';
 import 'package:my_chat_client/login_and_registration/register/request/register_user_request.dart';
 import 'package:my_chat_client/login_and_registration/register/user_register_data.dart';
 import '../../navigation/page_route_navigation.dart';
@@ -63,11 +64,19 @@ class _RegisterFormState extends State<RegisterForm> {
         _surnameController.text,
         _passwordController.text);
 
-    Future<bool> registerRequestResult = widget.registerUserRequest.register(registerData);
-
-    if(! await registerRequestResult){
+    Future<RegisterResponse> registerRequestResult = widget.registerUserRequest.register(registerData);
+    RegisterResponse registerResponse = await registerRequestResult;
+    if(registerResponse == RegisterResponse.userAlreadyExists){
+      print("Użytkownik już istnieje");
+      return;
+    }else if(registerResponse == RegisterResponse.error){
+      print("Błąd");
       return;
     }
+
+    // if(! await registerRequestResult){
+    //   return;
+    // }
 
     _goToConfirmAccount();
   }
