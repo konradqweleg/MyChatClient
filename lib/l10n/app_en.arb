@@ -163,6 +163,24 @@
     "description": "Text explaining to the user that the password has been changed"
   },
 
+
+  "emailOccupiedError": "The email address is already associated with an existing account.",
+  "@emailOccupiedError": {
+    "description": "A message explaining to the user that the email address used for registration is already taken"
+  },
+
+
+  "alreadyExistsEmailAccountNotActive": "The provided email address is already used for an inactive account.",
+  "@alreadyExistsEmailAccountNotActive": {
+    "description": "Information for the user when filling out the registration form with the email of an inactive user account."
+  },
+
+  "goToActiveAccountPanel": "Proceed to account activation",
+  "@goToActiveAccountPanel": {
+    "description": "Information for the user about the option to proceed to account activation."
+  },
+
+
   "helloWorld": "Hello World!",
   "@helloWorld": {
     "description": "The conventional newborn programmer greeting"

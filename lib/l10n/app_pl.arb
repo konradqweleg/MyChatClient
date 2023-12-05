@@ -31,5 +31,8 @@
   "errorCode" : "Błędny kod",
   "sendPasswordResetCode": "Kod resetowania hasła został wysłany na podany adres email",
   "passwordHasBenReset": "Hasło zostało zmienione",
+  "emailOccupiedError": "Użyty adres email jest już przypisany do istniejącego konta",
+  "alreadyExistsEmailAccountNotActive": "Podany adres email jest już użyty dla nieaktywowanego konta.",
+  "goToActiveAccountPanel": "Przejdź do aktywacji konta",
   "helloWorld": "¡Hola Mundo!"
 }

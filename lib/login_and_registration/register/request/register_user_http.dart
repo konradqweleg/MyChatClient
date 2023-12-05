@@ -40,7 +40,10 @@ class RegisterUserHttp extends RegisterUserRequest{
       Map parsedResponse = json.decode(request.body);
       ErrorMessage error =  ErrorMessage.fromJson(parsedResponse);
 
-      if(error.errorMessage == " User already exist "){
+      if(error.errorMessage == "Account not active"){
+        return RegisterResponse.accountNotActive;
+      }
+      else if(error.errorMessage == "User already exist"){
         return RegisterResponse.userAlreadyExists;
       }else{
         return RegisterResponse.error;

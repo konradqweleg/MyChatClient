@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:my_chat_client/login_and_registration/common/input/input_mail.dart';
 import 'package:my_chat_client/login_and_registration/common/input/input_password.dart';
@@ -8,6 +9,7 @@ import 'package:my_chat_client/login_and_registration/register/request/register_
 import 'package:my_chat_client/login_and_registration/register/user_register_data.dart';
 import '../../navigation/page_route_navigation.dart';
 import '../../common/name_app.dart';
+import '../../style/main_style.dart';
 import '../common/input/input_data.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -30,6 +32,8 @@ class _RegisterFormState extends State<RegisterForm> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _surnameController = TextEditingController();
+  bool _isOccupiedEmail = false;
+  bool _isShowAccountNotActive = false;
 
 
   bool isValidateForm() {
@@ -52,6 +56,13 @@ class _RegisterFormState extends State<RegisterForm> {
         isClearBackStack: true);
   }
 
+  void _showButtonAccountNotActive(){
+    setState(() {
+      _isShowAccountNotActive = true;
+    });
+
+  }
+
   void _register() async{
     bool isValidateFormData = isValidateForm();
     if (!isValidateFormData) {
@@ -67,18 +78,48 @@ class _RegisterFormState extends State<RegisterForm> {
     Future<RegisterResponse> registerRequestResult = widget.registerUserRequest.register(registerData);
     RegisterResponse registerResponse = await registerRequestResult;
     if(registerResponse == RegisterResponse.userAlreadyExists){
-      print("Użytkownik już istnieje");
+      setState(() {
+        _isOccupiedEmail = true;
+      });
       return;
     }else if(registerResponse == RegisterResponse.error){
-      print("Błąd");
+      return;
+    }else if(registerResponse == RegisterResponse.accountNotActive){
+      _showButtonAccountNotActive();
       return;
     }
 
-    // if(! await registerRequestResult){
-    //   return;
-    // }
+
 
     _goToConfirmAccount();
+  }
+
+  String _getErrorMessageWhenOccupiedEmail() {
+    String noError = "";
+    return _isOccupiedEmail
+        ? AppLocalizations.of(context)!.emailOccupiedError
+        : noError;
+  }
+
+
+  Widget _showActionTextGoToConfirmAccountIfAccountNotActivated(){
+  return  Visibility(
+    visible: _isShowAccountNotActive,
+    child: Text.rich(TextSpan(
+          text: AppLocalizations.of(context)!
+              .alreadyExistsEmailAccountNotActive,
+          children: <InlineSpan>[
+            TextSpan(
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: MainAppStyle.mainColorApp),
+              text: AppLocalizations.of(context)!
+                  .goToActiveAccountPanel,
+              recognizer: TapGestureRecognizer()
+                ..onTap = null,
+            )
+          ])),
+  );
   }
 
   @override
@@ -94,6 +135,16 @@ class _RegisterFormState extends State<RegisterForm> {
                 child: const NameApp(),
               ),
               const SizedBox(height: _breakBetweenNameAppAndForm),
+              Container(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  _getErrorMessageWhenOccupiedEmail(),
+                  textAlign: TextAlign.left,
+                  style: const TextStyle(color: Colors.red),
+                ),
+              ),
+
+              _showActionTextGoToConfirmAccountIfAccountNotActivated(),
               InputEmail(_emailController),
               InputData(
                 _usernameController,

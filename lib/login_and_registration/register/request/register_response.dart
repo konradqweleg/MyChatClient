@@ -1,1 +1,1 @@
-enum RegisterResponse { ok, userAlreadyExists, error }
+enum RegisterResponse { ok, userAlreadyExists, error,accountNotActive }
