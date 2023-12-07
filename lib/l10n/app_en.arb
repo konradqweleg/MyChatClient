@@ -180,6 +180,11 @@
     "description": "Information for the user about the option to proceed to account activation."
   },
 
+  "errorRequestInformationOnInternetAccessCheck": "The unexpected error. Please check your internet connection.",
+  "@errorRequestInformationOnInternetAccessCheck": {
+    "description": "Text informing the user about the request error "
+  },
+
 
   "helloWorld": "Hello World!",
   "@helloWorld": {

@@ -6,7 +6,7 @@ import 'package:my_chat_client/common/exit_button.dart';
 import 'package:my_chat_client/login_and_registration/common/button/main_action_button.dart';
 import 'package:my_chat_client/login_and_registration/confirm_code/confirm_register_code.dart';
 import 'package:my_chat_client/login_and_registration/login/login.dart';
-import 'package:my_chat_client/login_and_registration/register/request/register_response.dart';
+import 'package:my_chat_client/login_and_registration/register/request/register_response_status.dart';
 import 'package:my_chat_client/login_and_registration/register/request/register_user_request.dart';
 import 'package:my_chat_client/login_and_registration/register/user_register_data.dart';
 import '../helping/utils.dart';
@@ -30,8 +30,8 @@ Future<void> clickRegisterButton(WidgetTester tester) async {
 
 class RegisterUserRequestMock extends RegisterUserRequest{
   @override
-  Future<RegisterResponse> register(UserRegisterData userRegisterData) {
-    throw Future.value(RegisterResponse.ok);
+  Future<RegisterResponseStatus> register(UserRegisterData userRegisterData) {
+    throw Future.value(RegisterResponseStatus.ok);
   }
 
 }

@@ -19,7 +19,7 @@ class _CreateNewAccountButtonState extends State<CreateNewAccountButton> {
   void navigationToRegisterForm(){
     PageRouteNavigation.navigationTransitionSlideFromDown(
       context: context,
-      destination: Register(RegisterUserHttp()),
+      destination: Register(RegisterUserHttpRequest()),
     );
   }
 

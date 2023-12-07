@@ -1,0 +1,1 @@
+enum RegisterResponseStatus { ok, userAlreadyExists, error,accountNotActive,notSend }

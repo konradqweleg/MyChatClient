@@ -1,63 +1,55 @@
 import 'dart:convert';
-import 'dart:io';
-import 'package:http/http.dart' as http;
-import 'package:my_chat_client/login_and_registration/register/request/error_message.dart';
-import 'package:my_chat_client/login_and_registration/register/request/register_response.dart';
+import 'package:my_chat_client/http/request_response_general/error_message.dart';
+import 'package:my_chat_client/login_and_registration/register/request/register_response_status.dart';
 import 'package:my_chat_client/login_and_registration/register/request/register_user_request.dart';
-import 'package:my_chat_client/login_and_registration/register/request/status.dart';
+import 'package:my_chat_client/http/request_response_general/status.dart';
 import 'package:my_chat_client/login_and_registration/register/user_register_data.dart';
+import '../../../http/http_helper.dart';
+import '../../../requests/requests_url.dart';
 
-import '../../../requests/Requests.dart';
-
-class RegisterUserHttp extends RegisterUserRequest{
-
-  @override
-    Future<RegisterResponse> register(UserRegisterData userRegisterData) async {
-    var urlRequestRegister = Uri.parse(Requests.register);
-
-    var bodyUserRegisterData = jsonEncode(userRegisterData);
-
-    var request = await http.post(
-      urlRequestRegister,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: bodyUserRegisterData,
-    );
-
-    if (request.statusCode == 200) {
-     Map parsedResponse = json.decode(request.body);
-     Status status =  Status.fromJson(parsedResponse);
-
-     if(status.correctResponse){
-       return RegisterResponse.ok;
-     }else{
-       return RegisterResponse.error;
-     }
-
+class RegisterUserHttpRequest extends RegisterUserRequest {
+  RegisterResponseStatus _getCorrectResponseStatus(String resultBody) {
+    Map parsedResponse = json.decode(resultBody);
+    Status status = Status.fromJson(parsedResponse);
+    if (status.correctResponse) {
+      return RegisterResponseStatus.ok;
     } else {
-      print('Treść błędu: ${request.body}');
-      Map parsedResponse = json.decode(request.body);
-      ErrorMessage error =  ErrorMessage.fromJson(parsedResponse);
-
-      if(error.errorMessage == "Account not active"){
-        return RegisterResponse.accountNotActive;
-      }
-      else if(error.errorMessage == "User already exist"){
-        return RegisterResponse.userAlreadyExists;
-      }else{
-        return RegisterResponse.error;
-      }
-
-      // print('Wystąpił problem podczas wysyłania żądania POST.');
-      // print('Status kodu: ${request.statusCode}');
-      // print('Treść błędu: ${request.body}');
-
-
+      return RegisterResponseStatus.error;
     }
-
-   // return true;
-
   }
 
+  RegisterResponseStatus _getErrorResponseStatus(String resultBody) {
+    Map parsedResponse = json.decode(resultBody);
+    ErrorMessage error = ErrorMessage.fromJson(parsedResponse);
+
+    if (error.errorMessage == "Account not active") {
+      return RegisterResponseStatus.accountNotActive;
+    } else if (error.errorMessage == "User already exist") {
+      return RegisterResponseStatus.userAlreadyExists;
+    } else {
+      return RegisterResponseStatus.error;
+    }
+  }
+
+  @override
+  Future<RegisterResponseStatus> register(
+      UserRegisterData userRegisterData) async {
+
+    var bodyUserRegisterData = jsonEncode(userRegisterData);
+    var httpHelper = HttpHelper();
+    try {
+      var result = await httpHelper.executeHttpRequestWithTimeout(
+        RequestsURL.register,
+        body: bodyUserRegisterData,
+      );
+
+      if (result.statusCode == 200) {
+        return _getCorrectResponseStatus(result.body);
+      } else {
+        return _getErrorResponseStatus(result.body);
+      }
+    } catch (e) {
+      return RegisterResponseStatus.error;
+    }
+  }
 }

@@ -1,1 +1,0 @@
-enum RegisterResponse { ok, userAlreadyExists, error,accountNotActive }
