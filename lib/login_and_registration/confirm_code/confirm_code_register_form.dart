@@ -1,18 +1,16 @@
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:my_chat_client/conversation/conversation.dart';
 import 'package:my_chat_client/login_and_registration/common/button/main_action_button.dart';
 import 'package:my_chat_client/login_and_registration/confirm_code/create_account_data.dart';
+import 'package:my_chat_client/login_and_registration/confirm_code/request/confirm_account_request.dart';
 import 'package:my_chat_client/style/main_style.dart';
 import '../../navigation/page_route_navigation.dart';
 import '../../common/name_app.dart';
 import '../common/input/input_code.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../register/user_register_data.dart';
-import 'check_confirm_code_on_server.dart';
-import 'validate_confirm_code.dart';
 
 
 
@@ -38,16 +36,16 @@ class LocalizationsInject extends StatelessWidget {
   }
 }
 
-
-void main() => runApp(
-    LocalizationsInject(child:
-    ConfirmCodeRegisterForm(UserRegisterData("","","",""),ValidateConfirmCodeOnServer())));
+//
+// void main() => runApp(
+//     LocalizationsInject(child:
+//     ConfirmCodeRegisterForm(UserRegisterData("","","",""),ValidateConfirmCodeOnServer())));
 
 
 class ConfirmCodeRegisterForm extends StatefulWidget {
-  const ConfirmCodeRegisterForm( this.userRegisterData,this.checkConfirmCode, {super.key});
+  const ConfirmCodeRegisterForm( this.userRegisterData,this.checkConfirmCodeRequest, {super.key});
   final UserRegisterData userRegisterData;
-  final ValidateConfirmCode checkConfirmCode;
+  final ConfirmAccountRequest checkConfirmCodeRequest;
 
   @override
   State<ConfirmCodeRegisterForm> createState() {
@@ -92,7 +90,7 @@ class _ConfirmCodeRegisterFormState extends State<ConfirmCodeRegisterForm> {
 
   bool _isCorrectCodeOnServer() {
     CreateAccountData createAccountData = CreateAccountData(widget.userRegisterData, controller.text);
-    bool isCreatedAccount =  widget.checkConfirmCode.isValidConfirmCode(createAccountData);
+    bool isCreatedAccount =  widget.checkConfirmCodeRequest.isValidConfirmCode(createAccountData);
     return isCreatedAccount;
   }
 

@@ -28,7 +28,7 @@ class HttpHelper {
 
       if (response is http.Response) {
         if (response.statusCode == 200 || response.statusCode == 400) {
-          return response.body;
+          return response;
         } else {
           throw Exception('Request failed with status: ${response.statusCode}');
         }

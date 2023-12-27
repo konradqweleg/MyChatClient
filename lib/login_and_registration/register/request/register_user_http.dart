@@ -34,8 +34,8 @@ class RegisterUserHttpRequest extends RegisterUserRequest {
   @override
   Future<RegisterResponseStatus> register(
       UserRegisterData userRegisterData) async {
-
     var bodyUserRegisterData = jsonEncode(userRegisterData);
+
     var httpHelper = HttpHelper();
     try {
       var result = await httpHelper.executeHttpRequestWithTimeout(
