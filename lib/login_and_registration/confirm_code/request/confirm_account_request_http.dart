@@ -28,7 +28,11 @@ class ConfirmAccountRequestHttp extends ConfirmAccountRequest{
 
     if (error.errorMessage == "Bad code") {
       return ConfirmAccountRequestStatus.badCode;
-    }else {
+    }else if (error.errorMessage == "Code not found for this user"){
+      return ConfirmAccountRequestStatus.noCodeForUser;
+    }
+    else
+    {
       return ConfirmAccountRequestStatus.error;
     }
   }
@@ -45,6 +49,8 @@ class ConfirmAccountRequestHttp extends ConfirmAccountRequest{
         RequestsURL.confirmCodeCreateAccount,
         body: bodyConfirmAccountData,
       );
+      print(result.body);
+      print(bodyConfirmAccountData);
 
       if (result.statusCode == 200) {
         return _getCorrectResponseStatus(result.body);

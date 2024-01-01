@@ -185,6 +185,15 @@
     "description": "Text informing the user about the request error "
   },
 
+  "badCreateAccountConfirmCode": "Invalid account activation code",
+  "@badCreateAccountConfirmCode": {
+    "description": "The message informing the user during registration that they entered an incorrect account activation code"
+  },
+
+  "notSendActiveAccountCodeForThisUser": "For this user, the account activation code was not sent.",
+  "@notSendActiveAccountCodeForThisUser": {
+    "description": "The message informing the user about the lack of sending the account activation code"
+  },
 
   "helloWorld": "Hello World!",
   "@helloWorld": {

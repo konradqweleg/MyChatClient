@@ -35,5 +35,7 @@
   "alreadyExistsEmailAccountNotActive": "Podany adres email jest już użyty dla nieaktywowanego konta.",
   "goToActiveAccountPanel": "Przejdź do aktywacji konta",
   "errorRequestInformationOnInternetAccessCheck": "Nieoczekiwany błąd. Sprawdź czy masz połączenie z Internetem",
-  "helloWorld": "¡Hola Mundo!"
+  "helloWorld": "¡Hola Mundo!",
+  "badCreateAccountConfirmCode": "Wprowadzono zły kod aktywacji konta użytkownika",
+  "notSendActiveAccountCodeForThisUser": "Nie wysłano kodu aktywacji konta dla tego użytkownika"
 }

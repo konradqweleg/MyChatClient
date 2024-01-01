@@ -2,9 +2,13 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:my_chat_client/conversation/conversation.dart';
+import 'package:my_chat_client/http/request_response_general/error_message.dart';
 import 'package:my_chat_client/login_and_registration/common/button/main_action_button.dart';
 import 'package:my_chat_client/login_and_registration/confirm_code/create_account_data.dart';
+import 'package:my_chat_client/login_and_registration/confirm_code/request/confirm_account_data.dart';
 import 'package:my_chat_client/login_and_registration/confirm_code/request/confirm_account_request.dart';
+import 'package:my_chat_client/login_and_registration/confirm_code/request/confirm_account_request_status.dart';
+import 'package:my_chat_client/login_and_registration/confirm_code/status_message.dart';
 import 'package:my_chat_client/style/main_style.dart';
 import '../../navigation/page_route_navigation.dart';
 import '../../common/name_app.dart';
@@ -43,9 +47,10 @@ class LocalizationsInject extends StatelessWidget {
 
 
 class ConfirmCodeRegisterForm extends StatefulWidget {
-  const ConfirmCodeRegisterForm( this.userRegisterData,this.checkConfirmCodeRequest, {super.key});
+   ConfirmCodeRegisterForm( this.userRegisterData,this.checkConfirmCodeRequest, {super.key});
   final UserRegisterData userRegisterData;
   final ConfirmAccountRequest checkConfirmCodeRequest;
+  ConfirmAccountRequestStatus _confirmAccountRequestStatus = ConfirmAccountRequestStatus.notSend;
 
   @override
   State<ConfirmCodeRegisterForm> createState() {
@@ -58,9 +63,10 @@ class _ConfirmCodeRegisterFormState extends State<ConfirmCodeRegisterForm> {
   static double breakBetweenNameAppAndForm = 20.0;
   TextEditingController controller = TextEditingController();
 
-  bool isErrorLoginTry = false;
+  StatusMessage _errorMessage = StatusMessage.noError();
 
   void _resendConfirmCode() {
+
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         backgroundColor: MainAppStyle.mainColorApp,
         content: Text(AppLocalizations.of(context)!.sendConfirmCode)));
@@ -68,9 +74,13 @@ class _ConfirmCodeRegisterFormState extends State<ConfirmCodeRegisterForm> {
 
   String _getInformationIsValidCode() {
     const String validCode = "";
-    return isErrorLoginTry
-        ? AppLocalizations.of(context)!.errorConfirmCode
-        : validCode;
+
+    if(_errorMessage.isError()){
+      return _errorMessage.getErrorMessage();
+    }else{
+      return validCode;
+    }
+
   }
 
   bool _isValidFormatCode() {
@@ -80,18 +90,26 @@ class _ConfirmCodeRegisterFormState extends State<ConfirmCodeRegisterForm> {
     return true;
   }
 
-  void _showErrorWrongFormatCode() {
-    setState(
-      () {
-        isErrorLoginTry = true;
-      },
-    );
-  }
 
-  bool _isCorrectCodeOnServer() {
-    CreateAccountData createAccountData = CreateAccountData(widget.userRegisterData, controller.text);
-    bool isCreatedAccount =  widget.checkConfirmCodeRequest.isValidConfirmCode(createAccountData);
-    return isCreatedAccount;
+  void _isCorrectCodeOnServer() {
+
+    ConfirmAccountData confirmAccountData = ConfirmAccountData(email:widget.userRegisterData.email,code:controller.text);
+    Future<ConfirmAccountRequestStatus> isActivatedAccount =  widget.checkConfirmCodeRequest.confirmAccount(confirmAccountData);
+    isActivatedAccount.then((value) => setState(() {
+      widget._confirmAccountRequestStatus = value;
+      print(widget._confirmAccountRequestStatus);
+      if (widget._confirmAccountRequestStatus == ConfirmAccountRequestStatus.ok) {
+        _logIn();
+      }else if(widget._confirmAccountRequestStatus == ConfirmAccountRequestStatus.badCode) {
+        _errorMessage = StatusMessage.error(AppLocalizations.of(context)!.badCreateAccountConfirmCode);
+      }else if(widget._confirmAccountRequestStatus == ConfirmAccountRequestStatus.noCodeForUser) {
+        _errorMessage = StatusMessage.error(AppLocalizations.of(context)!.notSendActiveAccountCodeForThisUser);
+      }
+      else {
+        _errorMessage = StatusMessage.error(AppLocalizations.of(context)!.errorRequestInformationOnInternetAccessCheck);
+      }
+    }));
+
   }
 
   void _logIn() {
@@ -105,13 +123,7 @@ class _ConfirmCodeRegisterFormState extends State<ConfirmCodeRegisterForm> {
       return;
     }
 
-    bool isCorrectCode = _isCorrectCodeOnServer();
-
-    if (isCorrectCode) {
-      _logIn();
-    } else {
-      _showErrorWrongFormatCode();
-    }
+    _isCorrectCodeOnServer();
   }
 
   @override

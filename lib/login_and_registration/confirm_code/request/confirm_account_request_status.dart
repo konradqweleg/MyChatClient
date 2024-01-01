@@ -1,1 +1,1 @@
-enum ConfirmAccountRequestStatus{ok,badCode,noCodeForUser,error}
+enum ConfirmAccountRequestStatus{ok,badCode,noCodeForUser,error,notSend}
