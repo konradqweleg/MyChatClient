@@ -52,7 +52,7 @@ void main() {
       expect(find.text("Enter code"), findsOneWidget);
       expect(
           find.text(
-              "We sent you an email with a 4-digit code. Enter it to create an account.Resend code",
+              "We sent you an email with a 4-digit code. Enter it to create an account. Resend code",
               findRichText: true),
           findsOneWidget);
       expect(find.text("Register"), findsOneWidget);
@@ -113,7 +113,7 @@ void main() {
           UserRegisterData("", "name", "surname", "password");
       await Utils.showView(tester, ConfirmRegisterCode(registerData));
       final textFinder = find.text(
-          "We sent you an email with a 4-digit code. Enter it to create an account.Resend code",
+          "We sent you an email with a 4-digit code. Enter it to create an account. Resend code",
           findRichText: true);
 
       //when
@@ -159,22 +159,6 @@ void main() {
       expect(find.byType(ConfirmRegisterCode), findsOneWidget);
     });
 
-    testWidgets(
-        "When the registration button was clicked with a code that was ok length, the system no should display a message from validator ",
-        (tester) async {
-      //given
-      UserRegisterData registerData =
-          UserRegisterData("", "name", "surname", "password");
-      await Utils.showView(tester, ConfirmRegisterCode(registerData));
 
-      //when
-      await enterConfirmCode(tester, "3455");
-      await clickRegisterButton(tester);
-
-      //then
-      expect(find.text("Not enough characters in the code"), findsNothing);
-      expect(find.text("Please enter code"), findsNothing);
-
-    });
   });
 }

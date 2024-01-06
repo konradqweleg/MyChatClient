@@ -38,7 +38,7 @@ class RequestAcceptCode9999AsCorrect implements ConfirmAccountRequest {
       return Future.value(Result.success(ConfirmAccountRequestStatus.ok));
     }
     else{
-      return Future.value(Result.error(ConfirmAccountRequestStatus.error));
+      return Future.value(Result.error(ConfirmAccountRequestStatus.badCode));
     }
   }
 }
@@ -86,6 +86,30 @@ void main() {
           //then
           expect(find.byType(Conversation), findsNothing);
           expect(find.text("Invalid account activation code"), findsOneWidget);
+        });
+
+
+
+    testWidgets(
+        "When the registration button was clicked with a code that was ok length, the system no should display a message from validator ",
+            (tester) async {
+          //given
+              UserRegisterData registerData =
+              UserRegisterData("correct@mail.pl", "name", "surname", "password");
+
+              await Utils.showView(
+                tester,
+                ConfirmCodeRegisterForm(registerData, RequestAcceptCode9999AsCorrect()),
+              );
+
+          //when
+          await enterConfirmCode(tester, "3455");
+          await clickRegisterButton(tester);
+
+          //then
+          expect(find.text("Not enough characters in the code"), findsNothing);
+          expect(find.text("Please enter code"), findsNothing);
+
         });
   });
 }
