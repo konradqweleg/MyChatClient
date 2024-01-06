@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_chat_client/common/exit_button.dart';
 import 'package:my_chat_client/conversation/conversation.dart';
+import 'package:my_chat_client/login_and_registration/common/result.dart';
 import 'package:my_chat_client/login_and_registration/common/button/main_action_button.dart';
 import 'package:my_chat_client/login_and_registration/confirm_code/confirm_code_register_form.dart';
-import 'package:my_chat_client/login_and_registration/confirm_code/create_account_data.dart';
-import 'package:my_chat_client/login_and_registration/confirm_code/validate_confirm_code.dart';
+
+import 'package:my_chat_client/login_and_registration/confirm_code/request/confirm_account_data.dart';
+import 'package:my_chat_client/login_and_registration/confirm_code/request/confirm_account_request.dart';
+import 'package:my_chat_client/login_and_registration/confirm_code/request/confirm_account_request_status.dart';
+
 import 'package:my_chat_client/login_and_registration/register/user_register_data.dart';
 import '../helping/utils.dart';
 
@@ -26,10 +30,16 @@ Future<void> clickRegisterButton(WidgetTester tester) async {
   await tester.pumpAndSettle();
 }
 
-class ValidatorConfirmCode9999 implements ValidateConfirmCode {
+class RequestAcceptCode9999AsCorrect implements ConfirmAccountRequest {
+
   @override
-  bool isValidConfirmCode(CreateAccountData createAccountData) {
-    return createAccountData.confirmCode == "9999";
+  Future<Result> confirmAccount(ConfirmAccountData confirmAccountData) {
+    if(confirmAccountData.code == "9999"){
+      return Future.value(Result.success(ConfirmAccountRequestStatus.ok));
+    }
+    else{
+      return Future.value(Result.error(ConfirmAccountRequestStatus.error));
+    }
   }
 }
 
@@ -44,7 +54,7 @@ void main() {
 
       await Utils.showView(
         tester,
-        ConfirmCodeRegisterForm(registerData, ValidatorConfirmCode9999()),
+        ConfirmCodeRegisterForm(registerData, RequestAcceptCode9999AsCorrect()),
       );
 
       await enterConfirmCode(tester, "9999");
@@ -66,7 +76,7 @@ void main() {
 
           await Utils.showView(
             tester,
-            ConfirmCodeRegisterForm(registerData, ValidatorConfirmCode9999()),
+            ConfirmCodeRegisterForm(registerData, RequestAcceptCode9999AsCorrect()),
           );
 
           await enterConfirmCode(tester, "0000");
@@ -75,7 +85,7 @@ void main() {
           await clickRegisterButton(tester);
           //then
           expect(find.byType(Conversation), findsNothing);
-          expect(find.text("Error confirm code"), findsOneWidget);
+          expect(find.text("Invalid account activation code"), findsOneWidget);
         });
   });
 }

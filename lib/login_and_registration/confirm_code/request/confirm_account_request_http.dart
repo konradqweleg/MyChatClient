@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:my_chat_client/login_and_registration/common/result.dart';
 import 'package:my_chat_client/login_and_registration/confirm_code/request/confirm_account_data.dart';
 
 import 'package:my_chat_client/login_and_registration/confirm_code/request/confirm_account_request_status.dart';
@@ -12,35 +13,35 @@ import 'confirm_account_request.dart';
 
 class ConfirmAccountRequestHttp extends ConfirmAccountRequest{
 
-  ConfirmAccountRequestStatus _getCorrectResponseStatus(String resultBody) {
+  Result _getCorrectResponseStatus(String resultBody) {
     Map parsedResponse = json.decode(resultBody);
     Status status = Status.fromJson(parsedResponse);
     if (status.correctResponse) {
-      return ConfirmAccountRequestStatus.ok;
+      return Result.success(ConfirmAccountRequestStatus.ok);
     } else {
-      return ConfirmAccountRequestStatus.error;
+      return Result.error(ConfirmAccountRequestStatus.error);
     }
   }
 
-  ConfirmAccountRequestStatus _getErrorResponseStatus(String resultBody) {
+  Result _getErrorResponseStatus(String resultBody) {
     Map parsedResponse = json.decode(resultBody);
-    ErrorMessage error = ErrorMessage.fromJson(parsedResponse);
+    ErrorMessageData error = ErrorMessageData.fromJson(parsedResponse);
 
     if (error.errorMessage == "Bad code") {
-      return ConfirmAccountRequestStatus.badCode;
+      return Result.error(ConfirmAccountRequestStatus.badCode);
     }else if (error.errorMessage == "Code not found for this user"){
-      return ConfirmAccountRequestStatus.noCodeForUser;
+      return Result.error( ConfirmAccountRequestStatus.noCodeForUser);
     }
     else
     {
-      return ConfirmAccountRequestStatus.error;
+      return Result.error(ConfirmAccountRequestStatus.error);
     }
   }
 
 
 
   @override
-  Future<ConfirmAccountRequestStatus> confirmAccount(ConfirmAccountData confirmAccountData) async {
+ Future<Result> confirmAccount(ConfirmAccountData confirmAccountData) async {
     var bodyConfirmAccountData = jsonEncode(confirmAccountData);
 
     var httpHelper = HttpHelper();
@@ -49,16 +50,15 @@ class ConfirmAccountRequestHttp extends ConfirmAccountRequest{
         RequestsURL.confirmCodeCreateAccount,
         body: bodyConfirmAccountData,
       );
-      print(result.body);
-      print(bodyConfirmAccountData);
 
       if (result.statusCode == 200) {
         return _getCorrectResponseStatus(result.body);
       } else {
         return _getErrorResponseStatus(result.body);
       }
+
     } catch (e) {
-      return ConfirmAccountRequestStatus.error;
+      return Result.error(ConfirmAccountRequestStatus.error);
     }
   }
 

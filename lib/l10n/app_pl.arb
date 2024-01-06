@@ -37,5 +37,7 @@
   "errorRequestInformationOnInternetAccessCheck": "Nieoczekiwany błąd. Sprawdź czy masz połączenie z Internetem",
   "helloWorld": "¡Hola Mundo!",
   "badCreateAccountConfirmCode": "Wprowadzono zły kod aktywacji konta użytkownika",
-  "notSendActiveAccountCodeForThisUser": "Nie wysłano kodu aktywacji konta dla tego użytkownika"
+  "notSendActiveAccountCodeForThisUser": "Nie wysłano kodu aktywacji konta dla tego użytkownika",
+  "passwordTooShort": "Hasło musi się składać z minimum 6 znaków.",
+  "tooShortText": "Wprowadzony tekst musi mieć minimum dwa znaki."
 }

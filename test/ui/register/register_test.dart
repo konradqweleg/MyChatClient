@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_chat_client/common/undo_button.dart';
+import 'package:my_chat_client/login_and_registration/common/result.dart';
 import 'package:my_chat_client/login_and_registration/common/button/main_action_button.dart';
 import 'package:my_chat_client/login_and_registration/confirm_code/confirm_register_code.dart';
 import 'package:my_chat_client/login_and_registration/login/button/create_new_account.dart';
@@ -34,8 +35,8 @@ Future<void> clickRegisterButton(WidgetTester tester) async {
 class MockRegisterUserRequestRegisterAllRequests extends RegisterUserRequest{
 
   @override
-  Future<RegisterResponseStatus> register(UserRegisterData userRegisterData) {
-    return Future.value(RegisterResponseStatus.ok);
+  Future<Result> register(UserRegisterData userRegisterData) {
+    return Future.value(Result.success(RegisterResponseStatus.ok));
   }
 
 }

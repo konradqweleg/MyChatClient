@@ -2,25 +2,23 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:my_chat_client/conversation/conversation.dart';
-import 'package:my_chat_client/http/request_response_general/error_message.dart';
 import 'package:my_chat_client/login_and_registration/common/button/main_action_button.dart';
-import 'package:my_chat_client/login_and_registration/confirm_code/create_account_data.dart';
 import 'package:my_chat_client/login_and_registration/confirm_code/request/confirm_account_data.dart';
 import 'package:my_chat_client/login_and_registration/confirm_code/request/confirm_account_request.dart';
 import 'package:my_chat_client/login_and_registration/confirm_code/request/confirm_account_request_status.dart';
-import 'package:my_chat_client/login_and_registration/confirm_code/status_message.dart';
+import 'package:my_chat_client/login_and_registration/common/error_message.dart';
 import 'package:my_chat_client/style/main_style.dart';
 import '../../navigation/page_route_navigation.dart';
 import '../../common/name_app.dart';
+import '../common/result.dart';
+import '../common/errors.dart';
 import '../common/input/input_code.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../register/user_register_data.dart';
 
-
-
-
 class LocalizationsInject extends StatelessWidget {
   final Widget child;
+
   const LocalizationsInject({Key? key, required this.child}) : super(key: key);
 
   @override
@@ -40,17 +38,13 @@ class LocalizationsInject extends StatelessWidget {
   }
 }
 
-//
-// void main() => runApp(
-//     LocalizationsInject(child:
-//     ConfirmCodeRegisterForm(UserRegisterData("","","",""),ValidateConfirmCodeOnServer())));
-
 
 class ConfirmCodeRegisterForm extends StatefulWidget {
-   ConfirmCodeRegisterForm( this.userRegisterData,this.checkConfirmCodeRequest, {super.key});
+  const ConfirmCodeRegisterForm(this.userRegisterData, this.checkConfirmCodeRequest,
+      {super.key});
+
   final UserRegisterData userRegisterData;
   final ConfirmAccountRequest checkConfirmCodeRequest;
-  ConfirmAccountRequestStatus _confirmAccountRequestStatus = ConfirmAccountRequestStatus.notSend;
 
   @override
   State<ConfirmCodeRegisterForm> createState() {
@@ -62,25 +56,45 @@ class _ConfirmCodeRegisterFormState extends State<ConfirmCodeRegisterForm> {
   final _formKey = GlobalKey<FormState>();
   static double breakBetweenNameAppAndForm = 20.0;
   TextEditingController controller = TextEditingController();
+  Result _confirmAccountRequestStatus = Result.empty();
+  final Errors _matchedErrorToErrorMessage = Errors();
 
-  StatusMessage _errorMessage = StatusMessage.noError();
+
+  void _initMatchedErrorToErrorMessage() {
+    if(_matchedErrorToErrorMessage.isInit()) {
+      _matchedErrorToErrorMessage.registerMatchErrorToResultStatus(
+          ErrorMessage.error(AppLocalizations.of(context)!
+              .errorRequestInformationOnInternetAccessCheck,
+              Result.error(ConfirmAccountRequestStatus.error) ));
+      _matchedErrorToErrorMessage.registerMatchErrorToResultStatus(
+          ErrorMessage.error(
+              AppLocalizations.of(context)!.badCreateAccountConfirmCode,
+              Result.error(ConfirmAccountRequestStatus.badCode)));
+      _matchedErrorToErrorMessage.registerMatchErrorToResultStatus(
+          ErrorMessage.error(
+              AppLocalizations.of(context)!.notSendActiveAccountCodeForThisUser,
+              Result.error(ConfirmAccountRequestStatus.noCodeForUser)));
+
+    }
+
+
+  }
+
 
   void _resendConfirmCode() {
-
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         backgroundColor: MainAppStyle.mainColorApp,
         content: Text(AppLocalizations.of(context)!.sendConfirmCode)));
   }
 
-  String _getInformationIsValidCode() {
+  String _showWarningWhenIsErrorInRequest() {
     const String validCode = "";
 
-    if(_errorMessage.isError()){
-      return _errorMessage.getErrorMessage();
-    }else{
+    if (_confirmAccountRequestStatus.isError()) {
+      return _matchedErrorToErrorMessage.getErrorMessage();
+    } else {
       return validCode;
     }
-
   }
 
   bool _isValidFormatCode() {
@@ -91,25 +105,26 @@ class _ConfirmCodeRegisterFormState extends State<ConfirmCodeRegisterForm> {
   }
 
 
-  void _isCorrectCodeOnServer() {
+  void _makeRequestCheckActiveAccountCode() {
+    // _initMatchedErrorToErrorMessage();
 
-    ConfirmAccountData confirmAccountData = ConfirmAccountData(email:widget.userRegisterData.email,code:controller.text);
-    Future<ConfirmAccountRequestStatus> isActivatedAccount =  widget.checkConfirmCodeRequest.confirmAccount(confirmAccountData);
-    isActivatedAccount.then((value) => setState(() {
-      widget._confirmAccountRequestStatus = value;
-      print(widget._confirmAccountRequestStatus);
-      if (widget._confirmAccountRequestStatus == ConfirmAccountRequestStatus.ok) {
-        _logIn();
-      }else if(widget._confirmAccountRequestStatus == ConfirmAccountRequestStatus.badCode) {
-        _errorMessage = StatusMessage.error(AppLocalizations.of(context)!.badCreateAccountConfirmCode);
-      }else if(widget._confirmAccountRequestStatus == ConfirmAccountRequestStatus.noCodeForUser) {
-        _errorMessage = StatusMessage.error(AppLocalizations.of(context)!.notSendActiveAccountCodeForThisUser);
-      }
-      else {
-        _errorMessage = StatusMessage.error(AppLocalizations.of(context)!.errorRequestInformationOnInternetAccessCheck);
-      }
-    }));
+    ConfirmAccountData confirmAccountData = ConfirmAccountData(email: widget.userRegisterData.email, code: controller.text);
+    Future<Result> requestActiveAccountResult = widget.checkConfirmCodeRequest.confirmAccount(confirmAccountData);
 
+    requestActiveAccountResult.then((value) {
+
+      setState(() {
+        _confirmAccountRequestStatus = value;
+        if (_confirmAccountRequestStatus.isError()) {
+          _initMatchedErrorToErrorMessage();
+          _matchedErrorToErrorMessage.setActualError(
+              _confirmAccountRequestStatus);
+        }
+        if (_confirmAccountRequestStatus.isSuccess()) {
+          _logIn();
+        }
+      });
+    });
   }
 
   void _logIn() {
@@ -123,7 +138,7 @@ class _ConfirmCodeRegisterFormState extends State<ConfirmCodeRegisterForm> {
       return;
     }
 
-    _isCorrectCodeOnServer();
+    _makeRequestCheckActiveAccountCode();
   }
 
   @override
@@ -143,13 +158,15 @@ class _ConfirmCodeRegisterFormState extends State<ConfirmCodeRegisterForm> {
                 text: TextSpan(
                   text: AppLocalizations.of(context)!
                       .informUserAboutSendCodeOnMail,
-                  style: DefaultTextStyle.of(context).style,
+                  style: DefaultTextStyle
+                      .of(context)
+                      .style,
                   children: <TextSpan>[
                     TextSpan(
                         style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             color: MainAppStyle.mainColorApp),
-                        text: AppLocalizations.of(context)!.resendCode,
+                        text: " ${AppLocalizations.of(context)!.resendCode}",
                         recognizer: TapGestureRecognizer()
                           ..onTap = _resendConfirmCode),
                   ],
@@ -158,7 +175,7 @@ class _ConfirmCodeRegisterFormState extends State<ConfirmCodeRegisterForm> {
               const SizedBox(height: 30),
               InputCode(controller),
               Text(
-                _getInformationIsValidCode(),
+                _showWarningWhenIsErrorInRequest(),
                 style: const TextStyle(color: Colors.red),
               ),
               MainActionButton(

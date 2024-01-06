@@ -1,6 +1,6 @@
-class ErrorMessage{
+class ErrorMessageData{
   String errorMessage = "";
-  ErrorMessage.fromJson(Map json) {
+  ErrorMessageData.fromJson(Map json) {
     errorMessage = json['ErrorMessage'];
   }
 }

@@ -195,6 +195,18 @@
     "description": "The message informing the user about the lack of sending the account activation code"
   },
 
+
+  "passwordTooShort": "The password must consist of at least 6 characters.",
+  "@passwordTooShort": {
+    "description": "Message informing the user that they have entered a password that is too short."
+  },
+
+  "tooShortText": "The entered text must have a minimum of two characters.",
+  "@tooShortText": {
+    "description": "Message informing the user that the entered text in the field must consist of at least two characters."
+  },
+
+
   "helloWorld": "Hello World!",
   "@helloWorld": {
     "description": "The conventional newborn programmer greeting"

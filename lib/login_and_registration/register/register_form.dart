@@ -1,5 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+
+import 'package:my_chat_client/login_and_registration/common/result.dart';
 import 'package:my_chat_client/login_and_registration/common/input/input_mail.dart';
 import 'package:my_chat_client/login_and_registration/common/input/input_password.dart';
 import 'package:my_chat_client/login_and_registration/common/button/main_action_button.dart';
@@ -10,8 +12,12 @@ import 'package:my_chat_client/login_and_registration/register/user_register_dat
 import '../../navigation/page_route_navigation.dart';
 import '../../common/name_app.dart';
 import '../../style/main_style.dart';
+import '../common/errors.dart';
+
 import '../common/input/input_data.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../common/error_message.dart';
 
 class RegisterForm extends StatefulWidget {
   const RegisterForm(this._registerUserRequestAction, {super.key});
@@ -32,20 +38,25 @@ class _RegisterFormState extends State<RegisterForm> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _surnameController = TextEditingController();
 
-  RegisterResponseStatus registerResponseStatus =
-      RegisterResponseStatus.notSend;
+
+  final Errors _matchedErrorInRequestToErrorMessage = Errors();
+  Result _registerRequestResult = Result.empty();
+
+
+  void _initUserMessageForErrors() {
+    if(_matchedErrorInRequestToErrorMessage.isInit()) {
+      _matchedErrorInRequestToErrorMessage.registerMatchErrorToResultStatus(ErrorMessage.error(AppLocalizations.of(context)!.errorRequestInformationOnInternetAccessCheck, Result.error(RegisterResponseStatus.error)));
+      _matchedErrorInRequestToErrorMessage.registerMatchErrorToResultStatus(ErrorMessage.error(AppLocalizations.of(context)!.emailOccupiedError, Result.error(RegisterResponseStatus.userAlreadyExists)));
+      _matchedErrorInRequestToErrorMessage.registerMatchErrorToResultStatus(ErrorMessage.error(AppLocalizations.of(context)!.alreadyExistsEmailAccountNotActive, Result.error(RegisterResponseStatus.accountNotActive)));
+    }
+  }
+
 
 
   void _hideKeyboard() {
     FocusScope.of(context).requestFocus(FocusNode());
   }
 
-
-  void _ifRequestReturnCorrectDataGoToActiveAccountPage() {
-    if (registerResponseStatus == RegisterResponseStatus.ok) {
-      _goToConfirmAccount();
-    }
-  }
 
   void _goToConfirmAccount() {
     UserRegisterData registerData = UserRegisterData(
@@ -61,7 +72,9 @@ class _RegisterFormState extends State<RegisterForm> {
   }
 
 
+
   void _makeRequestRegister() async {
+    _clearAllError();
     UserRegisterData registerData = UserRegisterData(
         _emailController.text,
         _usernameController.text,
@@ -69,24 +82,28 @@ class _RegisterFormState extends State<RegisterForm> {
         _passwordController.text);
 
 
-    Future<RegisterResponseStatus> registerRequestResultFuture =
-    widget._registerUserRequestAction.register(registerData);
+    Future<Result> registerRequestResultFuture = widget._registerUserRequestAction.register(registerData);
 
-    _clearAllError();
 
-    RegisterResponseStatus responseStatus = await registerRequestResultFuture;
+    registerRequestResultFuture.then((Result value){
+      _initUserMessageForErrors();
+      setState(() {
+        _registerRequestResult = value;
+        _matchedErrorInRequestToErrorMessage.setActualError(_registerRequestResult);
+      });
 
-    setState(()  {
+      if(_registerRequestResult.isSuccess()){
+            _goToConfirmAccount();
+      }
 
-       registerResponseStatus = responseStatus;
-      _ifRequestReturnCorrectDataGoToActiveAccountPage();
     });
+
+
   }
 
   void _register() async {
     _hideKeyboard();
     _clearAllError();
-
 
     bool isCorrectValidationFormDataBeforeRequest = _isValidateFormData();
     if (isCorrectValidationFormDataBeforeRequest) {
@@ -104,67 +121,43 @@ class _RegisterFormState extends State<RegisterForm> {
   }
 
   void _clearAllError() {
-    setState(() {
-      registerResponseStatus = RegisterResponseStatus.notSend;
-    });
+   setState(() {
+     _registerRequestResult = Result.empty();
+   });
   }
 
-  Widget _showMessageErrorIfRequestReturnError() {
-    bool isShowErrorMessage =
-        (registerResponseStatus == RegisterResponseStatus.error);
+  Widget _showErrorWhenErrorInRequest() {
 
-    return Visibility(
-      visible: isShowErrorMessage,
-      child: Text.rich(TextSpan(children: <InlineSpan>[
+    if(!_registerRequestResult.isError()) {
+      return const SizedBox.shrink();
+    }
+
+    if(_registerRequestResult.isError() && _registerRequestResult.getData() == RegisterResponseStatus.accountNotActive) {
+      return Text.rich(TextSpan(children: <InlineSpan>[
         TextSpan(
           style:
-              const TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+          const TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
           text:
-              "${AppLocalizations.of(context)!.errorRequestInformationOnInternetAccessCheck} ",
-          recognizer: TapGestureRecognizer()..onTap = null,
-        )
-      ])),
-    );
-  }
-
-  Widget _showOccupiedEmailMessageIfEmailIsOccupied() {
-    bool isShowErrorOccupiedEmail =
-        (registerResponseStatus == RegisterResponseStatus.userAlreadyExists);
-
-    return Visibility(
-      visible: isShowErrorOccupiedEmail,
-      child: Container(
-        alignment: Alignment.topLeft,
-        child: Text(
-          AppLocalizations.of(context)!.emailOccupiedError,
-          textAlign: TextAlign.left,
-          style: const TextStyle(color: Colors.red),
-        ),
-      ),
-    );
-  }
-
-  Widget _showActionTextGoToConfirmAccountIfAccountNotActivated() {
-    bool showErrorMessageAccountAlreadyNotActivated = (registerResponseStatus == RegisterResponseStatus.accountNotActive);
-
-    return Visibility(
-      visible: showErrorMessageAccountAlreadyNotActivated,
-      child: Text.rich(TextSpan(children: <InlineSpan>[
-        TextSpan(
-          style:
-              const TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
-          text:
-              "${AppLocalizations.of(context)!.alreadyExistsEmailAccountNotActive} ",
-          recognizer: TapGestureRecognizer()..onTap = null,
+          _matchedErrorInRequestToErrorMessage.getErrorMessage(),
+          recognizer: TapGestureRecognizer()..onTap = _goToConfirmAccount,
         ),
         TextSpan(
           style: const TextStyle(
               fontWeight: FontWeight.bold, color: MainAppStyle.mainColorApp),
-          text: AppLocalizations.of(context)!.goToActiveAccountPanel,
-          recognizer: TapGestureRecognizer()..onTap = null,
+          text:  " ${AppLocalizations.of(context)!.goToActiveAccountPanel}",
+          recognizer: TapGestureRecognizer()..onTap = _goToConfirmAccount,
         )
-      ])),
-    );
+      ])
+      );
+    }
+    else
+    {
+      return Text(
+        _matchedErrorInRequestToErrorMessage.getErrorMessage(),
+        style: const TextStyle(color: Colors.red),
+      );
+    }
+
   }
 
   @override
@@ -180,9 +173,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 child: const NameApp(),
               ),
               const SizedBox(height: MainAppStyle.breakBetweenNameAppAndForm),
-              _showOccupiedEmailMessageIfEmailIsOccupied(),
-              _showMessageErrorIfRequestReturnError(),
-              _showActionTextGoToConfirmAccountIfAccountNotActivated(),
+              _showErrorWhenErrorInRequest(),
               InputEmail(_emailController),
               InputData(
                 _usernameController,

@@ -6,33 +6,36 @@ import 'package:my_chat_client/http/request_response_general/status.dart';
 import 'package:my_chat_client/login_and_registration/register/user_register_data.dart';
 import '../../../http/http_helper.dart';
 import '../../../requests/requests_url.dart';
+import '../../common/result.dart';
 
 class RegisterUserHttpRequest extends RegisterUserRequest {
-  RegisterResponseStatus _getCorrectResponseStatus(String resultBody) {
+  Result _getCorrectResponseStatus(String resultBody) {
     Map parsedResponse = json.decode(resultBody);
     Status status = Status.fromJson(parsedResponse);
     if (status.correctResponse) {
-      return RegisterResponseStatus.ok;
+      return Result.success(RegisterResponseStatus.ok);
     } else {
-      return RegisterResponseStatus.error;
+      return Result.error(RegisterResponseStatus.error);
     }
   }
 
-  RegisterResponseStatus _getErrorResponseStatus(String resultBody) {
+  Result _getErrorResponseStatus(String resultBody) {
     Map parsedResponse = json.decode(resultBody);
-    ErrorMessage error = ErrorMessage.fromJson(parsedResponse);
+    ErrorMessageData error = ErrorMessageData.fromJson(parsedResponse);
 
-    if (error.errorMessage == "Account not active") {
-      return RegisterResponseStatus.accountNotActive;
-    } else if (error.errorMessage == "User already exist") {
-      return RegisterResponseStatus.userAlreadyExists;
-    } else {
-      return RegisterResponseStatus.error;
+    if(error.errorMessage.contains("Account not active")){
+      return Result.error(RegisterResponseStatus.accountNotActive);
+    }
+    else if(error.errorMessage.contains("User already exist")){
+      return Result.error(RegisterResponseStatus.userAlreadyExists);
+    }
+    else{
+      return Result.error(RegisterResponseStatus.error);
     }
   }
 
   @override
-  Future<RegisterResponseStatus> register(
+  Future<Result> register(
       UserRegisterData userRegisterData) async {
     var bodyUserRegisterData = jsonEncode(userRegisterData);
 
@@ -42,6 +45,7 @@ class RegisterUserHttpRequest extends RegisterUserRequest {
         RequestsURL.register,
         body: bodyUserRegisterData,
       );
+      print(result.body);
 
       if (result.statusCode == 200) {
         return _getCorrectResponseStatus(result.body);
@@ -49,7 +53,8 @@ class RegisterUserHttpRequest extends RegisterUserRequest {
         return _getErrorResponseStatus(result.body);
       }
     } catch (e) {
-      return RegisterResponseStatus.error;
+      return Result.error(e);
     }
   }
 }
+

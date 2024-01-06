@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_chat_client/common/exit_button.dart';
-import 'package:my_chat_client/login_and_registration/confirm_code/check_confirm_code_on_server.dart';
+
 import 'package:my_chat_client/login_and_registration/confirm_code/confirm_code_register_form.dart';
 import 'package:my_chat_client/login_and_registration/confirm_code/request/confirm_account_request.dart';
 import 'package:my_chat_client/login_and_registration/confirm_code/request/confirm_account_request_http.dart';
@@ -8,7 +8,7 @@ import '../../navigation/page_route_navigation.dart';
 import '../../style/main_style.dart';
 import '../login/login.dart';
 import '../register/user_register_data.dart';
-import 'validate_confirm_code.dart';
+
 
 void main() => runApp(ConfirmRegisterCode(UserRegisterData("","","","")));
 
