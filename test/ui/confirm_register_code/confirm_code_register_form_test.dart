@@ -6,9 +6,9 @@ import 'package:my_chat_client/login_and_registration/common/result.dart';
 import 'package:my_chat_client/login_and_registration/common/button/main_action_button.dart';
 import 'package:my_chat_client/login_and_registration/confirm_code/confirm_code_register_form.dart';
 
-import 'package:my_chat_client/login_and_registration/confirm_code/request/confirm_account_data.dart';
-import 'package:my_chat_client/login_and_registration/confirm_code/request/confirm_account_request.dart';
-import 'package:my_chat_client/login_and_registration/confirm_code/request/confirm_account_request_status.dart';
+import 'package:my_chat_client/login_and_registration/confirm_code/request/confirm_account/confirm_account_data.dart';
+import 'package:my_chat_client/login_and_registration/confirm_code/request/confirm_account/confirm_account_request.dart';
+import 'package:my_chat_client/login_and_registration/confirm_code/request/confirm_account/confirm_account_request_status.dart';
 
 import 'package:my_chat_client/login_and_registration/register/user_register_data.dart';
 import '../helping/utils.dart';

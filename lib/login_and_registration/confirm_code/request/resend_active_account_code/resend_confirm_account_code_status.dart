@@ -1,0 +1,3 @@
+enum ResendConfirmAccountCodeStatus{
+  ok,error
+}

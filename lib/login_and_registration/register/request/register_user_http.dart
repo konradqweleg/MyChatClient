@@ -45,7 +45,7 @@ class RegisterUserHttpRequest extends RegisterUserRequest {
         RequestsURL.register,
         body: bodyUserRegisterData,
       );
-      print(result.body);
+     
 
       if (result.statusCode == 200) {
         return _getCorrectResponseStatus(result.body);
@@ -53,7 +53,7 @@ class RegisterUserHttpRequest extends RegisterUserRequest {
         return _getErrorResponseStatus(result.body);
       }
     } catch (e) {
-      return Result.error(e);
+      return Result.error(RegisterResponseStatus.error);
     }
   }
 }

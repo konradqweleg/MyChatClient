@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:my_chat_client/conversation/conversation.dart';
 import 'package:my_chat_client/login_and_registration/common/button/main_action_button.dart';
-import 'package:my_chat_client/login_and_registration/confirm_code/request/confirm_account_data.dart';
-import 'package:my_chat_client/login_and_registration/confirm_code/request/confirm_account_request.dart';
-import 'package:my_chat_client/login_and_registration/confirm_code/request/confirm_account_request_status.dart';
+import 'package:my_chat_client/login_and_registration/confirm_code/request/confirm_account/confirm_account_data.dart';
+import 'package:my_chat_client/login_and_registration/confirm_code/request/confirm_account/confirm_account_request.dart';
+import 'package:my_chat_client/login_and_registration/confirm_code/request/confirm_account/confirm_account_request_status.dart';
 import 'package:my_chat_client/login_and_registration/common/error_message.dart';
+import 'package:my_chat_client/login_and_registration/confirm_code/request/resend_active_account_code/email_data.dart';
+import 'package:my_chat_client/login_and_registration/confirm_code/request/resend_active_account_code/resend_confirm_account_code_request.dart';
+import 'package:my_chat_client/login_and_registration/confirm_code/request/resend_active_account_code/resend_confirm_account_code_status.dart';
 import 'package:my_chat_client/style/main_style.dart';
 import '../../navigation/page_route_navigation.dart';
 import '../../common/name_app.dart';
@@ -40,11 +43,12 @@ class LocalizationsInject extends StatelessWidget {
 
 
 class ConfirmCodeRegisterForm extends StatefulWidget {
-  const ConfirmCodeRegisterForm(this.userRegisterData, this.checkConfirmCodeRequest,
+  const ConfirmCodeRegisterForm(this.userRegisterData, this.checkConfirmCodeRequest,this.resendConfirmAccountCodeRequest,
       {super.key});
 
   final UserRegisterData userRegisterData;
   final ConfirmAccountRequest checkConfirmCodeRequest;
+  final ResendConfirmAccountCodeRequest resendConfirmAccountCodeRequest;
 
   @override
   State<ConfirmCodeRegisterForm> createState() {
@@ -82,9 +86,25 @@ class _ConfirmCodeRegisterFormState extends State<ConfirmCodeRegisterForm> {
 
 
   void _resendConfirmCode() {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        backgroundColor: MainAppStyle.mainColorApp,
-        content: Text(AppLocalizations.of(context)!.sendConfirmCode)));
+
+    EmailData userEmail = EmailData(email: widget.userRegisterData.email);
+    Future<Result> requestResendConfirmAccountCodeStatus =  widget.resendConfirmAccountCodeRequest.resendActiveAccountCode(userEmail);
+
+    requestResendConfirmAccountCodeStatus.then((value)  {
+      Result resultConfirmAccountCodeStatus = value;
+      if(resultConfirmAccountCodeStatus.isSuccess()){
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: MainAppStyle.mainColorApp,
+            content: Text(AppLocalizations.of(context)!.sendConfirmCode)));
+      }else if (resultConfirmAccountCodeStatus.isError()){
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: MainAppStyle.mainColorApp,
+            content: Text(AppLocalizations.of(context)!.errorRequestInformationOnInternetAccessCheck)));
+      }
+
+    });
+
+
   }
 
   String _showWarningWhenIsErrorInRequest() {

@@ -6,6 +6,11 @@ class UserRegisterData{
 
   UserRegisterData(this.email,this.name,this.surname,this.password,);
 
+  get getName => name;
+  get getSurname => surname;
+  get getEmail => email;
+  get getPassword => password;
+
   Map toJson() => {
     'name': name,
     'surname': surname,

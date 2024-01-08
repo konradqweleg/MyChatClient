@@ -1,14 +1,14 @@
 import 'dart:convert';
 
 import 'package:my_chat_client/login_and_registration/common/result.dart';
-import 'package:my_chat_client/login_and_registration/confirm_code/request/confirm_account_data.dart';
+import 'package:my_chat_client/login_and_registration/confirm_code/request/confirm_account/confirm_account_data.dart';
 
-import 'package:my_chat_client/login_and_registration/confirm_code/request/confirm_account_request_status.dart';
+import 'package:my_chat_client/login_and_registration/confirm_code/request/confirm_account/confirm_account_request_status.dart';
 
-import '../../../http/http_helper.dart';
-import '../../../http/request_response_general/error_message.dart';
-import '../../../http/request_response_general/status.dart';
-import '../../../requests/requests_url.dart';
+import '../../../../http/http_helper.dart';
+import '../../../../http/request_response_general/error_message.dart';
+import '../../../../http/request_response_general/status.dart';
+import '../../../../requests/requests_url.dart';
 import 'confirm_account_request.dart';
 
 class ConfirmAccountRequestHttp extends ConfirmAccountRequest{

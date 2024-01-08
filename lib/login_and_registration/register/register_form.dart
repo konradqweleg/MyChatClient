@@ -89,6 +89,7 @@ class _RegisterFormState extends State<RegisterForm> {
       _initUserMessageForErrors();
       setState(() {
         _registerRequestResult = value;
+        print(_registerRequestResult);
         _matchedErrorInRequestToErrorMessage.setActualError(_registerRequestResult);
       });
 
