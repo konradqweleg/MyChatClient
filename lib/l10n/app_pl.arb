@@ -39,5 +39,7 @@
   "badCreateAccountConfirmCode": "Wprowadzono zły kod aktywacji konta użytkownika",
   "notSendActiveAccountCodeForThisUser": "Nie wysłano kodu aktywacji konta dla tego użytkownika",
   "passwordTooShort": "Hasło musi się składać z minimum 6 znaków.",
-  "tooShortText": "Wprowadzony tekst musi mieć minimum dwa znaki."
+  "tooShortText": "Wprowadzony tekst musi mieć minimum dwa znaki.",
+  "userWithSpecifiedEmailNotExist": "Użytkownik o podanym adresie email nie istnieje",
+  "accountNotActive": "Konto użytkownika nie zostało aktywowane"
 }

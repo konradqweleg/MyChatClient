@@ -2,8 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_chat_client/login_and_registration/common/button/main_action_button.dart';
-import 'package:my_chat_client/login_and_registration/reset_password/check/checkExistsEmailOnServer.dart';
-import 'package:my_chat_client/login_and_registration/reset_password/check/checkExsistsEmail.dart';
+import 'package:my_chat_client/login_and_registration/reset_password/check/requests/check_exists_email_http.dart';
+import 'package:my_chat_client/login_and_registration/reset_password/check/requests/check_exists_email_request.dart';
 import 'package:my_chat_client/login_and_registration/reset_password/check/reset_code_on_server.dart';
 import 'package:my_chat_client/login_and_registration/reset_password/check/validate_code.dart';
 import 'package:my_chat_client/login_and_registration/reset_password/check/validate_code_on_server.dart';
@@ -30,7 +30,7 @@ Future<void> clickResetPasswordButton(WidgetTester tester) async {
 }
 
 
-class TestMailExistsInService implements CheckExistsEmail{
+class TestMailExistsInService implements CheckExistsEmailRequest{
   @override
   bool isEmailExistsInService(String email) {
     return email == "test@mail.eu";

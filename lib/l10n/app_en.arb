@@ -206,6 +206,16 @@
     "description": "Message informing the user that the entered text in the field must consist of at least two characters."
   },
 
+  "userWithSpecifiedEmailNotExist": "The user with the provided email address does not exist.",
+  "@userWithSpecifiedEmailNotExist": {
+    "description": "Information that a user with such an email does not exist in the service's user database"
+  },
+
+  "accountNotActive": "The user account has not been activated.",
+  "@accountNotActive": {
+    "description": "The text describing the situation in which the user account has not been activated."
+  },
+
 
   "helloWorld": "Hello World!",
   "@helloWorld": {

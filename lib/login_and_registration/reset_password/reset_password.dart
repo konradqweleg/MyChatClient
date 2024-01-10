@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:my_chat_client/login_and_registration/reset_password/check/checkExistsEmailOnServer.dart';
+import 'package:my_chat_client/login_and_registration/reset_password/check/requests/check_exists_email_http.dart';
+import 'package:my_chat_client/login_and_registration/reset_password/check/requests/is_correct_password_code_http.dart';
+import 'package:my_chat_client/login_and_registration/reset_password/check/requests/send_reset_password_code_http.dart';
 import 'package:my_chat_client/login_and_registration/reset_password/check/reset_code_on_server.dart';
 import 'package:my_chat_client/login_and_registration/reset_password/reset_password_form.dart';
 import 'package:my_chat_client/login_and_registration/reset_password/check/validate_code_on_server.dart';
@@ -44,7 +46,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                       // Another fixed-height child.
                       height: 600.0,
                       alignment: Alignment.topLeft,
-                      child:  ResetPasswordForm(ResetCodeOnServer(),ValidateCodeOnServer(),CheckEmailExistsOnServer()),
+                      child:  ResetPasswordForm(ResetCodeOnServer(),IsCorrectPasswordCodeHttp(),SendResetPasswordCodeHttp()),
                     ),
                   ],
                 ),

@@ -19,6 +19,10 @@ class Errors{
     }
   }
 
+  void clearError(){
+    _actualErrorMessage = null;
+  }
+
   String getErrorMessage(){
     if(_actualErrorMessage == null){
       throw Exception("Error: _actualErrorMessage is null");
@@ -31,7 +35,7 @@ class Errors{
   }
 
   bool isError(){
-    return isInit();
+    return _actualErrorMessage != null;
   }
 
 }
