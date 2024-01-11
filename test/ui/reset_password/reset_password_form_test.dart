@@ -1,16 +1,16 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_chat_client/login_and_registration/common/button/main_action_button.dart';
-import 'package:my_chat_client/login_and_registration/reset_password/check/requests/check_exists_email_http.dart';
-import 'package:my_chat_client/login_and_registration/reset_password/check/requests/check_exists_email_request.dart';
-import 'package:my_chat_client/login_and_registration/reset_password/check/reset_code_on_server.dart';
-import 'package:my_chat_client/login_and_registration/reset_password/check/validate_code.dart';
-import 'package:my_chat_client/login_and_registration/reset_password/check/validate_code_on_server.dart';
+import 'package:my_chat_client/login_and_registration/common/result.dart';
+import 'package:my_chat_client/login_and_registration/confirm_code/request/resend_active_account_code/email_data.dart';
 import 'package:my_chat_client/login_and_registration/reset_password/new_password/new_password.dart';
-import 'package:my_chat_client/login_and_registration/reset_password/reset_password.dart';
+import 'package:my_chat_client/login_and_registration/reset_password/request/send_reset_password_code/request_reset_password_code_status.dart';
+import 'package:my_chat_client/login_and_registration/reset_password/request/send_reset_password_code/send_reset_password_code_request.dart';
+import 'package:my_chat_client/login_and_registration/reset_password/request/validate_reset_password_code/Is_correct_password_code_request_status.dart';
+import 'package:my_chat_client/login_and_registration/reset_password/request/validate_reset_password_code/email_and_code_data.dart';
+import 'package:my_chat_client/login_and_registration/reset_password/request/validate_reset_password_code/is_correct_reset_password_code.dart';
 import 'package:my_chat_client/login_and_registration/reset_password/reset_password_form.dart';
-
+import 'package:screenshot/screenshot.dart';
 import '../helping/utils.dart';
 
 Future<void> enterEmail(WidgetTester tester, String text) async {
@@ -30,41 +30,70 @@ Future<void> clickResetPasswordButton(WidgetTester tester) async {
 }
 
 
-class TestMailExistsInService implements CheckExistsEmailRequest{
-  @override
-  bool isEmailExistsInService(String email) {
-    return email == "test@mail.eu";
-  }
-}
+class MockIsCorrectResetPasswordCodeAcceptAllData implements IsCorrectResetPasswordCode{
 
-class AcceptCode4digitZero implements ValidateCode{
   @override
-  bool isValidCode(String code, String email) {
-    return code == "0000";
+  Future<Result> isCorrectResetPasswordCode(EmailAndCodeData emailAndCodeData) {
+      return Future.value(Result.success(true));
+
   }
 
 }
+
+class MockIsCorrectResetPasswordCodeBadCode implements IsCorrectResetPasswordCode{
+
+  @override
+  Future<Result> isCorrectResetPasswordCode(EmailAndCodeData emailAndCodeData) {
+    return Future.value(Result.error(IsCorrectPasswordCodeRequestStatus.badCode));
+
+  }
+
+}
+
+
+class MockSendResetPasswordCodeEachUserNotExists implements SendResetPasswordCodeRequest{
+
+  @override
+  Future<Result> sendResetPasswordCode(EmailData email) {
+      return Future.value(Result.error(RequestResetPasswordCodeStatus.userNotExist));
+  }
+}
+
+class MockSendResetPasswordCodeAcceptAllData implements SendResetPasswordCodeRequest{
+
+  @override
+  Future<Result> sendResetPasswordCode(EmailData email) {
+    return Future.value(Result.success(true));
+  }
+}
+
 
 void main() {
   group('Reset Password Form Test', () {
+
+
+
     testWidgets(
         'If the user has entered the correct email format but the user does not exist in the database, the system should display information to the user',
             (WidgetTester tester) async {
           //given
-          await Utils.showView(tester,  ResetPasswordForm(ResetCodeOnServer(),ValidateCodeOnServer(),TestMailExistsInService()));
+
+          await Utils.showView(tester,ResetPasswordForm(MockIsCorrectResetPasswordCodeAcceptAllData(),MockSendResetPasswordCodeEachUserNotExists()));
           //when
           await enterEmail(tester, "no@existemail.pl");
           await clickSendCodeButton(tester);
 
+          await tester.pumpAndSettle();
+          await tester.pumpAndSettle();
           //then
-          expect(find.text("A user with such an email address is not in the application database"), findsOneWidget);
+          expect(find.text("The user with the provided email address does not exist."), findsOneWidget);
         });
 
     testWidgets(
         'If the user has entered the correct email  and  the user does exist in the database, the system should send code on mail',
             (WidgetTester tester) async {
           //given
-          await Utils.showView(tester,  ResetPasswordForm(ResetCodeOnServer(),ValidateCodeOnServer(),TestMailExistsInService()));
+          await Utils.showView(tester,  ResetPasswordForm(MockIsCorrectResetPasswordCodeAcceptAllData(),MockSendResetPasswordCodeAcceptAllData()));
           //when
           await enterEmail(tester, "test@mail.eu");
           await clickSendCodeButton(tester);
@@ -77,7 +106,7 @@ void main() {
         'If the user has entered the correct email  and  the user does exist in the database, the system should show resend code text and disable send code button',
             (WidgetTester tester) async {
           //given
-          await Utils.showView(tester,  ResetPasswordForm(ResetCodeOnServer(),ValidateCodeOnServer(),TestMailExistsInService()));
+          await Utils.showView(tester,ResetPasswordForm(MockIsCorrectResetPasswordCodeAcceptAllData(),MockSendResetPasswordCodeAcceptAllData()));
           //when
           await enterEmail(tester, "test@mail.eu");
           await clickSendCodeButton(tester);
@@ -91,7 +120,7 @@ void main() {
         'After clicking resend code, the message should be sent again',
             (WidgetTester tester) async {
           //given
-          await Utils.showView(tester,  ResetPasswordForm(ResetCodeOnServer(),ValidateCodeOnServer(),TestMailExistsInService()));
+          await Utils.showView(tester,  ResetPasswordForm(MockIsCorrectResetPasswordCodeAcceptAllData(),MockSendResetPasswordCodeAcceptAllData()));
           await enterEmail(tester, "test@mail.eu");
           await clickSendCodeButton(tester);
           //when
@@ -112,7 +141,7 @@ void main() {
         'When the user no enters the code, the system should display message please enter code',
             (WidgetTester tester) async {
           //given
-          await Utils.showView(tester,  ResetPasswordForm(ResetCodeOnServer(),AcceptCode4digitZero(),TestMailExistsInService()));
+          await Utils.showView(tester,  ResetPasswordForm(MockIsCorrectResetPasswordCodeAcceptAllData(),MockSendResetPasswordCodeAcceptAllData()));
           await enterEmail(tester, "test@mail.eu");
           await clickSendCodeButton(tester);
 
@@ -127,7 +156,7 @@ void main() {
         'When the user enters a code that is too short, the system should display an error message',
             (WidgetTester tester) async {
           //given
-          await Utils.showView(tester,  ResetPasswordForm(ResetCodeOnServer(),AcceptCode4digitZero(),TestMailExistsInService()));
+          await Utils.showView(tester,  ResetPasswordForm(MockIsCorrectResetPasswordCodeAcceptAllData(),MockSendResetPasswordCodeAcceptAllData()));
           await enterEmail(tester, "test@mail.eu");
           await clickSendCodeButton(tester);
 
@@ -142,7 +171,7 @@ void main() {
         'When the user enters the wrong code, the system should display an error message',
             (WidgetTester tester) async {
           //given
-          await Utils.showView(tester,  ResetPasswordForm(ResetCodeOnServer(),AcceptCode4digitZero(),TestMailExistsInService()));
+          await Utils.showView(tester,  ResetPasswordForm(MockIsCorrectResetPasswordCodeBadCode(),MockSendResetPasswordCodeAcceptAllData()));
           await enterEmail(tester, "test@mail.eu");
           await clickSendCodeButton(tester);
 
@@ -157,7 +186,7 @@ void main() {
         'Once the user enters the correct code, the system should go to the password change screen',
             (WidgetTester tester) async {
           //given
-          await Utils.showView(tester,  ResetPasswordForm(ResetCodeOnServer(),AcceptCode4digitZero(),TestMailExistsInService()));
+          await Utils.showView(tester,  ResetPasswordForm(MockIsCorrectResetPasswordCodeAcceptAllData(),MockSendResetPasswordCodeAcceptAllData()));
           await enterEmail(tester, "test@mail.eu");
           await clickSendCodeButton(tester);
 

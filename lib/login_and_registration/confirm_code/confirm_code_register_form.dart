@@ -126,8 +126,6 @@ class _ConfirmCodeRegisterFormState extends State<ConfirmCodeRegisterForm> {
 
 
   void _makeRequestCheckActiveAccountCode() {
-    // _initMatchedErrorToErrorMessage();
-
     ConfirmAccountData confirmAccountData = ConfirmAccountData(email: widget.userRegisterData.email, code: controller.text);
     Future<Result> requestActiveAccountResult = widget.checkConfirmCodeRequest.confirmAccount(confirmAccountData);
 
@@ -176,6 +174,7 @@ class _ConfirmCodeRegisterFormState extends State<ConfirmCodeRegisterForm> {
               SizedBox(height: breakBetweenNameAppAndForm),
               RichText(
                 text: TextSpan(
+
                   text: AppLocalizations.of(context)!
                       .informUserAboutSendCodeOnMail,
                   style: DefaultTextStyle

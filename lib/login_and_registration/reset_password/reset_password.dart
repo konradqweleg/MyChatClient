@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:my_chat_client/login_and_registration/reset_password/check/requests/check_exists_email_http.dart';
-import 'package:my_chat_client/login_and_registration/reset_password/check/requests/is_correct_password_code_http.dart';
-import 'package:my_chat_client/login_and_registration/reset_password/check/requests/send_reset_password_code_http.dart';
-import 'package:my_chat_client/login_and_registration/reset_password/check/reset_code_on_server.dart';
+import 'package:my_chat_client/login_and_registration/reset_password/request/send_reset_password_code/send_reset_password_code_http.dart';
+import 'package:my_chat_client/login_and_registration/reset_password/request/validate_reset_password_code/is_correct_password_code_http.dart';
 import 'package:my_chat_client/login_and_registration/reset_password/reset_password_form.dart';
-import 'package:my_chat_client/login_and_registration/reset_password/check/validate_code_on_server.dart';
 import '../../common/undo_button.dart';
 import '../../style/main_style.dart';
 
@@ -46,7 +43,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                       // Another fixed-height child.
                       height: 600.0,
                       alignment: Alignment.topLeft,
-                      child:  ResetPasswordForm(ResetCodeOnServer(),IsCorrectPasswordCodeHttp(),SendResetPasswordCodeHttp()),
+                      child:  ResetPasswordForm(IsCorrectPasswordCodeHttp(),SendResetPasswordCodeHttp()),
                     ),
                   ],
                 ),

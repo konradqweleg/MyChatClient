@@ -117,7 +117,7 @@ void main() {
           findRichText: true);
 
       //when
-      final gesture = await tester.startGesture(tester.getCenter(textFinder));
+      final gesture = await tester.startGesture(tester.getTopRight(textFinder));
       await gesture.up();
       await tester.pump();
 

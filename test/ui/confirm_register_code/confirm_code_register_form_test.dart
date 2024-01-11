@@ -9,6 +9,9 @@ import 'package:my_chat_client/login_and_registration/confirm_code/confirm_code_
 import 'package:my_chat_client/login_and_registration/confirm_code/request/confirm_account/confirm_account_data.dart';
 import 'package:my_chat_client/login_and_registration/confirm_code/request/confirm_account/confirm_account_request.dart';
 import 'package:my_chat_client/login_and_registration/confirm_code/request/confirm_account/confirm_account_request_status.dart';
+import 'package:my_chat_client/login_and_registration/confirm_code/request/resend_active_account_code/email_data.dart';
+import 'package:my_chat_client/login_and_registration/confirm_code/request/resend_active_account_code/resend_confirm_account_code_request.dart';
+import 'package:my_chat_client/login_and_registration/confirm_code/request/resend_active_account_code/resend_confirm_account_code_status.dart';
 
 import 'package:my_chat_client/login_and_registration/register/user_register_data.dart';
 import '../helping/utils.dart';
@@ -30,6 +33,11 @@ Future<void> clickRegisterButton(WidgetTester tester) async {
   await tester.pumpAndSettle();
 }
 
+/*
+
+  final ConfirmAccountRequest checkConfirmCodeRequest;
+  final ResendConfirmAccountCodeRequest resendConfirmAccountCodeRequest;
+ */
 class RequestAcceptCode9999AsCorrect implements ConfirmAccountRequest {
 
   @override
@@ -43,6 +51,14 @@ class RequestAcceptCode9999AsCorrect implements ConfirmAccountRequest {
   }
 }
 
+class ResendAccountCodeRequestMock implements ResendConfirmAccountCodeRequest{
+
+  @override
+  Future<Result> resendActiveAccountCode(EmailData emailData) {
+   return Future.value(Result.success(ResendConfirmAccountCodeStatus.ok));
+  }
+
+}
 void main() {
   group('ConfirmCodeRegisterForm', () {
     testWidgets(
@@ -54,7 +70,7 @@ void main() {
 
       await Utils.showView(
         tester,
-        ConfirmCodeRegisterForm(registerData, RequestAcceptCode9999AsCorrect()),
+        ConfirmCodeRegisterForm(registerData, RequestAcceptCode9999AsCorrect(),ResendAccountCodeRequestMock()),
       );
 
       await enterConfirmCode(tester, "9999");
@@ -76,7 +92,7 @@ void main() {
 
           await Utils.showView(
             tester,
-            ConfirmCodeRegisterForm(registerData, RequestAcceptCode9999AsCorrect()),
+            ConfirmCodeRegisterForm(registerData, RequestAcceptCode9999AsCorrect(),ResendAccountCodeRequestMock()),
           );
 
           await enterConfirmCode(tester, "0000");
@@ -99,7 +115,7 @@ void main() {
 
               await Utils.showView(
                 tester,
-                ConfirmCodeRegisterForm(registerData, RequestAcceptCode9999AsCorrect()),
+                ConfirmCodeRegisterForm(registerData, RequestAcceptCode9999AsCorrect(),ResendAccountCodeRequestMock()),
               );
 
           //when

@@ -2,15 +2,12 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:my_chat_client/login_and_registration/common/input/input_mail.dart';
 import 'package:my_chat_client/login_and_registration/common/button/main_action_button.dart';
-import 'package:my_chat_client/login_and_registration/reset_password/check/requests/check_exists_email_request.dart';
-import 'package:my_chat_client/login_and_registration/reset_password/check/requests/email_and_code_data.dart';
-import 'package:my_chat_client/login_and_registration/reset_password/check/requests/is_correct_reset_password_code.dart';
-import 'package:my_chat_client/login_and_registration/reset_password/check/requests/send_reset_password_code_request.dart';
+import 'package:my_chat_client/login_and_registration/reset_password/request/validate_reset_password_code/email_and_code_data.dart';
+import 'package:my_chat_client/login_and_registration/reset_password/request/validate_reset_password_code/is_correct_reset_password_code.dart';
+import 'package:my_chat_client/login_and_registration/reset_password/request/send_reset_password_code/send_reset_password_code_request.dart';
 import 'package:my_chat_client/login_and_registration/reset_password/new_password/new_password.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:my_chat_client/login_and_registration/reset_password/check/reset_code.dart';
 import 'package:my_chat_client/login_and_registration/reset_password/reset_password_state.dart';
-import 'package:my_chat_client/login_and_registration/reset_password/check/validate_code.dart';
 import '../../navigation/page_route_navigation.dart';
 import '../../common/name_app.dart';
 import '../../style/main_style.dart';
@@ -19,15 +16,13 @@ import '../common/errors.dart';
 import '../common/input/input_code.dart';
 import '../common/result.dart';
 import '../confirm_code/request/resend_active_account_code/email_data.dart';
-import 'check/requests/check_exists_email_status.dart';
-import 'check/requests/request_send_reset_password_code_status.dart';
+import 'request/send_reset_password_code/request_reset_password_code_status.dart';
 
 class ResetPasswordForm extends StatefulWidget {
-  const ResetPasswordForm(
-      this.resetCode, this.isCorrectResetPasswordCode, this.sendResetPasswordCodeRequest,
+  const ResetPasswordForm( this.isCorrectResetPasswordCode,
+      this.sendResetPasswordCodeRequest,
       {super.key});
 
-  final ResetCode resetCode;
   final IsCorrectResetPasswordCode isCorrectResetPasswordCode;
   final SendResetPasswordCodeRequest sendResetPasswordCodeRequest;
 
@@ -45,7 +40,8 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
   ResetPasswordState _state = ResetPasswordState.start;
   TextEditingController emailController = TextEditingController();
   TextEditingController codeController = TextEditingController();
-  final Errors _matchedErrorToErrorMessageCheckIfEmailExistsInServices = Errors();
+  final Errors _matchedErrorToErrorMessageCheckIfEmailExistsInServices =
+      Errors();
 
   bool _isValidFormatEmail() {
     if (!_formKeyMail.currentState!.validate()) {
@@ -61,82 +57,66 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
     return true;
   }
 
-
-
   void _initMatchedErrorToErrorMessage() {
-    if(_matchedErrorToErrorMessageCheckIfEmailExistsInServices.isInit()) {
-      _matchedErrorToErrorMessageCheckIfEmailExistsInServices.registerMatchErrorToResultStatus(
-          ErrorMessage.error(AppLocalizations.of(context)!
-              .errorRequestInformationOnInternetAccessCheck,
-              Result.error(RequestSendResetPasswordCodeStatus.error) ));
-      _matchedErrorToErrorMessageCheckIfEmailExistsInServices.registerMatchErrorToResultStatus(
-          ErrorMessage.error(
+    if (_matchedErrorToErrorMessageCheckIfEmailExistsInServices.isInit()) {
+      _matchedErrorToErrorMessageCheckIfEmailExistsInServices
+          .registerMatchErrorToResultStatus(ErrorMessage.error(
+              AppLocalizations.of(context)!
+                  .errorRequestInformationOnInternetAccessCheck,
+              Result.error(RequestResetPasswordCodeStatus.error)));
+      _matchedErrorToErrorMessageCheckIfEmailExistsInServices
+          .registerMatchErrorToResultStatus(ErrorMessage.error(
               AppLocalizations.of(context)!.userWithSpecifiedEmailNotExist,
-              Result.error(RequestSendResetPasswordCodeStatus.userNotExist)));
-      _matchedErrorToErrorMessageCheckIfEmailExistsInServices.registerMatchErrorToResultStatus(
-          ErrorMessage.error(
+              Result.error(RequestResetPasswordCodeStatus.userNotExist)));
+      _matchedErrorToErrorMessageCheckIfEmailExistsInServices
+          .registerMatchErrorToResultStatus(ErrorMessage.error(
               AppLocalizations.of(context)!.accountNotActive,
-              Result.error(RequestSendResetPasswordCodeStatus.accountNotActive)));
-
+              Result.error(
+                  RequestResetPasswordCodeStatus.accountNotActive)));
     }
-
-
   }
 
-  void _sendCode() {
-
+  void _sendResetPasswordCodeRequest() {
     setState(() {
       _matchedErrorToErrorMessageCheckIfEmailExistsInServices.clearError();
     });
 
-
     EmailData userEmail = EmailData(email: emailController.text);
-    Future<Result> requestSendResetPasswordCodeResult =  widget.sendResetPasswordCodeRequest.sendResetPasswordCode(userEmail);
+    Future<Result> requestSendResetPasswordCodeResult =
+        widget.sendResetPasswordCodeRequest.sendResetPasswordCode(userEmail);
 
-    requestSendResetPasswordCodeResult.then((value)  {
+    requestSendResetPasswordCodeResult.then((value) {
       Result resultSendResetPasswordCodeRequest = value;
-      print(resultSendResetPasswordCodeRequest);
-      if(resultSendResetPasswordCodeRequest.isSuccess()){
-        _setStateSentCode();
-        widget.resetCode.sendCode(context, emailController.text);
-      }else if (resultSendResetPasswordCodeRequest.isError()){
 
+      if (resultSendResetPasswordCodeRequest.isSuccess()) {
+        _setStateSentCode();
+        ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+            backgroundColor: MainAppStyle.mainColorApp,
+            content: Text( AppLocalizations.of(context)!.sendPasswordResetCode,)));
+      } else if (resultSendResetPasswordCodeRequest.isError()) {
         _initMatchedErrorToErrorMessage();
         setState(() {
-          _matchedErrorToErrorMessageCheckIfEmailExistsInServices.setActualError(resultSendResetPasswordCodeRequest);
+          _matchedErrorToErrorMessageCheckIfEmailExistsInServices
+              .setActualError(resultSendResetPasswordCodeRequest);
         });
-
-
-        if(resultSendResetPasswordCodeRequest.getData() == RequestCheckExistsEmailStatus.userNotExist) {
-          _setStateNoExistsEmailInService();
-        }
-
-
-
       }
-
     });
-
-
   }
 
   Widget _showErrorWhenIsErrorInRequestSendResetPasswordCode() {
-    print(_matchedErrorToErrorMessageCheckIfEmailExistsInServices.isError());
-    if(_matchedErrorToErrorMessageCheckIfEmailExistsInServices.isError()){
-      String errorMessage = _matchedErrorToErrorMessageCheckIfEmailExistsInServices.getErrorMessage();
-         return  Text(
-          errorMessage,
-          style: const TextStyle(color: Colors.red),
+    if (_matchedErrorToErrorMessageCheckIfEmailExistsInServices.isError()) {
+      String errorMessage =
+          _matchedErrorToErrorMessageCheckIfEmailExistsInServices
+              .getErrorMessage();
+      return Text(
+        errorMessage,
+        style: const TextStyle(color: Colors.red),
       );
     }
 
-    return const SizedBox(height: 0,);
-  }
-
-  void _setStateNoExistsEmailInService() {
-    setState(() {
-      _state = ResetPasswordState.noExistsEmail;
-    });
+    return const SizedBox(
+      height: 0,
+    );
   }
 
   void _setStateSentCode() {
@@ -152,8 +132,7 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
       return;
     }
 
-    _sendCode();
-
+    _sendResetPasswordCodeRequest();
   }
 
   void _goToInsertNewPassword() {
@@ -163,60 +142,47 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
         isClearBackStack: true);
   }
 
-  void _validateResetPasswordCode() {
+  void _sendRequestValidateResetPasswordCode() {
     setState(() {
       _matchedErrorToErrorMessageCheckIfEmailExistsInServices.clearError();
     });
 
-    EmailAndCodeData emailAndCodeData = EmailAndCodeData( email: emailController.text, code: codeController.text);
-    Future<Result> requestIsCorrectResetPasswordCode =  widget.isCorrectResetPasswordCode.isCorrectResetPasswordCode(emailAndCodeData);
+    EmailAndCodeData emailAndCodeData = EmailAndCodeData(
+        email: emailController.text, code: codeController.text);
+    Future<Result> requestIsCorrectResetPasswordCode = widget
+        .isCorrectResetPasswordCode
+        .isCorrectResetPasswordCode(emailAndCodeData);
 
-    requestIsCorrectResetPasswordCode.then((value)  {
+    requestIsCorrectResetPasswordCode.then((value) {
       Result resultSendResetPasswordCodeRequest = value;
-      print(resultSendResetPasswordCodeRequest);
-      if(resultSendResetPasswordCodeRequest.isSuccess()){
+      if (resultSendResetPasswordCodeRequest.isSuccess()) {
         _goToInsertNewPassword();
-      }else if (resultSendResetPasswordCodeRequest.isError()){
-
+      } else if (resultSendResetPasswordCodeRequest.isError()) {
         _initMatchedErrorToErrorMessage();
         setState(() {
-          _matchedErrorToErrorMessageCheckIfEmailExistsInServices.setActualError(resultSendResetPasswordCodeRequest);
+          _matchedErrorToErrorMessageCheckIfEmailExistsInServices
+              .setActualError(resultSendResetPasswordCodeRequest);
         });
-
 
         setState(() {
           _state = ResetPasswordState.badCode;
         });
-
-
-
       }
-
     });
   }
 
   void _resetPassword() {
     bool isValidFormatCode = _isValidFormatCode();
-
     if (!isValidFormatCode) {
       return;
     }
-
-    _validateResetPasswordCode();
-    // bool isGoodCode = widget.validateCode
-    //     .isValidCode(codeController.text, emailController.text);
-    //
-    // if (isGoodCode) {
-    //   _goToInsertNewPassword();
-    // } else {
-    //   setState(() {
-    //     _state = ResetPasswordState.badCode;
-    //   });
-    // }
+    _sendRequestValidateResetPasswordCode();
   }
 
-  void _sendResetPasswordCodeOnEmail() {
-    widget.resetCode.sendCode(context, emailController.text);
+  void _resendResetPasswordCodeOnEmail() {
+    _sendResetPasswordCodeRequest();
+
+
   }
 
   @override
@@ -239,15 +205,16 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
                     color: MainAppStyle.mainColorApp),
                 text: _state.getResendCodeText(context),
                 recognizer: TapGestureRecognizer()
-                  ..onTap = _sendResetPasswordCodeOnEmail,
+                  ..onTap = _resendResetPasswordCodeOnEmail,
               )
             ])),
-        Form(key: _formKeyMail, child: InputEmail(emailController,isEnabled: _state.isSendCodeButtonEnabled,)),
+        Form(
+            key: _formKeyMail,
+            child: InputEmail(
+              emailController,
+              isEnabled: _state.isSendCodeButtonEnabled,
+            )),
         _showErrorWhenIsErrorInRequestSendResetPasswordCode(),
-        // Text(
-        //   _state.getNoExistsEmailText(context),
-        //   style: const TextStyle(color: Colors.red),
-        // ),
         MainActionButton(
           text: AppLocalizations.of(context)!.sendResetPasswordCode,
           action:
@@ -276,7 +243,6 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
             text: AppLocalizations.of(context)!.resetPassword,
             action: _state.isResetPasswordButtonEnabled ? _resetPassword : null,
             backgroundColor: _state.colorResetPasswordButton),
-
       ],
     ));
   }

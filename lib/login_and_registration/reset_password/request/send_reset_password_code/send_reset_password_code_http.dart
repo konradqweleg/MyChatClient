@@ -1,24 +1,23 @@
 import 'dart:convert';
 
-import 'package:my_chat_client/login_and_registration/reset_password/check/requests/check_exists_email_request.dart';
+import 'package:my_chat_client/login_and_registration/confirm_code/request/resend_active_account_code/email_data.dart';
+import 'package:my_chat_client/login_and_registration/reset_password/request/send_reset_password_code/request_reset_password_code_status.dart';
+import 'package:my_chat_client/login_and_registration/reset_password/request/send_reset_password_code/send_reset_password_code_request.dart';
 
 import '../../../../http/http_helper.dart';
 import '../../../../http/request_response_general/error_message.dart';
 import '../../../../http/request_response_general/status.dart';
 import '../../../../requests/requests_url.dart';
 import '../../../common/result.dart';
-import '../../../confirm_code/request/resend_active_account_code/email_data.dart';
-import 'check_exists_email_status.dart';
 
-class CheckEmailExistsHttp implements CheckExistsEmailRequest{
-
+class SendResetPasswordCodeHttp extends SendResetPasswordCodeRequest {
   Result _getCorrectResponseStatus(String resultBody) {
     Map parsedResponse = json.decode(resultBody);
     Status status = Status.fromJson(parsedResponse);
     if (status.correctResponse) {
-      return Result.success(RequestCheckExistsEmailStatus.ok);
+      return Result.success(RequestResetPasswordCodeStatus.ok);
     } else {
-      return Result.error(RequestCheckExistsEmailStatus.error);
+      return Result.error(RequestResetPasswordCodeStatus.error);
     }
   }
 
@@ -27,23 +26,25 @@ class CheckEmailExistsHttp implements CheckExistsEmailRequest{
     ErrorMessageData error = ErrorMessageData.fromJson(parsedResponse);
 
     if (error.errorMessage == "Account not active") {
-      return Result.error(RequestCheckExistsEmailStatus.accountNotActive);
+      return Result.error(RequestResetPasswordCodeStatus.accountNotActive);
     }else if (error.errorMessage == "User not found"){
-      return Result.error( RequestCheckExistsEmailStatus.userNotExist);
+      return Result.error( RequestResetPasswordCodeStatus.userNotExist);
     }
     else
     {
-      return Result.error(RequestCheckExistsEmailStatus.error);
+      return Result.error(RequestResetPasswordCodeStatus.error);
     }
   }
+
+
   @override
-  Future<Result> isEmailExistsInService(EmailData email) async {
+  Future<Result> sendResetPasswordCode(EmailData email) async {
     var bodyEmail = jsonEncode(email);
 
     var httpHelper = HttpHelper();
     try {
       var result = await httpHelper.executeHttpRequestWithTimeout(
-        RequestsURL.checkIsUserWithThisEmailExist,
+        RequestsURL.sendResetPasswordCode,
         body: bodyEmail,
       );
 
@@ -54,8 +55,7 @@ class CheckEmailExistsHttp implements CheckExistsEmailRequest{
       }
 
     } catch (e) {
-      return Result.error(RequestCheckExistsEmailStatus.error);
+      return Result.error(RequestResetPasswordCodeStatus.error);
     }
   }
-
 }

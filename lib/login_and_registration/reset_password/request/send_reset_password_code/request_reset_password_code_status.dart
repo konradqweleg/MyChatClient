@@ -1,3 +1,3 @@
-enum RequestSendResetPasswordCodeStatus {
+enum RequestResetPasswordCodeStatus {
   ok,userNotExist,accountNotActive,error
 }

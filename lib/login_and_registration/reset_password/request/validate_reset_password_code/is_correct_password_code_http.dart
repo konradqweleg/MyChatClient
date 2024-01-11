@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:my_chat_client/login_and_registration/common/result.dart';
-import 'package:my_chat_client/login_and_registration/reset_password/check/requests/email_and_code_data.dart';
-import 'package:my_chat_client/login_and_registration/reset_password/check/requests/is_correct_reset_password_code.dart';
+import 'package:my_chat_client/login_and_registration/reset_password/request/validate_reset_password_code/email_and_code_data.dart';
+import 'package:my_chat_client/login_and_registration/reset_password/request/validate_reset_password_code/is_correct_reset_password_code.dart';
 
 import '../../../../http/http_helper.dart';
 import '../../../../http/request_response_general/error_message.dart';
