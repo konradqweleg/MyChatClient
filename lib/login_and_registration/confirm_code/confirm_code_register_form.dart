@@ -86,7 +86,6 @@ class _ConfirmCodeRegisterFormState extends State<ConfirmCodeRegisterForm> {
 
 
   void _resendConfirmCode() {
-
     EmailData userEmail = EmailData(email: widget.userRegisterData.email);
     Future<Result> requestResendConfirmAccountCodeStatus =  widget.resendConfirmAccountCodeRequest.resendActiveAccountCode(userEmail);
 

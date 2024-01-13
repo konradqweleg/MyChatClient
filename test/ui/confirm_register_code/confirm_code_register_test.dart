@@ -1,16 +1,73 @@
 
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_chat_client/common/exit_button.dart';
 import 'package:my_chat_client/login_and_registration/common/result.dart';
 import 'package:my_chat_client/login_and_registration/common/button/main_action_button.dart';
 import 'package:my_chat_client/login_and_registration/confirm_code/confirm_register_code.dart';
+import 'package:my_chat_client/login_and_registration/login/button/create_new_account.dart';
 import 'package:my_chat_client/login_and_registration/login/login.dart';
 import 'package:my_chat_client/login_and_registration/register/request/register_response_status.dart';
 import 'package:my_chat_client/login_and_registration/register/request/register_user_request.dart';
 import 'package:my_chat_client/login_and_registration/register/user_register_data.dart';
-import '../helping/utils.dart';
+
+//import '../helping/utils.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:my_chat_client/style/main_style.dart';
+class Utils {
+  static Future<void> showView(WidgetTester tester, Widget view) async {
+    await tester.pumpWidget(MaterialApp(
+      title: "MY CHAT",
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: MainAppStyle.mainColorApp),
+        useMaterial3: true,
+      ),
+      home: Scaffold(body: view),
+    ));
+    await tester.pumpAndSettle();
+  }
+
+  static Future<void> click(
+      WidgetTester tester, Type typeClickedElement) async {
+    await tester.tap(find.byType(typeClickedElement));
+    await tester.pump();
+    await tester.pumpAndSettle();
+  }
+
+  static Future<void> clickButtonFind(
+      WidgetTester tester, Finder finder) async {
+    await tester.tap(finder);
+    await tester.pump();
+    await tester.pumpAndSettle();
+  }
+
+
+
+  static Future<void> enterText(
+      WidgetTester tester, Finder element, String text) async {
+    await tester.tap(element);
+    await tester.pump();
+
+    await tester.pump();
+    await tester.enterText(element, text);
+    await tester.pump();
+    await tester.pumpAndSettle();
+  }
+
+  static Future<void> backOsButton(WidgetTester tester) async {
+    final NavigatorState navigator = tester.state(find.byType(Navigator));
+    navigator.pop();
+    await tester.pump();
+    await tester.pumpAndSettle();
+  }
+}
+
+
 
 
 Future<void> clickExitButton(WidgetTester tester) async {
@@ -73,6 +130,7 @@ void main() {
       expect(find.byType(Login), findsOneWidget);
     });
 
+    //TO DO
     // testWidgets(
     //     "Checking that the os back button takes you to the login screen.",
     //     (tester) async {
@@ -101,29 +159,11 @@ void main() {
     //   //then
     //   expect(find.byType(Login), findsOneWidget);
     // });
+    //
 
 
 
 
-    testWidgets(
-        "When the resend code is clicked, the system should display a message to the user that the code has been sent",
-        (tester) async {
-      //given
-      UserRegisterData registerData =
-          UserRegisterData("", "name", "surname", "password");
-      await Utils.showView(tester, ConfirmRegisterCode(registerData));
-      final textFinder = find.text(
-          "We sent you an email with a 4-digit code. Enter it to create an account. Resend code",
-          findRichText: true);
-
-      //when
-      final gesture = await tester.startGesture(tester.getTopRight(textFinder));
-      await gesture.up();
-      await tester.pump();
-
-      //then
-      expect(find.text("Send confirm code"), findsOneWidget);
-    });
 
     testWidgets(
         "When you clicked the registration button without entering the code, the system should display a message asking you to enter the code",
@@ -141,6 +181,8 @@ void main() {
       expect(find.text("Please enter code"), findsOneWidget);
       expect(find.byType(ConfirmRegisterCode), findsOneWidget);
     });
+
+
 
     testWidgets(
         "When the registration button was clicked with a code that was too short, the system should display a message stating that the code was given too short",

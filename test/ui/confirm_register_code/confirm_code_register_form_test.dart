@@ -1,4 +1,6 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_chat_client/common/exit_button.dart';
 import 'package:my_chat_client/conversation/conversation.dart';
@@ -33,11 +35,6 @@ Future<void> clickRegisterButton(WidgetTester tester) async {
   await tester.pumpAndSettle();
 }
 
-/*
-
-  final ConfirmAccountRequest checkConfirmCodeRequest;
-  final ResendConfirmAccountCodeRequest resendConfirmAccountCodeRequest;
- */
 class RequestAcceptCode9999AsCorrect implements ConfirmAccountRequest {
 
   @override
@@ -56,6 +53,16 @@ class ResendAccountCodeRequestMock implements ResendConfirmAccountCodeRequest{
   @override
   Future<Result> resendActiveAccountCode(EmailData emailData) {
    return Future.value(Result.success(ResendConfirmAccountCodeStatus.ok));
+  }
+
+}
+
+
+class ResendAndShowMesssageAccountCodeRequestMock implements ResendConfirmAccountCodeRequest{
+
+  @override
+  Future<Result> resendActiveAccountCode(EmailData emailData) {
+    return Future.value(Result.success(ResendConfirmAccountCodeStatus.ok));
   }
 
 }
@@ -128,4 +135,28 @@ void main() {
 
         });
   });
+
+
+  testWidgets(
+      "When the resend code is clicked, the system should display a message to the user that the code has been sent",
+          (tester) async {
+        //given
+            UserRegisterData registerData =
+            UserRegisterData("correct@mail.pl", "name", "surname", "password");
+
+            await Utils.showView(
+              tester,
+              ConfirmCodeRegisterForm(registerData, RequestAcceptCode9999AsCorrect(),ResendAccountCodeRequestMock()),
+            );
+        final textFinder = find.text(
+            "We sent you an email with a 4-digit code. Enter it to create an account. Resend code",
+            findRichText: true);
+
+        //when
+        await Utils.fireOnTapOnTextSpan(tester,textFinder, ' Resend code');
+
+        //then
+        expect(find.text('Send confirm code'), findsOneWidget);
+
+      });
 }

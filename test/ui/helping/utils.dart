@@ -1,4 +1,6 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_chat_client/style/main_style.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -50,5 +52,20 @@ class Utils {
     navigator.pop();
     await tester.pump();
     await tester.pumpAndSettle();
+  }
+
+  static Future<void> fireOnTapOnTextSpan(WidgetTester tester,Finder finder, String text) async {
+    final Element element = finder.evaluate().single;
+    final RenderParagraph paragraph = element.renderObject as RenderParagraph;
+
+    paragraph.text.visitChildren((dynamic span) {
+      if (span.text != text) return true;
+      (span.recognizer as TapGestureRecognizer).onTap!();
+      return false;
+    });
+
+    await tester.pump();
+    await tester.pumpAndSettle();
+
   }
 }
