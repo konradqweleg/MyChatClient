@@ -28,7 +28,7 @@
   "passwordResetCodeSend": "Wysłano kod resetowania hasła",
   "enterCodeReceivedOnEmail" : "Wprowadź kod \n otrzymany na adres email",
   "resetPassword" : "Zmień hasło",
-  "errorCode" : "Błędny kod",
+  "errorCode" : "Wprowadzono błędny kod",
   "sendPasswordResetCode": "Kod resetowania hasła został wysłany na podany adres email",
   "passwordHasBenReset": "Hasło zostało zmienione",
   "emailOccupiedError": "Użyty adres email jest już przypisany do istniejącego konta",
