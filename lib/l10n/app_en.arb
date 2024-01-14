@@ -216,6 +216,15 @@
     "description": "The text describing the situation in which the user account has not been activated."
   },
 
+  "userOrResetPasswordCodeNotFound": "No password reset code found for the user. Try starting the registration process again.",
+  "@userOrResetPasswordCodeNotFound": {
+        "description": "The text describing the situation in which the user or password reset code was not found in the service."
+  },
+
+  "badChangePasswordCode": "Wrong password reset code. Try starting the password reset process again.",
+  "@badChangePasswordCode": {
+        "description": "The text describing the situation in which the user has entered an incorrect password reset code."
+  },
 
   "helloWorld": "Hello World!",
   "@helloWorld": {

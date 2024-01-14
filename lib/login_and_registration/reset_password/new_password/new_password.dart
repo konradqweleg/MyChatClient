@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:my_chat_client/login_and_registration/reset_password/new_password/change_password_on_server.dart';
 import 'package:my_chat_client/login_and_registration/reset_password/new_password/new_password_form.dart';
+import 'package:my_chat_client/login_and_registration/reset_password/new_password/request/request_change_password_http.dart';
 import '../../../common/exit_button.dart';
 import '../../../navigation/page_route_navigation.dart';
 import '../../../style/main_style.dart';
 import '../../login/login.dart';
 
-void main() => runApp( NewPassword("emptyEmail"));
+void main() => runApp( NewPassword("emptyEmail","emptyCode"));
 
 
 class NewPassword extends StatefulWidget {
-   NewPassword(this.emailUser, {super.key});
+   NewPassword(this.emailUser,this.resetPasswordCode, {super.key});
 
   String emailUser;
+  String resetPasswordCode;
 
   @override
   State<StatefulWidget> createState() {
@@ -53,7 +55,7 @@ class _NewPasswordState extends State<NewPassword> {
                     // Another fixed-height child.
                     height: 300.0,
                     alignment: Alignment.topLeft,
-                    child:  NewPasswordForm(widget.emailUser,ChangePasswordOnServer()),
+                    child:  NewPasswordForm(widget.emailUser,widget.resetPasswordCode,RequestChangePasswordHttp()),
                   ),
 
 

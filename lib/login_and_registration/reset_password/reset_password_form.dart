@@ -138,7 +138,7 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
   void _goToInsertNewPassword() {
     PageRouteNavigation.navigationTransitionSlideFromDown(
         context: context,
-        destination: NewPassword(emailController.text),
+        destination: NewPassword(emailController.text,codeController.text),
         isClearBackStack: true);
   }
 

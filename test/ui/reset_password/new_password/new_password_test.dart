@@ -33,7 +33,7 @@ void main() {
         'Checking that the ui back button takes you to the login screen.',
             (WidgetTester tester) async {
           //given
-          await Utils.showView(tester, NewPassword("example@mail"));
+          await Utils.showView(tester, NewPassword("example@mail", "0000"));
           //when
           await clickExitButton(tester);
 
@@ -71,7 +71,7 @@ void main() {
         'When the user does not provide a new password, the system should display a message that the password has not been entered',
             (WidgetTester tester) async {
           //given
-          await Utils.showView(tester, NewPassword("example@mail"));
+          await Utils.showView(tester, NewPassword("example@mail", "0000"));
           //when
           await enterPassword(tester,"");
           await clickResetPasswordButton(tester);
@@ -83,7 +83,7 @@ void main() {
         'When the user does  provide a new password, the system should display a message that the password has  been changed',
             (WidgetTester tester) async {
           //given
-          await Utils.showView(tester, NewPassword("example@mail"));
+          await Utils.showView(tester, NewPassword("example@mail", "0000"));
           //when
           await enterPassword(tester,"password");
           await clickResetPasswordButton(tester);
