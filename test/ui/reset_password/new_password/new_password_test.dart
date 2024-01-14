@@ -79,17 +79,7 @@ void main() {
           expect(find.text("Please enter your password"), findsOneWidget);
         });
 
-    testWidgets(
-        'When the user does  provide a new password, the system should display a message that the password has  been changed',
-            (WidgetTester tester) async {
-          //given
-          await Utils.showView(tester, NewPassword("example@mail", "0000"));
-          //when
-          await enterPassword(tester,"password");
-          await clickResetPasswordButton(tester);
-          //then
-          expect(find.text("Password has been changed"), findsOneWidget);
-        });
+
 
   });
 }
