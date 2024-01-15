@@ -1,0 +1,4 @@
+enum LoginRequestErrorStatus {
+  badCredentials,
+  error;
+}

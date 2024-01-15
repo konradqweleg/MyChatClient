@@ -4,6 +4,7 @@ import 'package:my_chat_client/login_and_registration/login/button/reset_passwor
 import 'package:my_chat_client/login_and_registration/login/check_credentials.dart';
 import 'package:my_chat_client/login_and_registration/login/check_user_credentails.dart';
 import 'package:my_chat_client/login_and_registration/login/other_form_login/login_with_google_or_facebook.dart';
+import 'package:my_chat_client/login_and_registration/login/request/login_request_http.dart';
 import '../../style/main_style.dart';
 import 'login_form.dart';
 
@@ -41,8 +42,8 @@ class LoginState extends State<Login> {
                       // Another fixed-height child.
                       height: 400.0,
                       alignment: Alignment.center,
-                      child: LoginForm(
-                        checkCredentials: CheckUserCredentials(),
+                      child: LoginForm(loginRequest: LoginRequestHttp()
+
                       ),
                     ),
                     const SizedBox(height: 30),

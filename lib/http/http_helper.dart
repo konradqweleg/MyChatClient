@@ -26,6 +26,8 @@ class HttpHelper {
         throw TimeoutException('Request timed out');
       }
 
+
+
       if (response is http.Response) {
         if (response.statusCode == 200 || response.statusCode == 400) {
           return response;

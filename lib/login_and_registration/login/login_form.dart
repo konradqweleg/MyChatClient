@@ -1,18 +1,21 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:my_chat_client/conversation/conversation.dart';
 import 'package:my_chat_client/login_and_registration/common/input/input_mail.dart';
 import 'package:my_chat_client/login_and_registration/common/input/input_password.dart';
-import 'package:my_chat_client/login_and_registration/common/button/main_action_button.dart';
-import 'package:my_chat_client/login_and_registration/login/check_credentials.dart';
+import 'package:my_chat_client/login_and_registration/login/request/login_data.dart';
+import 'package:my_chat_client/login_and_registration/login/request/login_request.dart';
+import 'package:my_chat_client/login_and_registration/login/request/login_request_error_status.dart';
 import '../../common/name_app.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../navigation/page_route_navigation.dart';
+import '../common/button/main_action_button.dart';
+import '../common/error_message.dart';
+import '../common/errors.dart';
+import '../common/result.dart';
 
 class LoginForm extends StatefulWidget {
-  const LoginForm({required this.checkCredentials,super.key});
-  final CheckCredentials checkCredentials;
+  const LoginForm({required this.loginRequest,super.key});
+  final LoginRequest loginRequest;
 
   @override
   State<LoginForm> createState() {
@@ -26,19 +29,38 @@ class _LoginFormState extends State<LoginForm> {
   bool isErrorWhenTryToLogIn = false;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  final Errors _matchedErrorToErrorMessageLoginRequest=
+  Errors();
 
-  void _setErrorLoginDataState() {
-    setState(() {
-      isErrorWhenTryToLogIn = true;
-    });
+
+  void _initMatchedErrorToErrorMessage() {
+    if (_matchedErrorToErrorMessageLoginRequest.isInit()) {
+      _matchedErrorToErrorMessageLoginRequest
+          .registerMatchErrorToResultStatus(ErrorMessage.error(
+          AppLocalizations.of(context)!
+              .errorRequestInformationOnInternetAccessCheck,
+          Result.error(LoginRequestErrorStatus.error)));
+
+      _matchedErrorToErrorMessageLoginRequest
+          .registerMatchErrorToResultStatus(ErrorMessage.error(
+          AppLocalizations.of(context)!.badLoginCredentials,
+          Result.error(LoginRequestErrorStatus.badCredentials)));
+
+    }
   }
 
-  String _getErrorMessageWhenErrorInTryLogin() {
-    String noError = "";
-    return isErrorWhenTryToLogIn
-        ? AppLocalizations.of(context)!.incorrectLoginDetails
-        : noError;
+
+  Text _getErrorMessageWhenErrorInTryLogin() {
+   if(_matchedErrorToErrorMessageLoginRequest.isError()){
+     return Text(_matchedErrorToErrorMessageLoginRequest.getErrorMessage(),style: const TextStyle(color: Colors.red));
+   }else{
+     return const Text("");
+   }
   }
+
+
+
+
 
   bool _validateLoginData() {
     return _loginFormKey.currentState!.validate();
@@ -55,19 +77,33 @@ class _LoginFormState extends State<LoginForm> {
 
   void _checkLoginData() {
 
+    setState(() {
+      _matchedErrorToErrorMessageLoginRequest.clearError();
+    });
+
     bool isPassValidationLoginData = _validateLoginData();
     if (!isPassValidationLoginData) {
       return;
     }
 
-    bool isTheCorrectLoginCredentials =
-        widget.checkCredentials.isValidCredentials(emailController.text, passwordController.text);
+    LoginData loginData = LoginData(
+        email: emailController.text, password: passwordController.text);
 
-    if (isTheCorrectLoginCredentials) {
-      _logIn();
-    } else {
-      _setErrorLoginDataState();
-    }
+    Future<Result> requestLoginResult = widget.loginRequest.login(loginData);
+
+    requestLoginResult.then((value) {
+      Result resultLoginRequest = value;
+      if (resultLoginRequest.isSuccess()) {
+        _logIn();
+      } else if (resultLoginRequest.isError()) {
+        _initMatchedErrorToErrorMessage();
+        setState(() {
+          _matchedErrorToErrorMessageLoginRequest
+              .setActualError(resultLoginRequest);
+        });
+      }
+    });
+
 
   }
 
@@ -89,10 +125,7 @@ class _LoginFormState extends State<LoginForm> {
               const SizedBox(
                 height: 10,
               ),
-              Text(
-                _getErrorMessageWhenErrorInTryLogin(),
-                style: const TextStyle(color: Colors.red),
-              ),
+              _getErrorMessageWhenErrorInTryLogin(),
               MainActionButton(
                   text: AppLocalizations.of(context)!.login,
                   action: _checkLoginData),

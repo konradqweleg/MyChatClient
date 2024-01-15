@@ -43,5 +43,6 @@
   "userWithSpecifiedEmailNotExist": "Użytkownik o podanym adresie email nie istnieje",
   "userOrResetPasswordCodeNotFound": "Nie znaleziono użytkownika lub kodu resetowania hasła. Spróbuj ponownie rozpocząć proces resetowania hasła.",
   "badChangePasswordCode": "Wprowadzono zły kod zmiany hasła. Spróbuj ponownie rozpocząć proces resetowania hasła.",
-  "accountNotActive": "Konto użytkownika nie zostało aktywowane"
+  "accountNotActive": "Konto użytkownika nie zostało aktywowane",
+  "badLoginCredentials": "Błędne dane logowania"
 }

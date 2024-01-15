@@ -226,6 +226,11 @@
         "description": "The text describing the situation in which the user has entered an incorrect password reset code."
   },
 
+  "badLoginCredentials": "Incorrect login credentials",
+    "@badLoginCredentials": {
+        "description": "The text describing the situation in which the user has entered an incorrect login credentials."
+    },
+
   "helloWorld": "Hello World!",
   "@helloWorld": {
     "description": "The conventional newborn programmer greeting"

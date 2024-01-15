@@ -3,8 +3,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:my_chat_client/login_and_registration/common/button/main_action_button.dart';
 import 'package:my_chat_client/login_and_registration/common/input/input_mail.dart';
 import 'package:my_chat_client/login_and_registration/common/input/input_password.dart';
+import 'package:my_chat_client/login_and_registration/common/result.dart';
 import 'package:my_chat_client/login_and_registration/login/check_credentials.dart';
 import 'package:my_chat_client/login_and_registration/login/login_form.dart';
+import 'package:my_chat_client/login_and_registration/login/request/login_data.dart';
+import 'package:my_chat_client/login_and_registration/login/request/login_request.dart';
 
 import '../helping/localizations_inject.dart';
 import '../helping/utils.dart';
@@ -28,6 +31,18 @@ class CorrectExampleUserCredentials implements CheckCredentials {
   }
 }
 
+class MockLoginRequest implements LoginRequest {
+  @override
+  Future<Result> login(LoginData loginData) {
+    if (loginData.email == "example@mail.pl" &&
+        loginData.password == "password123") {
+      return Future.value(Result.success("Logged"));
+    } else {
+      return Future.value(Result.error(" Bad credentials "));
+    }
+  }
+
+}
 
 
 
@@ -40,7 +55,7 @@ void main() {
       await Utils.showView(
           tester,
           LoginForm(
-            checkCredentials: CorrectExampleUserCredentials(),
+            loginRequest: MockLoginRequest(),
           ));
       //when
       await enterEmail(tester, "");
@@ -57,7 +72,7 @@ void main() {
       await Utils.showView(
           tester,
           LoginForm(
-            checkCredentials: CorrectExampleUserCredentials(),
+            loginRequest: MockLoginRequest(),
           ));
       //when
       await enterEmail(tester, "email.bad.format");
@@ -75,7 +90,7 @@ void main() {
       await Utils.showView(
           tester,
           LoginForm(
-            checkCredentials: CorrectExampleUserCredentials(),
+            loginRequest: MockLoginRequest(),
           ));
       //when
       await enterPassword(tester, "");
@@ -92,7 +107,7 @@ void main() {
       await Utils.showView(
           tester,
           LoginForm(
-            checkCredentials: CorrectExampleUserCredentials(),
+            loginRequest: MockLoginRequest(),
           ));
       //when
       await enterPassword(tester, "");
@@ -110,7 +125,7 @@ void main() {
       await Utils.showView(
           tester,
           LoginForm(
-            checkCredentials: CorrectExampleUserCredentials(),
+            loginRequest: MockLoginRequest(),
           ));
       await enterPassword(tester, "password123");
       await enterEmail(tester, "example@mail.pl");
@@ -130,7 +145,7 @@ void main() {
       await Utils.showView(
           tester,
           LoginForm(
-            checkCredentials: CorrectExampleUserCredentials(),
+            loginRequest: MockLoginRequest(),
           ));
       await enterPassword(tester, "password123");
       await enterEmail(tester, "badmail@mail.pl");
@@ -140,7 +155,7 @@ void main() {
       await tester.pumpAndSettle();
 
       //then
-      expect(find.text("Incorrect login details"), findsOneWidget);
+      expect(find.text("Incorrect login credentials"), findsOneWidget);
     });
 
     testWidgets(
@@ -150,7 +165,7 @@ void main() {
       await Utils.showView(
           tester,
           LoginForm(
-            checkCredentials: CorrectExampleUserCredentials(),
+            loginRequest: MockLoginRequest(),
           ));
       await enterPassword(tester, "passwordbad");
       await enterEmail(tester, "example@mail.pl");
@@ -160,7 +175,7 @@ void main() {
       await tester.pumpAndSettle();
 
       //then
-      expect(find.text("Incorrect login details"), findsOneWidget);
+      expect(find.text("Incorrect login credentialss"), findsOneWidget);
     });
   });
 }
