@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:my_chat_client/conversation/conversation.dart';
 import 'package:my_chat_client/login_and_registration/common/input/input_mail.dart';
 import 'package:my_chat_client/login_and_registration/common/input/input_password.dart';
+import 'package:my_chat_client/login_and_registration/login/data/auth_data.dart';
+import 'package:my_chat_client/login_and_registration/login/data/saved_data.dart';
 import 'package:my_chat_client/login_and_registration/login/request/login_data.dart';
 import 'package:my_chat_client/login_and_registration/login/request/login_request.dart';
 import 'package:my_chat_client/login_and_registration/login/request/login_request_error_status.dart';
+import 'package:my_chat_client/login_and_registration/login/request/response/Tokens.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../common/name_app.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../navigation/page_route_navigation.dart';
@@ -52,6 +56,7 @@ class _LoginFormState extends State<LoginForm> {
 
   Text _getErrorMessageWhenErrorInTryLogin() {
    if(_matchedErrorToErrorMessageLoginRequest.isError()){
+
      return Text(_matchedErrorToErrorMessageLoginRequest.getErrorMessage(),style: const TextStyle(color: Colors.red));
    }else{
      return const Text("");
@@ -66,8 +71,15 @@ class _LoginFormState extends State<LoginForm> {
     return _loginFormKey.currentState!.validate();
   }
 
+  Future<void> setUserLoginFlag() async {
+    SavedData.setUserLoginFlag();
+  }
+
 
   void _logIn() {
+
+    setUserLoginFlag();
+
     PageRouteNavigation.navigation(
       context: context,
       destination: const Conversation(),
@@ -93,18 +105,30 @@ class _LoginFormState extends State<LoginForm> {
 
     requestLoginResult.then((value) {
       Result resultLoginRequest = value;
+
       if (resultLoginRequest.isSuccess()) {
+        _saveUserLoginAuth(resultLoginRequest);
         _logIn();
       } else if (resultLoginRequest.isError()) {
+
         _initMatchedErrorToErrorMessage();
         setState(() {
           _matchedErrorToErrorMessageLoginRequest
               .setActualError(resultLoginRequest);
+
         });
       }
     });
 
 
+  }
+
+  void _saveUserLoginAuth(Result resultLoginRequest) async {
+     Tokens tokens = resultLoginRequest.getData() as Tokens;
+     AuthData.saveAccessToken(tokens.accessToken);
+     AuthData.saveRefreshToken(tokens.refreshToken);
+     AuthData.saveEmail(emailController.text);
+     AuthData.savePassword(passwordController.text);
   }
 
   @override

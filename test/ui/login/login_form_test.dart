@@ -8,6 +8,7 @@ import 'package:my_chat_client/login_and_registration/login/check_credentials.da
 import 'package:my_chat_client/login_and_registration/login/login_form.dart';
 import 'package:my_chat_client/login_and_registration/login/request/login_data.dart';
 import 'package:my_chat_client/login_and_registration/login/request/login_request.dart';
+import 'package:my_chat_client/login_and_registration/login/request/login_request_error_status.dart';
 
 import '../helping/localizations_inject.dart';
 import '../helping/utils.dart';
@@ -36,9 +37,9 @@ class MockLoginRequest implements LoginRequest {
   Future<Result> login(LoginData loginData) {
     if (loginData.email == "example@mail.pl" &&
         loginData.password == "password123") {
-      return Future.value(Result.success("Logged"));
+      return Future.value(Result.success("Tokens"));
     } else {
-      return Future.value(Result.error(" Bad credentials "));
+      return Future.value(Result.error(LoginRequestErrorStatus.badCredentials));
     }
   }
 
@@ -175,7 +176,7 @@ void main() {
       await tester.pumpAndSettle();
 
       //then
-      expect(find.text("Incorrect login credentialss"), findsOneWidget);
+      expect(find.text("Incorrect login credentials"), findsOneWidget);
     });
   });
 }
