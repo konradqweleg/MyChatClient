@@ -11,6 +11,7 @@ import 'package:my_chat_client/login_and_registration/login/request/response/Tok
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../common/name_app.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../http/http_helper_auth.dart';
 import '../../navigation/page_route_navigation.dart';
 import '../common/button/main_action_button.dart';
 import '../common/error_message.dart';
@@ -87,7 +88,8 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  void _checkLoginData() {
+  void _checkLoginData() async {
+
 
     setState(() {
       _matchedErrorToErrorMessageLoginRequest.clearError();

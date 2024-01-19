@@ -11,9 +11,10 @@ class AuthData{
     await storage.write(key: _KEY_ACCESS_TOKKEN, value: accessToken);
   }
 
-  static  Future<String?> getAccessToken() async {
+  static  Future<String?> getAccessToken()  {
     FlutterSecureStorage storage = const FlutterSecureStorage();
-    return await storage.read(key: _KEY_ACCESS_TOKKEN);
+    return  storage.read(key: _KEY_ACCESS_TOKKEN);
+   // return Future(() => null);
   }
 
   static void deleteAccessToken() async {

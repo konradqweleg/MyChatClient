@@ -14,6 +14,7 @@ class RequestsURL{
   static String checkIsCorrectResetPasswordCode = "http://127.0.0.1:8083/api/v1/user/checkIsCorrectResetPasswordCode";
   static String changePassword = "http://127.0.0.1:8083/api/v1/user/changeUserPassword";
   static String login = "http://127.0.0.1:8083/api/v1/auth/login";
+  static String refreshToken = "http://127.0.0.1:8083/api/v1/auth/refreshAccessToken";
 
 
 }
