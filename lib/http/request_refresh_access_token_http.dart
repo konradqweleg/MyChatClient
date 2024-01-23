@@ -28,21 +28,24 @@ class RequestRefreshAccessTokenHttp{
 
   @override
   Future<Result> refreshAccessToken(String refreshToken) async{
-
+    print("Odświeżam token"+ refreshToken);
 
 
     var httpHelper = HttpHelper();
 
     Map<String, String> headersWithRefreshToken = {
-      'Authorization': 'Bearer $refreshToken}',
       'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer $refreshToken'
     };
 
     try {
+      print("1.");
       var result = await httpHelper.executeHttpRequestWithTimeout(
         headers: headersWithRefreshToken,
         RequestsURL.refreshToken,
       );
+      print("2.");
+      print(result.body);
 
       if (result.statusCode == 200) {
         return _getCorrectResponseStatus(result.body);
@@ -51,6 +54,7 @@ class RequestRefreshAccessTokenHttp{
       }
 
     } catch (e) {
+      print(e);
       return Result.error(RefreshTokenStatus.error);
     }
   }

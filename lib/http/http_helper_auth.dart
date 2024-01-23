@@ -45,16 +45,7 @@ enum AuthErrorStatus{
 
 class HttpHelperAuth {
 
-
-  static Future<void> downloadAccessTokenAndRefreshToken(String login, String password) async {
-    var body = {
-      "login": login,
-      "password": password,
-    };
-  }
-
-
-  static Future<Result<RefreshTokenStatus>> checkRefreshToken() async {
+   Future<Result<RefreshTokenStatus>> checkRefreshToken() async {
     Future<String?> refreshToken = AuthData.getRefreshToken();
     return  refreshToken.then((token) {
       if(token == null){
@@ -66,7 +57,7 @@ class HttpHelperAuth {
     });
   }
 
-  static Future<Result<AccessTokenStatus>> checkAccessToken() async {
+   Future<Result<AccessTokenStatus>> checkAccessToken() async {
     Future<String?> accessToken = AuthData.getAccessToken();
     return  accessToken.then((token) {
       if(token == null){
@@ -78,7 +69,7 @@ class HttpHelperAuth {
     });
   }
 
-  static Future<Result<SavedCredentialsStatus>> checkSavedCredentials() async {
+   Future<Result<SavedCredentialsStatus>> checkSavedCredentials() async {
     String? email = await AuthData.getEmail();
     String? password = await AuthData.getPassword();
 
@@ -90,7 +81,7 @@ class HttpHelperAuth {
    }
   }
 
- static Future<Result> executeHttpWithAccessTokenRequestWithTimeout(String url,dynamic body, {Duration timeoutDuration = const Duration(seconds: 3),}) async {
+  Future<Result> getWithTimeout(String url,dynamic body, {Duration timeoutDuration = const Duration(seconds: 3),}) async {
 
     Result<AccessTokenStatus> accessTokenStatus = await checkAccessToken();
     Result<RefreshTokenStatus> refreshTokenStatus = Result.success(RefreshTokenStatus.noCheck);
@@ -101,7 +92,7 @@ class HttpHelperAuth {
     }
 
     if(refreshTokenStatus.isError()){
-      print("Nie znaleziono refresh tokena");
+      print("Nie znaleziono refresh tokena i access tokena przekierowuje do logowania");
       return Result.error(TokenCheckStatus.redirectToLoginPage);
     }
 
@@ -109,24 +100,53 @@ class HttpHelperAuth {
     if(accessTokenStatus.isSuccess()){
       String? token = await AuthData.getAccessToken();
       if(token == null){
-        print("Nie znaleziono access tokena2");
+        print("Sprawdzenie pobranego access tokena nie powiodło się jest on pusty");
         return Result.error(TokenCheckStatus.redirectToLoginPage);
       }else{
-        Result resultRequestWithAccessToken = await requestGETAuthWithTimeout(url,token,body: body,timeoutDuration: timeoutDuration);
+        Result resultRequestWithAccessToken = await _requestGETAuthWithTimeout(url,token,body: body,timeoutDuration: timeoutDuration);
         if(resultRequestWithAccessToken.isSuccess()){
           print("Znaleziono access tokena");
           return resultRequestWithAccessToken;
-        }
-        else {
+        }else if(resultRequestWithAccessToken.isError() &&  resultRequestWithAccessToken.getData() == TokenCheckStatus.accessTokenExpired){
+
+
+          refreshTokenStatus = await checkRefreshToken();
+          if(refreshTokenStatus.isError()){
+            print("Nie znaleziono refresh tokena");
+            return Result.error(TokenCheckStatus.redirectToLoginPage);
+          }
+
           print("Nie znaleziono access tokena3");
+          String refreshToken = await AuthData.getRefreshToken() as String;
           RequestRefreshAccessTokenHttp requestRefreshAccessTokenHttp = RequestRefreshAccessTokenHttp();
-          Result resultRefreshAccessToken = await requestRefreshAccessTokenHttp.refreshAccessToken(token);
+          Result resultRefreshAccessToken = await requestRefreshAccessTokenHttp.refreshAccessToken(refreshToken);
+          print(resultRefreshAccessToken.getData());
 
           if(resultRefreshAccessToken.isSuccess()){
             print("Znaleziono access tokena4");
             AccessTokenData tokens = resultRefreshAccessToken.getData() as AccessTokenData;
             AuthData.saveAccessToken(tokens.accessToken);
-            return await requestGETAuthWithTimeout(url,tokens.accessToken,body: body,timeoutDuration: timeoutDuration);
+            return await _requestGETAuthWithTimeout(url,tokens.accessToken,body: body,timeoutDuration: timeoutDuration);
+          }
+          else if(resultRefreshAccessToken.isError() && resultRefreshAccessToken.getData() == RefreshTokenRequestStatus.noAuthorized){
+            print("Nie znaleziono access tokena5");
+            return Result.error(TokenCheckStatus.redirectToLoginPage);
+          }else{
+            print("Nie znaleziono access tokena6");
+            return Result.error(TokenCheckStatus.error);
+          }
+        }
+        else {
+          print("Nie znaleziono access tokena3");
+          RequestRefreshAccessTokenHttp requestRefreshAccessTokenHttp = RequestRefreshAccessTokenHttp();
+          Result resultRefreshAccessToken = await requestRefreshAccessTokenHttp.refreshAccessToken(token);
+          print(resultRefreshAccessToken.getData());
+
+          if(resultRefreshAccessToken.isSuccess()){
+            print("Znaleziono access tokena4");
+            AccessTokenData tokens = resultRefreshAccessToken.getData() as AccessTokenData;
+            AuthData.saveAccessToken(tokens.accessToken);
+            return await _requestGETAuthWithTimeout(url,tokens.accessToken,body: body,timeoutDuration: timeoutDuration);
           }
           else if(resultRefreshAccessToken.isError() && resultRefreshAccessToken.getData() == RefreshTokenRequestStatus.noAuthorized){
             print("Nie znaleziono access tokena5");
@@ -229,7 +249,7 @@ class HttpHelperAuth {
 
 
 
- static Future<dynamic> requestGETAuthWithTimeout(
+  Future<Result> _requestGETAuthWithTimeout(
       String url,String accessToken, {
         dynamic body,
         Duration timeoutDuration = const Duration(seconds: 3),
@@ -260,7 +280,7 @@ class HttpHelperAuth {
 
       if (response is http.Response) {
         if (response.statusCode == 200 || response.statusCode == 400) {
-          return response;
+          return Result.success(response.body);
         }else if (response.statusCode == 401) {
           return Result.error(TokenCheckStatus.accessTokenExpired);
         }
