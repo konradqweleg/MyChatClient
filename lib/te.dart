@@ -19,9 +19,9 @@ Future<void> main() async {
   // print(resultRefreshAccessToken.getData());
 
   AuthData.saveAccessToken("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiVVNFUiIsImlzcyI6IlNPTUVfTkFNRV9GT1JfSVNTRVJfSldUIiwidHlwZVRva2VuIjoiQUNDRVNTX1RPS0VOIiwidXNlckVtYWlsIjoiYWRtaW5AYWRtaW4ucGwiLCJleHAiOjE3MDYwNDI5NDN9.0neiq9pxwVryjgrNWq2By2xJZoIQ9U987RKzKFarwH0");
-  AuthData.saveRefreshToken("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBhZG1pbi5wbCIsInJvbGUiOiJVU0VSIiwiaXNzIjoiU09NRV9OQU1FX0ZPUl9JU1NFUl9KV1QiLCJ0eXBlVG9rZW4iOiJSRUZSRVNIX1RPS0VOIiwidXNlckVtYWlsIjoiYWRtaW5AYWRtaW4ucGwiLCJleHAiOjE3MDYwNDk2ODB9.AiDpG407u1g048pni1OrpMVu2kd9hENBNLk_eN-8a8U");
+  AuthData.saveRefreshToken("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBhZG1pbi5wbCIsInJvbGUiOiJVU0VSIiwiaXNzIjoiU09NRV9OQU1FX0ZPUl9JU1NFUl9KV1QiLCJ0eXBlVG9rZW4iOiJSRUZSRVNIX1RPS0VOIiwidXNlckVtYWlsIjoiYWRtaW5AYWRtaW4ucGwiLCJleHAiOjE3MDY2NTMzNzV9.Em3FfEYvQqvDEXgTCuhLROramI0ap-ObLdaKV_B6bm0");
   HttpHelperAuth httpHelperAuth = HttpHelperAuth();
-  Result a =   await httpHelperAuth.getWithTimeout("http://127.0.0.1:8083/xd/xd", "body");
+  Result a =   await httpHelperAuth.get("http://127.0.0.1:8083/xd/xd");
   print(a);
 
 

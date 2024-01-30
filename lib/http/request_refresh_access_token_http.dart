@@ -1,15 +1,13 @@
 import 'dart:convert';
 
-import 'package:my_chat_client/http/acess_token_data.dart';
-import 'package:my_chat_client/http/http_helper_auth.dart';
+import 'package:my_chat_client/http/request_data/acess_token_data.dart';
 import 'package:my_chat_client/http/refresh_token_request_status.dart';
-import 'package:my_chat_client/http/request_response_general/error_message.dart';
-
 import '../login_and_registration/common/result.dart';
 import '../requests/requests_url.dart';
 import 'http_helper.dart';
 
 class RequestRefreshAccessTokenHttp{
+
   Result _getCorrectResponseStatus(String resultBody) {
     Map parsedResponse = json.decode(resultBody);
     AccessTokenData tokens = AccessTokenData.fromJson(parsedResponse);
@@ -21,15 +19,13 @@ class RequestRefreshAccessTokenHttp{
        return Result.error(RefreshTokenRequestStatus.noAuthorized);
     }
     else{
-       return Result.error(RefreshTokenStatus.error);
+       return Result.error(RefreshTokenRequestStatus.error);
     }
   }
 
 
   @override
   Future<Result> refreshAccessToken(String refreshToken) async{
-    print("Odświeżam token"+ refreshToken);
-
 
     var httpHelper = HttpHelper();
 
@@ -39,13 +35,11 @@ class RequestRefreshAccessTokenHttp{
     };
 
     try {
-      print("1.");
+
       var result = await httpHelper.executeHttpRequestWithTimeout(
         headers: headersWithRefreshToken,
         RequestsURL.refreshToken,
       );
-      print("2.");
-      print(result.body);
 
       if (result.statusCode == 200) {
         return _getCorrectResponseStatus(result.body);
@@ -55,7 +49,7 @@ class RequestRefreshAccessTokenHttp{
 
     } catch (e) {
       print(e);
-      return Result.error(RefreshTokenStatus.error);
+      return Result.error(RefreshTokenRequestStatus.error);
     }
   }
 }
