@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:my_chat_client/http/request_data/acess_token_data.dart';
-import 'package:my_chat_client/http/refresh_token_request_status.dart';
+import 'package:my_chat_client/http/request_status/refresh_token_request_status.dart';
 import '../login_and_registration/common/result.dart';
 import '../requests/requests_url.dart';
 import 'http_helper.dart';
@@ -48,7 +48,6 @@ class RequestRefreshAccessTokenHttp{
       }
 
     } catch (e) {
-      print(e);
       return Result.error(RefreshTokenRequestStatus.error);
     }
   }

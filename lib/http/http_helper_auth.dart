@@ -1,21 +1,14 @@
 import 'dart:async';
 
 import 'package:http/http.dart' as http;
-import 'package:my_chat_client/http/refresh_token_request_status.dart';
+import 'package:my_chat_client/http/request_status/auth_request_status.dart';
+import 'package:my_chat_client/http/request_status/refresh_token_request_status.dart';
 import 'package:my_chat_client/http/request_refresh_access_token_http.dart';
-
 import '../login_and_registration/common/result.dart';
 import '../login_and_registration/login/data/auth_data.dart';
 import 'request_data/acess_token_data.dart';
 
-enum AuthRequestStatus {
-  ok,
-  error,
-  timeout,
-  refreshTokenExpired,
-  accessTokenExpired,
-  redirectToLoginPage,
-}
+
 
 enum _SavedTokenStatus {
   error,
