@@ -2,17 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:my_chat_client/conversation/conversation.dart';
 import 'package:my_chat_client/login_and_registration/common/input/input_mail.dart';
 import 'package:my_chat_client/login_and_registration/common/input/input_password.dart';
-import 'package:my_chat_client/login_and_registration/login/data/auth_data.dart';
-import 'package:my_chat_client/login_and_registration/login/data/saved_data.dart';
+
 import 'package:my_chat_client/login_and_registration/login/request/login_data.dart';
 import 'package:my_chat_client/login_and_registration/login/request/login_request.dart';
 import 'package:my_chat_client/login_and_registration/login/request/login_request_error_status.dart';
 import 'package:my_chat_client/login_and_registration/login/request/response/Tokens.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:my_chat_client/tokens/token_manager.dart';
+
+
 import '../../common/name_app.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import '../../http/http_helper_auth.dart';
+
 import '../../navigation/page_route_navigation.dart';
+import '../../tokens/saved_login_data.dart';
+import '../../tokens/token_manager_factory.dart';
 import '../common/button/main_action_button.dart';
 import '../common/error_message.dart';
 import '../common/errors.dart';
@@ -73,7 +76,7 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   Future<void> setUserLoginFlag() async {
-    SavedData.setUserLoginFlag();
+    SavedLoginData.setUserLoginFlag();
   }
 
 
@@ -127,10 +130,12 @@ class _LoginFormState extends State<LoginForm> {
 
   void _saveUserLoginAuth(Result resultLoginRequest) async {
      Tokens tokens = resultLoginRequest.getData() as Tokens;
-     AuthData.saveAccessToken(tokens.accessToken);
-     AuthData.saveRefreshToken(tokens.refreshToken);
-     AuthData.saveEmail(emailController.text);
-     AuthData.savePassword(passwordController.text);
+
+     TokenManager tokenManager = TokenManagerFactory.getTokenManager();
+     tokenManager.saveAccessToken(tokens.accessToken);
+     tokenManager.saveRefreshToken(tokens.refreshToken);
+
+
   }
 
   @override

@@ -1,73 +1,73 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class AuthData{
+class SavedAuthData{
   static String _KEY_ACCESS_TOKKEN = "access_token";
   static String _KEY_REFRESH_TOKEN = "refresh_token";
   static String _EMAIL = "email";
   static String _PASSWORD = "password";
 
-  static void saveAccessToken(String accessToken) async {
+   void saveAccessToken(String accessToken) async {
     FlutterSecureStorage storage = const FlutterSecureStorage();
     await storage.write(key: _KEY_ACCESS_TOKKEN, value: accessToken);
   }
 
-  static  Future<String?> getAccessToken()  {
+    Future<String?> getAccessToken()  {
     FlutterSecureStorage storage = const FlutterSecureStorage();
     return  storage.read(key: _KEY_ACCESS_TOKKEN);
    // return Future(() => null);
   }
 
-  static void deleteAccessToken() async {
+   void deleteAccessToken() async {
     FlutterSecureStorage storage = const FlutterSecureStorage();
     await storage.delete(key: _KEY_ACCESS_TOKKEN);
   }
 
-  static void saveRefreshToken(String refreshToken) async {
+   void saveRefreshToken(String refreshToken) async {
     FlutterSecureStorage storage = const FlutterSecureStorage();
     await storage.write(key: _KEY_REFRESH_TOKEN, value: refreshToken);
   }
 
-  static Future<String?> getRefreshToken() async {
+   Future<String?> getRefreshToken() async {
     FlutterSecureStorage storage = const FlutterSecureStorage();
     return await storage.read(key: _KEY_REFRESH_TOKEN);
   }
 
-  static void deleteRefreshToken() async {
+   void deleteRefreshToken() async {
     FlutterSecureStorage storage = const FlutterSecureStorage();
     await storage.delete(key: _KEY_REFRESH_TOKEN);
   }
 
-  static void saveEmail(String email) async {
+   void saveEmail(String email) async {
     FlutterSecureStorage storage = const FlutterSecureStorage();
     await storage.write(key: _EMAIL, value: email);
   }
 
-  static Future<String?> getEmail() async {
+   Future<String?> getEmail() async {
     FlutterSecureStorage storage = const FlutterSecureStorage();
     return await storage.read(key: _EMAIL);
   }
 
-  static void deleteEmail() async {
+   void deleteEmail() async {
     FlutterSecureStorage storage = const FlutterSecureStorage();
     await storage.delete(key: _EMAIL);
   }
 
-  static void savePassword(String password) async {
+   void savePassword(String password) async {
     FlutterSecureStorage storage = const FlutterSecureStorage();
     await storage.write(key: _PASSWORD, value: password);
   }
 
-  static Future<String?> getPassword() async {
+   Future<String?> getPassword() async {
     FlutterSecureStorage storage = const FlutterSecureStorage();
     return await storage.read(key: _PASSWORD);
   }
 
-  static void deletePassword() async {
+   void deletePassword() async {
     FlutterSecureStorage storage = const FlutterSecureStorage();
     await storage.delete(key: _PASSWORD);
   }
 
-  static void deleteAllTokens() async {
+   void deleteAllTokens() async {
     FlutterSecureStorage storage = const FlutterSecureStorage();
     await storage.deleteAll();
   }

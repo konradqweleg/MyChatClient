@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SavedData{
+class SavedLoginData{
   static const String _KEY_IS_USER_LOGIN = "loggedIn";
 
 
