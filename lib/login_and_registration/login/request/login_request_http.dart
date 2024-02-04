@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:my_chat_client/login_and_registration/common/result.dart';
 import 'package:my_chat_client/login_and_registration/login/request/login_data.dart';
@@ -9,6 +10,7 @@ import 'package:my_chat_client/login_and_registration/login/request/response/Tok
 import '../../../http/http_helper.dart';
 import '../../../http/request_response_general/error_message.dart';
 import '../../../requests/requests_url.dart';
+import 'package:http/http.dart' as http;
 
 class LoginRequestHttp extends LoginRequest{
 
@@ -37,7 +39,7 @@ class LoginRequestHttp extends LoginRequest{
     var bodyLoginData = jsonEncode(loginData);
 
 
-    var httpHelper = HttpHelper();
+    var httpHelper = HttpHelper(http.Client());
     try {
       var result = await httpHelper.executeHttpRequestWithTimeout(
         RequestsURL.login,

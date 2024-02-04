@@ -9,6 +9,7 @@ import '../../../../http/request_response_general/error_message.dart';
 import '../../../../http/request_response_general/status.dart';
 import '../../../../requests/requests_url.dart';
 import '../../../common/result.dart';
+import 'package:http/http.dart' as http;
 
 class SendResetPasswordCodeHttp extends SendResetPasswordCodeRequest {
   Result _getCorrectResponseStatus(String resultBody) {
@@ -41,7 +42,7 @@ class SendResetPasswordCodeHttp extends SendResetPasswordCodeRequest {
   Future<Result> sendResetPasswordCode(EmailData email) async {
     var bodyEmail = jsonEncode(email);
 
-    var httpHelper = HttpHelper();
+    var httpHelper = HttpHelper(http.Client());
     try {
       var result = await httpHelper.executeHttpRequestWithTimeout(
         RequestsURL.sendResetPasswordCode,

@@ -5,8 +5,11 @@ import 'package:my_chat_client/http/request_status/refresh_token_request_status.
 import '../login_and_registration/common/result.dart';
 import '../requests/requests_url.dart';
 import 'http_helper.dart';
+import 'package:http/http.dart' as http;
 
 class RequestRefreshAccessTokenHttp{
+  final http.Client httpClient;
+  RequestRefreshAccessTokenHttp(this.httpClient);
 
   Result _getCorrectResponseStatus(String resultBody) {
     Map parsedResponse = json.decode(resultBody);
@@ -25,9 +28,13 @@ class RequestRefreshAccessTokenHttp{
 
 
   @override
-  Future<Result> refreshAccessToken(String refreshToken) async{
+  Future<Result> refreshAccessToken(String? refreshToken) async{
 
-    var httpHelper = HttpHelper();
+    if(refreshToken == null){
+      return Result.error(RefreshTokenRequestStatus.error);
+    }
+
+    var httpHelper = HttpHelper(httpClient);
 
     Map<String, String> headersWithRefreshToken = {
       'Content-Type': 'application/json; charset=UTF-8',
@@ -48,6 +55,7 @@ class RequestRefreshAccessTokenHttp{
       }
 
     } catch (e) {
+      print(e);
       return Result.error(RefreshTokenRequestStatus.error);
     }
   }

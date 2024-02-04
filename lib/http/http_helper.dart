@@ -2,6 +2,11 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 
 class HttpHelper {
+
+
+  final http.Client httpClient;
+  HttpHelper(this.httpClient);
+
   Future<dynamic> executeHttpRequestWithTimeout(
     String url, {
     Map<String, String>? headers = const <String, String>{
@@ -11,11 +16,11 @@ class HttpHelper {
     Duration timeoutDuration = const Duration(seconds: 3),
   }) async {
     try {
-      var client = http.Client();
+
       var response;
       try {
         response = await Future.any([
-          client.post(
+          httpClient.post(
             Uri.parse(url),
             headers: headers,
             body: body,

@@ -85,9 +85,11 @@ class HttpHelperAuthImpl implements HttpHelperAuth {
 
 
   Future<Result> _repeatGetRequestWithRefreshedAccessToken(_TypeOfRequest requestType, url, body, timeoutDuration) async {
-    String refreshToken = tokenManager.getRefreshToken() as String;
-    RequestRefreshAccessTokenHttp requestRefreshAccessTokenHttp = RequestRefreshAccessTokenHttp();
+    String? refreshToken = await tokenManager.getRefreshToken();
+    RequestRefreshAccessTokenHttp requestRefreshAccessTokenHttp = RequestRefreshAccessTokenHttp(httpClient);
     Result resultRefreshAccessToken = await requestRefreshAccessTokenHttp.refreshAccessToken(refreshToken);
+    print("a");
+    print(resultRefreshAccessToken);
     if (resultRefreshAccessToken.isSuccess()) {
       AccessTokenData tokens = resultRefreshAccessToken.getData() as AccessTokenData;
       tokenManager.saveAccessToken(tokens.accessToken);

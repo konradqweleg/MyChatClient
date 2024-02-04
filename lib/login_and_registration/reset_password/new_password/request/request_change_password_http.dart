@@ -10,7 +10,7 @@ import '../../../../http/request_response_general/error_message.dart';
 import '../../../../http/request_response_general/status.dart';
 import '../../../../requests/requests_url.dart';
 
-
+import 'package:http/http.dart' as http;
 class RequestChangePasswordHttp extends RequestChangePassword {
 
   Result _getCorrectResponseStatus(String resultBody) {
@@ -44,7 +44,7 @@ Result _getErrorResponseStatus(String resultBody) {
   Future<Result> requestChangePassword(ChangePasswordData changePasswordData) async {
   var bodyChangePasswordData = jsonEncode(changePasswordData);
 
-  var httpHelper = HttpHelper();
+  var httpHelper = HttpHelper(http.Client());
   try {
     var result = await httpHelper.executeHttpRequestWithTimeout(
       RequestsURL.changePassword,

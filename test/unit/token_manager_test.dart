@@ -1,10 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:my_chat_client/login_and_registration/common/result.dart';
 import 'package:my_chat_client/tokens/saved_auth_data.dart';
+import 'package:my_chat_client/tokens/saved_token_status.dart';
 import 'package:my_chat_client/tokens/token_manager.dart';
-import 'package:my_chat_client/tokens/token_manager_factory.dart';
 import 'package:my_chat_client/tokens/token_manager_impl.dart';
-
 
 
 class SavedAuthDataMock implements SavedAuthData {
@@ -84,11 +83,9 @@ class SavedAuthDataMock implements SavedAuthData {
 void main() {
   group('TokenManagerImplTest', () {
 
-    //setUp(() => TokenManagerFactory.getTokenManager().clear());
-
 
     test('When saved access token access token should be accessible', () async {
-      WidgetsFlutterBinding.ensureInitialized();
+
       //given
       TokenManager tokenManager = TokenManagerImpl(SavedAuthDataMock());
       //when
@@ -99,13 +96,41 @@ void main() {
     });
 
     test('When saved refresh token refresh token should be accessible', () async {
-      WidgetsFlutterBinding.ensureInitialized();
       //given
       TokenManager tokenManager = TokenManagerImpl(SavedAuthDataMock());
       //when
       tokenManager.saveRefreshToken('refresh_token');
       //then
       expect('refresh_token', await tokenManager.getRefreshToken());
+
+    });
+
+    test('When access token is unavailable and refresh token is available should return accessible refresh token', () async {
+      //given
+      TokenManager tokenManager = TokenManagerImpl(SavedAuthDataMock());
+      //when
+      tokenManager.saveRefreshToken('refresh_token');
+      //then
+      expect(Result.success(SavedTokenStatus.accessibleRefreshToken), await tokenManager.checkSavedTokens());
+
+    });
+
+    test('When access token is unavailable and refresh token is unavailable should return no access any tokens', () async {
+      //given
+      TokenManager tokenManager = TokenManagerImpl(SavedAuthDataMock());
+      //when
+      //then
+      expect(Result.success(SavedTokenStatus.noAccessAnyTokens), await tokenManager.checkSavedTokens());
+
+    });
+
+    test('When access token is available and refresh token is unavailable should return accessible access token', () async {
+      //given
+      TokenManager tokenManager = TokenManagerImpl(SavedAuthDataMock());
+      //when
+      tokenManager.saveAccessToken('access_token');
+      //then
+      expect(Result.success(SavedTokenStatus.accessibleAccessToken), await tokenManager.checkSavedTokens());
 
     });
 

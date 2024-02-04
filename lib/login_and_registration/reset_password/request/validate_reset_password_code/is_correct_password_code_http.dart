@@ -9,6 +9,7 @@ import '../../../../http/request_response_general/error_message.dart';
 import '../../../../http/request_response_general/status.dart';
 import '../../../../requests/requests_url.dart';
 import 'Is_correct_password_code_request_status.dart';
+import 'package:http/http.dart' as http;
 
 class IsCorrectPasswordCodeHttp extends IsCorrectResetPasswordCode {
 
@@ -41,7 +42,7 @@ class IsCorrectPasswordCodeHttp extends IsCorrectResetPasswordCode {
   Future<Result> isCorrectResetPasswordCode(EmailAndCodeData emailAndCodeData) async {
     var bodyEmailAndCode = jsonEncode(emailAndCodeData);
 
-    var httpHelper = HttpHelper();
+    var httpHelper = HttpHelper(http.Client());
     try {
       var result = await httpHelper.executeHttpRequestWithTimeout(
         RequestsURL.checkIsCorrectResetPasswordCode,

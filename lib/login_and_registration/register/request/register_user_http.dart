@@ -7,6 +7,7 @@ import 'package:my_chat_client/login_and_registration/register/user_register_dat
 import '../../../http/http_helper.dart';
 import '../../../requests/requests_url.dart';
 import '../../common/result.dart';
+import 'package:http/http.dart' as http;
 
 class RegisterUserHttpRequest extends RegisterUserRequest {
   Result _getCorrectResponseStatus(String resultBody) {
@@ -39,7 +40,7 @@ class RegisterUserHttpRequest extends RegisterUserRequest {
       UserRegisterData userRegisterData) async {
     var bodyUserRegisterData = jsonEncode(userRegisterData);
 
-    var httpHelper = HttpHelper();
+    var httpHelper = HttpHelper(http.Client());
     try {
       var result = await httpHelper.executeHttpRequestWithTimeout(
         RequestsURL.register,

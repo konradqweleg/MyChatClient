@@ -8,6 +8,7 @@ import 'package:my_chat_client/login_and_registration/confirm_code/request/resen
 import '../../../../http/http_helper.dart';
 import '../../../../http/request_response_general/status.dart';
 import '../../../../requests/requests_url.dart';
+import 'package:http/http.dart' as http;
 
 class ResendConfirmAccountCodeRequestHttp extends ResendConfirmAccountCodeRequest{
 
@@ -26,7 +27,7 @@ class ResendConfirmAccountCodeRequestHttp extends ResendConfirmAccountCodeReques
 
     var bodyEmailData = jsonEncode(emailData);
 
-    var httpHelper = HttpHelper();
+    var httpHelper = HttpHelper(http.Client());
     try {
       var result = await httpHelper.executeHttpRequestWithTimeout(
         RequestsURL.resendActiveAccountCode,

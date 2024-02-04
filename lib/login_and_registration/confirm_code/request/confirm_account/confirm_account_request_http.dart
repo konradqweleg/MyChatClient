@@ -10,6 +10,7 @@ import '../../../../http/request_response_general/error_message.dart';
 import '../../../../http/request_response_general/status.dart';
 import '../../../../requests/requests_url.dart';
 import 'confirm_account_request.dart';
+import 'package:http/http.dart' as http;
 
 class ConfirmAccountRequestHttp extends ConfirmAccountRequest{
 
@@ -44,7 +45,7 @@ class ConfirmAccountRequestHttp extends ConfirmAccountRequest{
  Future<Result> confirmAccount(ConfirmAccountData confirmAccountData) async {
     var bodyConfirmAccountData = jsonEncode(confirmAccountData);
 
-    var httpHelper = HttpHelper();
+    var httpHelper = HttpHelper(http.Client());
     try {
       var result = await httpHelper.executeHttpRequestWithTimeout(
         RequestsURL.confirmCodeCreateAccount,
