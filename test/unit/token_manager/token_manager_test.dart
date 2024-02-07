@@ -29,6 +29,30 @@ void main() {
       expect(result.isSuccess() && result.getData() == SavedTokenStatus.noAccessAnyTokens, true);
     });
 
+    test('When the access token is valid, the checkSavedTokens method should return the accessible access token status', () async {
+      //given
+      MockTokenManager mockTokenManager = MockTokenManagerFactory().getAccessibleAllTokens();
+
+      //when
+      Result<SavedTokenStatus> result = await mockTokenManager.checkSavedTokens();
+
+      //then
+      expect(result.isSuccess() && result.getData() == SavedTokenStatus.accessibleAccessToken, true);
+    });
+
+     test('When only refresh token is valid, checkSavedTokens method should return the accessible refresh token', () async {
+        //given
+        MockTokenManager mockTokenManager = MockTokenManagerFactory().getAccessibleRefreshToken();
+
+        //when
+        Result<SavedTokenStatus> result = await mockTokenManager.checkSavedTokens();
+
+        //then
+        expect(result.isSuccess() && result.getData() == SavedTokenStatus.accessibleRefreshToken, true);
+
+      });
+
+
 
 
 

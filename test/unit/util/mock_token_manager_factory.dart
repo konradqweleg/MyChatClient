@@ -30,5 +30,15 @@ class MockTokenManagerFactory{
     return mockTokenManager;
   }
 
+  MockTokenManager getAccessibleRefreshToken(){
+    MockTokenManager mockTokenManager = MockTokenManager();
+    when(mockTokenManager.checkSavedTokens()).thenAnswer((_)  {
+      return Future(() => Result.success(SavedTokenStatus.accessibleRefreshToken)) ;
+    });
+
+    when(mockTokenManager.getRefreshToken()).thenAnswer((_) => Future.value('refresh_token'));
+    return mockTokenManager;
+  }
+
 
 }
