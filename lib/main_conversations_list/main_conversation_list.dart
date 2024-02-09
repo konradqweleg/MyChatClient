@@ -59,7 +59,7 @@ class _MainConversationListState extends State<MainConversationList> {
                     ],
                   )),
               SizedBox(
-                  height: MediaQuery.of(context).size.height - 155,
+                  height: MediaQuery.of(context).size.height - 165,
                   child: ListConversations())
             ],
           )),

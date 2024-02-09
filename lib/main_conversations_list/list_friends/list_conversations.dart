@@ -20,25 +20,32 @@ class ListConversations extends StatefulWidget {
 class ListConversationsState extends State<ListConversations> {
 
   List<UserMyChat> friendsConversations = [
-    UserMyChat("Konrad Groń","Ostatnio w twojej sprawie nie było dobrze","1",Colors.blue),
-    UserMyChat("Damian Golonka","Ale to nie jest tak że ten PVM nie chce działać to po prostu kod jest zły","1",Colors.green),
-    UserMyChat("Mateusz Rysula","Wiesz on mi ostatnio powiedział że to bez sensu","1",Colors.orange),
-    UserMyChat("Andrzej Sroka","Przegraliśmy","1",Colors.red),
-    UserMyChat("Kamil Kowalski","Wiesz on mi ostatnio powiedział że to bez sensu","1",Colors.amber),
-    UserMyChat("Jakub Kowalski","Ani nie dobrze ani źle","1",Colors.blue),
-    UserMyChat("Sebastian Pawlak","Polska wygrała","1",Colors.purple),
-    UserMyChat("Sebastian Pawlak","Polska wygrała","1",Colors.purple),
-    UserMyChat("Jan Nowak","Cześć, jak się masz?","2",Colors.green),
-    UserMyChat("Anna Kowalska","Dzisiaj jest piękny dzień","3",Colors.red),
-    UserMyChat("Piotr Zieliński","Czy możemy się spotkać?","4",Colors.yellow),
-    UserMyChat("Katarzyna Nowak","Mam nowy pomysł na projekt","5",Colors.orange),
+    UserMyChat("Konrad Groń","Ostatnio w twojej sprawie nie było dobrze","1"),
+    UserMyChat("Damian Golonka","Ale to nie jest tak że ten PVM nie chce działać to po prostu kod jest zły","1"),
+    UserMyChat("Mateusz Rysula","Wiesz on mi ostatnio powiedział że to bez sensu","1"),
+    UserMyChat("Andrzej Sroka","Przegraliśmy","1"),
+    UserMyChat("Kamil Kowalski","Wiesz on mi ostatnio powiedział że to bez sensu","1"),
+    UserMyChat("Jakub Kowalski","Ani nie dobrze ani źle","1"),
+    UserMyChat("Sebastian Pawlak","Polska wygrała","1",),
+    UserMyChat("Sebastian Pawlak","Polska wygrała","1",),
+    UserMyChat("Jan Nowak","Cześć, jak się masz?","2",),
+    UserMyChat("Anna Kowalska","Dzisiaj jest piękny dzień","3",),
+    UserMyChat("Piotr Zieliński","Czy możemy się spotkać?","4",),
+    UserMyChat("Katarzyna Nowak","Mam nowy pomysł na projekt","5",),
 
 
   ];
   List<OnePerson> friendsConversationsWidget = [];
+  
+  String _trimText(String text) {
+    if(text.length > 50) {
+      return text.substring(0,50) + "...";
+    }
+    return text;
+  }
 
   void _transformFriendsConversationsToWidget() {
-    friendsConversationsWidget = friendsConversations.map((UserMyChat user) => OnePerson(user.color, user.name, user.lastMessage)).toList();
+    friendsConversationsWidget = friendsConversations.map((UserMyChat user) => OnePerson(Colors.blue, user.name, _trimText(user.lastMessage))).toList();
   }
 
 
