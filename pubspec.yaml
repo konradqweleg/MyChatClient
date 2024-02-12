@@ -33,10 +33,14 @@ dependencies:
   google_fonts: ^5.0.0
   flutter_keyboard_visibility: ^5.4.1
   screenshot: ^2.1.0
+  sqflite: ^2.0.0+4
+  path: ^1.8.0
   shared_preferences: ^2.0.6
   flutter_secure_storage: ^9.0.0
   flutter_localizations:
     sdk: flutter
+
+
 
 
 
