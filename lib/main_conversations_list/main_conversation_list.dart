@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:my_chat_client/database/di_db/di_db_service_sqlite.dart';
+import 'package:my_chat_client/di/register_di.dart';
 import 'package:my_chat_client/main_conversations_list/list_friends/list_conversations.dart';
 import 'package:my_chat_client/main_conversations_list/search_bar/search_person_and_message.dart';
 
@@ -6,6 +8,7 @@ import '../style/main_style.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() {
+  RegisterDI.register(DiDbServiceSqlite());
   runApp(const App());
 }
 

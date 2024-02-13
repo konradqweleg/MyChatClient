@@ -1,8 +1,8 @@
 import 'package:my_chat_client/database/schema/friend_schema.dart';
 import 'package:my_chat_client/database/schema/info_about_me_schema.dart';
 import 'package:my_chat_client/database/schema/message_schema.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 class DbCreateService {
 
   static const _nameDbFile = 'database.db';
@@ -27,6 +27,8 @@ class DbCreateService {
   }
 
   Future<Database> initializeDB() async {
+    sqfliteFfiInit();
+    databaseFactory = databaseFactoryFfi;
     String path = await getDatabasesPath();
 
     return openDatabase(
