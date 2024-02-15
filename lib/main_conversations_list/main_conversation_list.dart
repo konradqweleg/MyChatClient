@@ -3,8 +3,8 @@ import 'package:my_chat_client/database/di_db/di_db_service_sqlite.dart';
 import 'package:my_chat_client/di/register_di.dart';
 import 'package:my_chat_client/main_conversations_list/list_friends/list_conversations.dart';
 import 'package:my_chat_client/main_conversations_list/search_bar/search_person_and_message.dart';
-
 import '../style/main_style.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() {
@@ -52,12 +52,12 @@ class _MainConversationListState extends State<MainConversationList> {
                   height: 60,
                   width: MediaQuery.of(context).size.width,
                   padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-                  child: const Row(
+                  child:  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Messages",
-                        style: TextStyle(fontSize: 20.0),
+                        AppLocalizations.of(context)!.messages,
+                        style: const TextStyle(fontSize: 20.0),
                       ),
                     ],
                   )),

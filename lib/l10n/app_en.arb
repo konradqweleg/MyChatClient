@@ -231,6 +231,16 @@
         "description": "The text describing the situation in which the user has entered an incorrect login credentials."
     },
 
+  "search": "Search",
+  "@search": {
+    "description": "The text describing the search action"
+  },
+
+  "messages": "Message",
+  "@messages": {
+        "description": "The text describing list the messages"
+  },
+
   "helloWorld": "Hello World!",
   "@helloWorld": {
     "description": "The conventional newborn programmer greeting"

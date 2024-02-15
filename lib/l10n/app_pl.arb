@@ -44,5 +44,7 @@
   "userOrResetPasswordCodeNotFound": "Nie znaleziono użytkownika lub kodu resetowania hasła. Spróbuj ponownie rozpocząć proces resetowania hasła.",
   "badChangePasswordCode": "Wprowadzono zły kod zmiany hasła. Spróbuj ponownie rozpocząć proces resetowania hasła.",
   "accountNotActive": "Konto użytkownika nie zostało aktywowane",
-  "badLoginCredentials": "Błędne dane logowania"
+  "badLoginCredentials": "Błędne dane logowania",
+  "search": "Szukaj",
+  "messages": "Konwersacje"
 }

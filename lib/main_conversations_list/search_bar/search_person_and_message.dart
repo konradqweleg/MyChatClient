@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SearchPersonAndMessage extends StatefulWidget {
   const SearchPersonAndMessage({Key? key}) : super(key: key);
@@ -27,12 +28,11 @@ class _SearchPersonAndMessageState extends State<SearchPersonAndMessage> {
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.only(left: 20.0,right: 20.0),
 
-      child: Row(
-
+      child:  Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: const [
-          Text("Search",style: TextStyle(fontSize: 20.0),),
-          Icon(Icons.search)
+        children: [
+          Text(AppLocalizations.of(context)!.search,style: const TextStyle(fontSize: 20.0),),
+          const Icon(Icons.search)
         ],
       )
     );

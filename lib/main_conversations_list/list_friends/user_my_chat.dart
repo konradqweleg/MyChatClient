@@ -1,10 +1,8 @@
-import 'dart:ui';
 
 class UserMyChat{
   String name;
   String lastMessage;
-  String idUser;
-
+  int idUser;
 
   UserMyChat(this.name, this.lastMessage, this.idUser);
 }

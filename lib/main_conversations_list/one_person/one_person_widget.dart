@@ -1,32 +1,30 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class OnePerson extends StatefulWidget {
-  Color _personColor;
-  String _personName;
-  String _personMessage;
+class OnePersonWidget extends StatefulWidget {
+  final Color _personColor;
+  final String _personName;
+  final String _personMessage;
 
-  OnePerson(this._personColor, this._personName, this._personMessage);
+  const OnePersonWidget(this._personColor, this._personName, this._personMessage, {super.key});
 
   @override
-  State<OnePerson> createState() => _OnePersonState();
+  State<OnePersonWidget> createState() => _OnePersonWidgetState();
 }
 
-class _OnePersonState extends State<OnePerson> {
+class _OnePersonWidgetState extends State<OnePersonWidget> {
 
   String getInitials(String name) {
+    int maxInitialsCharacters = 2;
     List<String> names = name.split(" ");
     String initials = "";
-    int numWords = 2;
 
-    if (names.length < 2) {
-      numWords = names.length;
+    if (names.length < maxInitialsCharacters) {
+      maxInitialsCharacters = names.length;
     }
 
-    for (var i = 0; i < numWords; i++) {
-      if (names[i][0] != null) {
-        initials += names[i][0].toUpperCase();
-      }
+    for (var i = 0; i < maxInitialsCharacters; i++) {
+      initials += names[i][0].toUpperCase();
     }
 
     return initials;
@@ -53,7 +51,7 @@ class _OnePersonState extends State<OnePerson> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(widget._personName,style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold )),
+              Text(widget._personName,style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold )),
               Wrap( alignment: WrapAlignment.center,children: [Text(widget._personMessage,)])
             ],
           ),
@@ -70,7 +68,7 @@ class ColoredCircleWithText extends StatelessWidget {
   final String letters;
   final double size;
 
-  ColoredCircleWithText({required this.color, required this.letters, required this.size});
+  ColoredCircleWithText({super.key, required this.color, required this.letters, required this.size});
 
   @override
   Widget build(BuildContext context) {
