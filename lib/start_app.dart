@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_chat_client/style/main_style.dart';
+import 'database/di_db/di_db_service_sqlite.dart';
+import 'di/register_di.dart';
 import 'navigation/page_route_navigation.dart';
 import 'login_and_registration/login/login.dart';
 import 'common/big_app_logo.dart';
@@ -7,7 +9,9 @@ import 'common/name_app.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() {
+  RegisterDI.register(DiDbServiceSqlite());
   runApp(
+
     const App()
   );
 }

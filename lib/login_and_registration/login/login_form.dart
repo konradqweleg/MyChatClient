@@ -7,6 +7,7 @@ import 'package:my_chat_client/login_and_registration/login/request/login_data.d
 import 'package:my_chat_client/login_and_registration/login/request/login_request.dart';
 import 'package:my_chat_client/login_and_registration/login/request/login_request_error_status.dart';
 import 'package:my_chat_client/login_and_registration/login/request/response/Tokens.dart';
+import 'package:my_chat_client/main_conversations_list/main_conversation_list.dart';
 import 'package:my_chat_client/tokens/token_manager.dart';
 
 
@@ -86,7 +87,7 @@ class _LoginFormState extends State<LoginForm> {
 
     PageRouteNavigation.navigation(
       context: context,
-      destination: const Conversation(),
+      destination: const MainConversationList(),
       isClearBackStack: true,
     );
   }
