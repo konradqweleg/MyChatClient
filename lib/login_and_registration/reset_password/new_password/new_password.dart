@@ -25,7 +25,7 @@ class NewPassword extends StatefulWidget {
 class _NewPasswordState extends State<NewPassword> {
 
   void _backToLogin(BuildContext context){
-    PageRouteNavigation.navigation(context: context,destination: const Login());
+    PageRouteNavigation.navigation(context: context,destination:  Login());
   }
 
   @override

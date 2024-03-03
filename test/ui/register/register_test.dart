@@ -229,7 +229,7 @@ void main() {
         'In the registration view, the os back button should go back to the login view',
         (WidgetTester tester) async {
       //given
-      await Utils.showView(tester, const Login());
+      await Utils.showView(tester,  Login());
       await Utils.click(tester, CreateNewAccountButton);
 
       //when
@@ -243,7 +243,7 @@ void main() {
         'In the registration view, the back arrow button should go back to the login view',
         (WidgetTester tester) async {
       //given
-      await Utils.showView(tester, const Login());
+      await Utils.showView(tester,  Login());
       await Utils.click(tester, CreateNewAccountButton);
 
       //when

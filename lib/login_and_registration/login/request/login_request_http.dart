@@ -2,10 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:my_chat_client/login_and_registration/common/result.dart';
-import 'package:my_chat_client/login_and_registration/login/request/login_data.dart';
+
 import 'package:my_chat_client/login_and_registration/login/request/login_request.dart';
 import 'package:my_chat_client/login_and_registration/login/request/login_request_error_status.dart';
-import 'package:my_chat_client/login_and_registration/login/request/response/Tokens.dart';
+import 'package:my_chat_client/login_and_registration/login/request/request_data/login_data.dart';
+import 'package:my_chat_client/login_and_registration/login/request/response/tokens_data.dart';
 
 import '../../../http/http_helper.dart';
 import '../../../http/request_response_general/error_message.dart';
@@ -16,7 +17,7 @@ class LoginRequestHttp extends LoginRequest{
 
   Result _getCorrectResponseStatus(String resultBody) {
     Map parsedResponse = json.decode(resultBody);
-    Tokens tokens = Tokens.fromJson(parsedResponse);
+    TokensData tokens = TokensData.fromJson(parsedResponse);
     return Result.success(tokens);
   }
 

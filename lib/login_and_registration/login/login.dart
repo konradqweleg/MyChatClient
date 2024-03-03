@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:my_chat_client/login_and_registration/login/button/create_new_account.dart';
 import 'package:my_chat_client/login_and_registration/login/button/reset_password_button.dart';
-import 'package:my_chat_client/login_and_registration/login/check_credentials.dart';
-import 'package:my_chat_client/login_and_registration/login/check_user_credentails.dart';
 import 'package:my_chat_client/login_and_registration/login/other_form_login/login_with_google_or_facebook.dart';
 import 'package:my_chat_client/login_and_registration/login/request/login_request_http.dart';
+import 'package:my_chat_client/login_and_registration/login/request/request_is_correct_tokens.dart';
+import '../../main_conversations_list/main_conversation_list.dart';
 import '../../style/main_style.dart';
 import 'login_form.dart';
 
-void main() => runApp(const Login());
+void main() => runApp(Login());
 
 class Login extends StatefulWidget {
-  const Login({super.key});
-
+  Login({super.key});
 
   @override
   State<StatefulWidget> createState() {
@@ -21,6 +21,29 @@ class Login extends StatefulWidget {
 }
 
 class LoginState extends State<Login> {
+  final GetIt _getIt = GetIt.instance;
+
+  @override
+  void initState() {
+    super.initState();
+    _redirectToMainConversationWhenValidRefreshToken();
+  }
+
+  void _redirectToMainConversationWhenValidRefreshToken() {
+    _getIt<RequestIsCorrectTokens>().isCorrectSavedTokens().then((isValidTokens) {
+        if (isValidTokens) {
+          _redirectToMainConversationView();
+        }
+    });
+  }
+
+  void _redirectToMainConversationView() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const MainConversationList()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -42,9 +65,7 @@ class LoginState extends State<Login> {
                       // Another fixed-height child.
                       height: 400.0,
                       alignment: Alignment.center,
-                      child: LoginForm(loginRequest: LoginRequestHttp()
-
-                      ),
+                      child: LoginForm(loginRequest: LoginRequestHttp()),
                     ),
                     const SizedBox(height: 30),
                     const Column(

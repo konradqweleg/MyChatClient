@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:my_chat_client/database/di_db/di_db_service_sqlite.dart';
+import 'package:my_chat_client/di/di_factory_impl.dart';
+import 'package:my_chat_client/di/register_di.dart';
 import 'package:my_chat_client/login_and_registration/common/button/main_action_button.dart';
 import 'package:my_chat_client/login_and_registration/common/input/input_mail.dart';
 import 'package:my_chat_client/login_and_registration/common/input/input_password.dart';
 import 'package:my_chat_client/login_and_registration/common/result.dart';
 import 'package:my_chat_client/login_and_registration/login/check_credentials.dart';
 import 'package:my_chat_client/login_and_registration/login/login_form.dart';
-import 'package:my_chat_client/login_and_registration/login/request/login_data.dart';
+
 import 'package:my_chat_client/login_and_registration/login/request/login_request.dart';
 import 'package:my_chat_client/login_and_registration/login/request/login_request_error_status.dart';
-import 'package:my_chat_client/login_and_registration/login/request/response/Tokens.dart';
+import 'package:my_chat_client/login_and_registration/login/request/request_data/login_data.dart';
+import 'package:my_chat_client/login_and_registration/login/request/response/tokens_data.dart';
+import 'package:my_chat_client/main_conversations_list/list_friends/list_conversations.dart';
 
 import '../helping/localizations_inject.dart';
 import '../helping/utils.dart';
@@ -38,15 +43,13 @@ class MockLoginRequest implements LoginRequest {
   Future<Result> login(LoginData loginData) {
     if (loginData.email == "example@mail.pl" &&
         loginData.password == "password123") {
-      return Future.value(Result.success(Tokens(accessToken: 'accessToken', refreshToken: 'requestToken')));
+      return Future.value(Result.success(
+          TokensData(accessToken: 'accessToken', refreshToken: 'requestToken')));
     } else {
       return Future.value(Result.error(LoginRequestErrorStatus.badCredentials));
     }
   }
-
 }
-
-
 
 void main() {
   group('LoginFormTests', () {
@@ -124,6 +127,9 @@ void main() {
         "When the user entered the correct login details he was logged into the system",
         (tester) async {
       //given
+      RegisterDI registerDI = RegisterDI( DiFactoryImpl());
+      registerDI.register();
+
       await Utils.showView(
           tester,
           LoginForm(
@@ -137,7 +143,8 @@ void main() {
       await tester.pumpAndSettle();
 
       //then
-      expect(find.text("Logged"), findsOneWidget);
+      expect(find.byType(ListConversations), findsOneWidget);
+      // expect(find.text("Logged"), findsOneWidget);
     });
 
     testWidgets(
@@ -157,6 +164,7 @@ void main() {
       await tester.pumpAndSettle();
 
       //then
+
       expect(find.text("Incorrect login credentials"), findsOneWidget);
     });
 

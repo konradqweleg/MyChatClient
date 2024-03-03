@@ -2,13 +2,12 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:core';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:my_chat_client/database/db_services/friends/friends_service.dart';
 import 'package:my_chat_client/database/db_services/info_about_me/info_about_me_service.dart';
 import 'package:my_chat_client/database/db_services/messages/messages_service.dart';
-import 'package:my_chat_client/database/model/info_about_me.dart';
+
 import 'package:my_chat_client/main_conversations_list/list_friends/user_my_chat.dart';
 import 'package:my_chat_client/main_conversations_list/requests/LastMessagesWithFriendsData.dart';
 
@@ -48,7 +47,7 @@ class ListConversationsState extends State<ListConversations> {
   }
 
   void _startTimer() {
-    _timer = Timer.periodic(const Duration(seconds: 15), (_) {
+    _timer = Timer.periodic(const Duration(minutes: 1), (_) {
 
       _downloadLastMessages();
       _getFriends();

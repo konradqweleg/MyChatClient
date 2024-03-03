@@ -16,6 +16,7 @@ class RequestsURL{
   static String login = "http://127.0.0.1:8083/api/v1/auth/login";
   static String refreshToken = "http://127.0.0.1:8083/api/v1/auth/refreshAccessToken";
   static String getLastMessagesWithFriends = "http://127.0.0.1:8083/api/v1/message/getLastMessageWithAllFriendsUser?idUser=";
+  static String isValidTokens = "http://127.0.0.1:8083/api/v1/auth/isCorrectAccessToken";
 
 
 }

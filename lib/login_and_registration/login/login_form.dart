@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:my_chat_client/conversation/conversation.dart';
+
 import 'package:my_chat_client/login_and_registration/common/input/input_mail.dart';
 import 'package:my_chat_client/login_and_registration/common/input/input_password.dart';
 
-import 'package:my_chat_client/login_and_registration/login/request/login_data.dart';
 import 'package:my_chat_client/login_and_registration/login/request/login_request.dart';
 import 'package:my_chat_client/login_and_registration/login/request/login_request_error_status.dart';
-import 'package:my_chat_client/login_and_registration/login/request/response/Tokens.dart';
+import 'package:my_chat_client/login_and_registration/login/request/request_data/login_data.dart';
+import 'package:my_chat_client/login_and_registration/login/request/response/tokens_data.dart';
 import 'package:my_chat_client/main_conversations_list/main_conversation_list.dart';
 import 'package:my_chat_client/tokens/token_manager.dart';
-
 
 import '../../common/name_app.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -23,7 +22,8 @@ import '../common/errors.dart';
 import '../common/result.dart';
 
 class LoginForm extends StatefulWidget {
-  const LoginForm({required this.loginRequest,super.key});
+  const LoginForm({required this.loginRequest, super.key});
+
   final LoginRequest loginRequest;
 
   @override
@@ -38,39 +38,30 @@ class _LoginFormState extends State<LoginForm> {
   bool isErrorWhenTryToLogIn = false;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  final Errors _matchedErrorToErrorMessageLoginRequest=
-  Errors();
-
+  final Errors _matchedErrorToErrorMessageLoginRequest = Errors();
 
   void _initMatchedErrorToErrorMessage() {
     if (_matchedErrorToErrorMessageLoginRequest.isInit()) {
-      _matchedErrorToErrorMessageLoginRequest
-          .registerMatchErrorToResultStatus(ErrorMessage.error(
-          AppLocalizations.of(context)!
-              .errorRequestInformationOnInternetAccessCheck,
-          Result.error(LoginRequestErrorStatus.error)));
+      _matchedErrorToErrorMessageLoginRequest.registerMatchErrorToResultStatus(
+          ErrorMessage.error(
+              AppLocalizations.of(context)!
+                  .errorRequestInformationOnInternetAccessCheck,
+              Result.error(LoginRequestErrorStatus.error)));
 
-      _matchedErrorToErrorMessageLoginRequest
-          .registerMatchErrorToResultStatus(ErrorMessage.error(
-          AppLocalizations.of(context)!.badLoginCredentials,
-          Result.error(LoginRequestErrorStatus.badCredentials)));
-
+      _matchedErrorToErrorMessageLoginRequest.registerMatchErrorToResultStatus(
+          ErrorMessage.error(AppLocalizations.of(context)!.badLoginCredentials,
+              Result.error(LoginRequestErrorStatus.badCredentials)));
     }
   }
 
-
   Text _getErrorMessageWhenErrorInTryLogin() {
-   if(_matchedErrorToErrorMessageLoginRequest.isError()){
-
-     return Text(_matchedErrorToErrorMessageLoginRequest.getErrorMessage(),style: const TextStyle(color: Colors.red));
-   }else{
-     return const Text("");
-   }
+    if (_matchedErrorToErrorMessageLoginRequest.isError()) {
+      return Text(_matchedErrorToErrorMessageLoginRequest.getErrorMessage(),
+          style: const TextStyle(color: Colors.red));
+    } else {
+      return const Text("");
+    }
   }
-
-
-
-
 
   bool _validateLoginData() {
     return _loginFormKey.currentState!.validate();
@@ -80,9 +71,7 @@ class _LoginFormState extends State<LoginForm> {
     SavedLoginData.setUserLoginFlag();
   }
 
-
   void _logIn() {
-
     setUserLoginFlag();
 
     PageRouteNavigation.navigation(
@@ -93,8 +82,6 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   void _checkLoginData() async {
-
-
     setState(() {
       _matchedErrorToErrorMessageLoginRequest.clearError();
     });
@@ -116,28 +103,21 @@ class _LoginFormState extends State<LoginForm> {
         _saveUserLoginAuth(resultLoginRequest);
         _logIn();
       } else if (resultLoginRequest.isError()) {
-
         _initMatchedErrorToErrorMessage();
         setState(() {
           _matchedErrorToErrorMessageLoginRequest
               .setActualError(resultLoginRequest);
-
         });
       }
     });
-
-
   }
 
   void _saveUserLoginAuth(Result resultLoginRequest) async {
+    TokensData tokens = resultLoginRequest.getData() as TokensData;
 
-     Tokens tokens = resultLoginRequest.getData() as Tokens;
-
-     TokenManager tokenManager = TokenManagerFactory.getTokenManager();
-     tokenManager.saveAccessToken(tokens.accessToken);
-     tokenManager.saveRefreshToken(tokens.refreshToken);
-
-
+    TokenManager tokenManager = TokenManagerFactory.getTokenManager();
+    tokenManager.saveAccessToken(tokens.accessToken);
+    tokenManager.saveRefreshToken(tokens.refreshToken);
   }
 
   @override

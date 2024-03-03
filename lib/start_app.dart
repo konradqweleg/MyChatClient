@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_chat_client/di/di_factory_impl.dart';
 import 'package:my_chat_client/style/main_style.dart';
 import 'database/di_db/di_db_service_sqlite.dart';
 import 'di/register_di.dart';
@@ -9,9 +10,10 @@ import 'common/name_app.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() {
-  RegisterDI.register(DiDbServiceSqlite());
-  runApp(
+  RegisterDI registerDI = RegisterDI(DiFactoryImpl());
+  registerDI.register();
 
+  runApp(
     const App()
   );
 }
@@ -52,7 +54,7 @@ class _StartPanelState extends State<StartPanel> {
 
     PageRouteNavigation.navigationTransitionSlideFromDown(
       context: context,
-      destination: const Login(),
+      destination:  Login(),
       delayInSeconds: 1,
       isClearBackStack: true
     );
