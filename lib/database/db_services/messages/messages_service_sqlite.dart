@@ -15,6 +15,28 @@ class MessagesServiceSqLite extends MessagesService {
     });
   }
 
+  //
+  // @override
+  // Future<void> addMessage2(Message message) {
+  //   return dbCreateService.initializeDB().then((db) {
+  //     // Sprawdź, czy wiadomość już istnieje w bazie danych
+  //     return db.query(
+  //       MessageSchema.tableName,
+  //       where: 'field1 = ? AND field2 = ?', // Tutaj możesz określić warunki, które definiują unikalność danych
+  //       whereArgs: [message.idMessage, message.idMessage], // Przykładowe wartości pól dla warunków
+  //     ).then((existingMessages) {
+  //       if (existingMessages.isEmpty) {
+  //         // Jeśli nie ma istniejących rekordów, dodaj nową wiadomość
+  //         return db.insert(MessageSchema.tableName, message.toMap());
+  //       } else {
+  //         // W przeciwnym razie zwróć pustą przyszłość, nie dodając niczego nowego
+  //         return Future.value();
+  //       }
+  //     });
+  //   });
+  // }
+
+
   @override
   Future<List<Message>> getLastMessagesWithEachFriend() {
     return dbCreateService.initializeDB().then((db) {
@@ -102,7 +124,7 @@ class MessagesServiceSqLite extends MessagesService {
   @override
   Future<Message> getLastMessageWithFriendId(int friendId) {
     return dbCreateService.initializeDB().then((db) {
-      return db.query(MessageSchema.tableName, where: '${MessageSchema.idReceiverCol} = ? OR ${MessageSchema.idSenderCol} = ?', whereArgs: [friendId, friendId]);
+      return db.query(MessageSchema.tableName, where: '${MessageSchema.idReceiverCol} = ? OR ${MessageSchema.idSenderCol} = ?', whereArgs: [friendId, friendId], orderBy: '${MessageSchema.idMessageCol} DESC');
     }).then((List<Map<String, dynamic>> maps) {
       return Message(
         idMessage: maps[0][MessageSchema.idMessageCol],

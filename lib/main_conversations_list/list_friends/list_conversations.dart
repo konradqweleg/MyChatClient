@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:core';
 
@@ -25,60 +26,63 @@ class ListConversations extends StatefulWidget {
     return ListConversationsState();
   }
 }
-
 class ListConversationsState extends State<ListConversations> {
   GetIt getIt = GetIt.instance;
+  Timer? _timer;
 
-@override initState() {
-   super.initState();
-    _getFriends();
-  }
-
-void _getFriends() async {
-      List<Friend> data = await getIt<FriendsService>().getFriends();
-      for (var element in data) {
-        Message lastMessage = await getIt<MessagesService>().getLastMessageWithFriendId(element.idFriend);
-        setState(() {
-          friendsConversations.add(UserMyChat("${element.name} ${element.surname}", lastMessage.message, element.idFriend));
-        });
-      }
-}
-
-Future<void> _downloadLastMessages()  async {
- // await getIt<FriendsService>().addFriend(new Friend(idFriend: 771, name: "asd", surname: "sadsadasa"));
-
-
-  int data = await getIt<InfoAboutMeService>().getId();
-
-  Result lastMessages = await getIt<RequestLastMessage>().getLastMessagesWithFriends(data);
-
-  var tagObjsJson = jsonDecode(lastMessages.data as String) as List;
-  List<LastMessageWithFriendsData> tagObjs = tagObjsJson.map((tagJson) => LastMessageWithFriendsData.fromMap(tagJson)).toList();
-  for(var element in tagObjs) {
-    print(element);
-    await getIt<MessagesService>().addMessage(Message(idMessage: element.idMessage, message: element.lastMessage, idSender: element.idUser, idReceiver: element.idUser, date: element.date));
-  }
-
-  // List<LastMessageWithFriendsData> lastMessagesData = LastMessageWithFriendsData.fromMap(lastMessages.data);
-  // print(lastMessages);
-
-  }
-
-
-
-
-
-
-  List<UserMyChat> friendsConversations = [
-    UserMyChat("Konrad Groń","Ostatnio w twojej sprawie nie było dobrze",1),
-    UserMyChat("Damian Golonka","Ale to nie jest tak że ten PVM nie chce działać to po prostu kod jest zły",1),
-    UserMyChat("Mateusz Rysula","Wiesz on mi ostatnio powiedział że to bez sensu",1),
-
-
-
-  ];
+  List<UserMyChat> friendsConversations = [];
   List<OnePersonWidget> friendsConversationsWidget = [];
-  
+
+  @override
+  void initState() {
+    super.initState();
+    _getFriends();
+    _downloadLastMessages();
+    _startTimer();
+  }
+
+  @override
+  void dispose() {
+    _stopTimer();
+    super.dispose();
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 15), (_) {
+
+      _downloadLastMessages();
+      _getFriends();
+        print('Timer executed');
+
+    });
+  }
+
+  void _stopTimer() {
+    _timer?.cancel();
+  }
+
+  void _getFriends() async {
+    List<Friend> data = await getIt<FriendsService>().getFriends();
+    for (var element in data) {
+      Message lastMessage = await getIt<MessagesService>().getLastMessageWithFriendId(element.idFriend);
+      setState(() {
+        friendsConversations.clear();
+        friendsConversations.add(UserMyChat("${element.name} ${element.surname}", lastMessage.message, element.idFriend));
+      });
+    }
+  }
+
+  Future<void> _downloadLastMessages() async {
+    int data = await getIt<InfoAboutMeService>().getId();
+    Result lastMessages = await getIt<RequestLastMessage>().getLastMessagesWithFriends(data);
+    var tagObjsJson = jsonDecode(lastMessages.data as String) as List;
+    List<LastMessageWithFriendsData> tagObjs = tagObjsJson.map((tagJson) => LastMessageWithFriendsData.fromMap(tagJson)).toList();
+    for(var element in tagObjs) {
+      print(element);
+      await getIt<MessagesService>().addMessage(Message(idMessage: element.idMessage, message: element.lastMessage, idSender: element.idUser, idReceiver: element.idUser, date: element.date));
+    }
+  }
+
   String _trimText(String text) {
     const int maxMessageLength = 50;
     if(text.length > maxMessageLength) {
@@ -87,27 +91,10 @@ Future<void> _downloadLastMessages()  async {
     return text;
   }
 
-  void _transformFriendsConversationsToWidget() {
-    friendsConversationsWidget = friendsConversations.map((UserMyChat user) => OnePersonWidget(Colors.blue, user.name, _trimText(user.lastMessage))).toList();
-
-    //print(friendsConversationsWidget);
-    for(var element in friendsConversations) {
-      print(element);
-    }
-
-
-  }
-
-
   @override
   Widget build(BuildContext context) {
-
-
-    setState(() {
-      _transformFriendsConversationsToWidget();
-      _downloadLastMessages();
-
-    });
+    // Transformuj friendsConversations do friendsConversationsWidget
+    friendsConversationsWidget = friendsConversations.map((user) => OnePersonWidget(Colors.blue, user.name, _trimText(user.lastMessage))).toList();
 
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints viewportConstraints) {
@@ -122,7 +109,6 @@ Future<void> _downloadLastMessages()  async {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: friendsConversationsWidget,
               ),
-
             ),
           ),
         );
@@ -130,4 +116,3 @@ Future<void> _downloadLastMessages()  async {
     );
   }
 }
-
