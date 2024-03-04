@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_chat_client/common/exit_button.dart';
 import 'package:my_chat_client/login_and_registration/common/button/main_action_button.dart';
-import 'package:my_chat_client/login_and_registration/login/button/reset_password_button.dart';
 import 'package:my_chat_client/login_and_registration/login/login.dart';
 import 'package:my_chat_client/login_and_registration/reset_password/new_password/new_password.dart';
 import '../../helping/utils.dart';
+import '../../mock/di/login/di_mock_validate_tokens_request.dart';
 
 
 Future<void> clickExitButton(WidgetTester tester) async {
@@ -25,6 +25,8 @@ Future<void> clickResetPasswordButton(WidgetTester tester) async {
   await tester.pumpAndSettle();
 }
 
+DiMockValidateTokensRequest diMockValidateTokensRequest =
+DiMockValidateTokensRequest();
 
 void main() {
   group('New Password test', () {
@@ -33,6 +35,7 @@ void main() {
         'Checking that the ui back button takes you to the login screen.',
             (WidgetTester tester) async {
           //given
+          diMockValidateTokensRequest.registerMockDiRequestStayOnActualLoginPage();
           await Utils.showView(tester, NewPassword("example@mail", "0000"));
           //when
           await clickExitButton(tester);

@@ -1,3 +1,4 @@
+import 'package:get_it/get_it.dart';
 import 'package:my_chat_client/database/di_db/di_db_service.dart';
 import 'package:my_chat_client/di/di_factory.dart';
 
@@ -26,4 +27,5 @@ class RegisterDI {
     DiDbService diDbService = DiDbServiceSqlite();
     diDbService.register();
   }
+
 }

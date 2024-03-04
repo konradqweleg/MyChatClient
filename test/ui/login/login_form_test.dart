@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:my_chat_client/database/di_db/di_db_service_sqlite.dart';
 import 'package:my_chat_client/di/di_factory_impl.dart';
 import 'package:my_chat_client/di/register_di.dart';
 import 'package:my_chat_client/login_and_registration/common/button/main_action_button.dart';
-import 'package:my_chat_client/login_and_registration/common/input/input_mail.dart';
-import 'package:my_chat_client/login_and_registration/common/input/input_password.dart';
 import 'package:my_chat_client/login_and_registration/common/result.dart';
 import 'package:my_chat_client/login_and_registration/login/check_credentials.dart';
 import 'package:my_chat_client/login_and_registration/login/login_form.dart';
@@ -16,7 +13,6 @@ import 'package:my_chat_client/login_and_registration/login/request/request_data
 import 'package:my_chat_client/login_and_registration/login/request/response/tokens_data.dart';
 import 'package:my_chat_client/main_conversations_list/list_friends/list_conversations.dart';
 
-import '../helping/localizations_inject.dart';
 import '../helping/utils.dart';
 
 Future<void> enterEmail(WidgetTester tester, String text) async {

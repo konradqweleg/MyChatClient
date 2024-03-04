@@ -10,7 +10,6 @@ import 'package:my_chat_client/login_and_registration/reset_password/request/val
 import 'package:my_chat_client/login_and_registration/reset_password/request/validate_reset_password_code/email_and_code_data.dart';
 import 'package:my_chat_client/login_and_registration/reset_password/request/validate_reset_password_code/is_correct_reset_password_code.dart';
 import 'package:my_chat_client/login_and_registration/reset_password/reset_password_form.dart';
-import 'package:screenshot/screenshot.dart';
 import '../helping/utils.dart';
 
 Future<void> enterEmail(WidgetTester tester, String text) async {

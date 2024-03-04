@@ -1,22 +1,19 @@
 
-
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_chat_client/common/exit_button.dart';
 import 'package:my_chat_client/login_and_registration/common/result.dart';
 import 'package:my_chat_client/login_and_registration/common/button/main_action_button.dart';
 import 'package:my_chat_client/login_and_registration/confirm_code/confirm_register_code.dart';
-import 'package:my_chat_client/login_and_registration/login/button/create_new_account.dart';
 import 'package:my_chat_client/login_and_registration/login/login.dart';
 import 'package:my_chat_client/login_and_registration/register/request/register_response_status.dart';
 import 'package:my_chat_client/login_and_registration/register/request/register_user_request.dart';
 import 'package:my_chat_client/login_and_registration/register/user_register_data.dart';
-
-//import '../helping/utils.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:my_chat_client/style/main_style.dart';
+import '../mock/di/login/di_mock_validate_tokens_request.dart';
+
+
 class Utils {
   static Future<void> showView(WidgetTester tester, Widget view) async {
     await tester.pumpWidget(MaterialApp(
@@ -94,6 +91,8 @@ class RegisterUserRequestMock extends RegisterUserRequest{
 
 }
 
+DiMockValidateTokensRequest diMockValidateTokensRequest = DiMockValidateTokensRequest();
+
 void main() {
   group('ConfirmCodeRegister', () {
     testWidgets(
@@ -120,6 +119,8 @@ void main() {
         'Checking that the ui back button takes you to the login screen.',
         (WidgetTester tester) async {
       //given
+      diMockValidateTokensRequest.registerMockDiRequestStayOnActualLoginPage();
+
       UserRegisterData registerData =
           UserRegisterData("", "name", "surname", "password");
       await Utils.showView(tester, ConfirmRegisterCode(registerData));
@@ -160,9 +161,6 @@ void main() {
     //   expect(find.byType(Login), findsOneWidget);
     // });
     //
-
-
-
 
 
     testWidgets(

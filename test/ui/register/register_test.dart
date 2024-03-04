@@ -11,6 +11,8 @@ import 'package:my_chat_client/login_and_registration/register/request/register_
 import 'package:my_chat_client/login_and_registration/register/request/register_user_request.dart';
 import 'package:my_chat_client/login_and_registration/register/user_register_data.dart';
 import '../helping/utils.dart';
+import '../mock/di/login/di_mock_validate_tokens_request.dart';
+
 
 Future<void> enterTextEmail(WidgetTester tester, String text) async {
   await Utils.enterText(tester, find.byType(TextFormField).first, text);
@@ -32,25 +34,24 @@ Future<void> clickRegisterButton(WidgetTester tester) async {
   await Utils.click(tester, MainActionButton);
 }
 
-class MockRegisterUserRequestRegisterAllRequests extends RegisterUserRequest{
-
+class MockRegisterUserRequestRegisterAllRequests extends RegisterUserRequest {
   @override
   Future<Result> register(UserRegisterData userRegisterData) {
     return Future.value(Result.success(RegisterResponseStatus.ok));
   }
-
 }
 
+DiMockValidateTokensRequest diMockValidateTokensRequest = DiMockValidateTokensRequest();
+
 void main() {
-
-
   group('Register', () {
     testWidgets(
         'Checking that the register view contains all the required elements',
         (WidgetTester tester) async {
       //given
       //when
-      await Utils.showView(tester,  Register(MockRegisterUserRequestRegisterAllRequests()));
+      await Utils.showView(
+          tester, Register(MockRegisterUserRequestRegisterAllRequests()));
 
       //then
       expect(find.text("Enter your email"), findsOneWidget);
@@ -64,7 +65,8 @@ void main() {
         'If the user has not entered an email address, the system should display information to the user to enter an email.',
         (WidgetTester tester) async {
       //given
-      await Utils.showView(tester,  Register(MockRegisterUserRequestRegisterAllRequests()));
+      await Utils.showView(
+          tester, Register(MockRegisterUserRequestRegisterAllRequests()));
 
       //when
       await enterTextEmail(tester, "");
@@ -78,7 +80,8 @@ void main() {
         'If the user has entered an incorrect email address format the system should display information to the user about the incorrect email format.',
         (WidgetTester tester) async {
       //given
-      await Utils.showView(tester,  Register(MockRegisterUserRequestRegisterAllRequests()));
+      await Utils.showView(
+          tester, Register(MockRegisterUserRequestRegisterAllRequests()));
 
       //when
       await enterTextEmail(tester, "bad.mail.format");
@@ -93,7 +96,8 @@ void main() {
         'If the user has entered the correct email format the system does not display an error',
         (WidgetTester tester) async {
       //given
-      await Utils.showView(tester,  Register(MockRegisterUserRequestRegisterAllRequests()));
+      await Utils.showView(
+          tester, Register(MockRegisterUserRequestRegisterAllRequests()));
 
       //when
       await enterTextEmail(tester, "correct@mail.format");
@@ -109,7 +113,8 @@ void main() {
         'If the user has entered the correct email format the system does not display an error',
         (WidgetTester tester) async {
       //given
-      await Utils.showView(tester,  Register(MockRegisterUserRequestRegisterAllRequests()));
+      await Utils.showView(
+          tester, Register(MockRegisterUserRequestRegisterAllRequests()));
 
       //when
       await enterTextEmail(tester, "correct@mail.format");
@@ -125,7 +130,8 @@ void main() {
         'If the users name has not been entered, the system should display a message asking for input',
         (WidgetTester tester) async {
       //given
-      await Utils.showView(tester,  Register(MockRegisterUserRequestRegisterAllRequests()));
+      await Utils.showView(
+          tester, Register(MockRegisterUserRequestRegisterAllRequests()));
 
       //when
       await enterUsername(tester, "");
@@ -139,7 +145,8 @@ void main() {
         'If the user has entered a surname the system should not display a name validation error',
         (WidgetTester tester) async {
       //given
-      await Utils.showView(tester,  Register(MockRegisterUserRequestRegisterAllRequests()));
+      await Utils.showView(
+          tester, Register(MockRegisterUserRequestRegisterAllRequests()));
 
       //when
       await enterSurname(tester, "surname");
@@ -153,7 +160,8 @@ void main() {
         'If the users surname has not been entered, the system should display a message asking for input',
         (WidgetTester tester) async {
       //given
-      await Utils.showView(tester,  Register(MockRegisterUserRequestRegisterAllRequests()));
+      await Utils.showView(
+          tester, Register(MockRegisterUserRequestRegisterAllRequests()));
 
       //when
       await enterSurname(tester, "");
@@ -167,7 +175,8 @@ void main() {
         'If the user has entered a password the system should not display a name validation error',
         (WidgetTester tester) async {
       //given
-      await Utils.showView(tester,  Register(MockRegisterUserRequestRegisterAllRequests()));
+      await Utils.showView(
+          tester, Register(MockRegisterUserRequestRegisterAllRequests()));
 
       //when
       await enterPassword(tester, "password");
@@ -181,7 +190,8 @@ void main() {
         'If the users password has not been entered, the system should display a message asking for input password',
         (WidgetTester tester) async {
       //given
-      await Utils.showView(tester,  Register(MockRegisterUserRequestRegisterAllRequests()));
+      await Utils.showView(
+          tester, Register(MockRegisterUserRequestRegisterAllRequests()));
 
       //when
       await enterPassword(tester, "");
@@ -195,7 +205,8 @@ void main() {
         'If there are errors in the form, the system should not change the view when the registration button is pressed',
         (WidgetTester tester) async {
       //given
-      await Utils.showView(tester,  Register(MockRegisterUserRequestRegisterAllRequests()));
+      await Utils.showView(
+          tester, Register(MockRegisterUserRequestRegisterAllRequests()));
 
       //when
       await enterTextEmail(tester, "wrong.mail.format");
@@ -212,7 +223,8 @@ void main() {
         'If there are no errors in the form, the system should show the user the screen for entering the account creation confirmation code',
         (WidgetTester tester) async {
       //given
-      await Utils.showView(tester,  Register(MockRegisterUserRequestRegisterAllRequests()));
+      await Utils.showView(
+          tester, Register(MockRegisterUserRequestRegisterAllRequests()));
 
       //when
       await enterTextEmail(tester, "correct@mail.format");
@@ -229,7 +241,8 @@ void main() {
         'In the registration view, the os back button should go back to the login view',
         (WidgetTester tester) async {
       //given
-      await Utils.showView(tester,  Login());
+      diMockValidateTokensRequest.registerMockDiRequestStayOnActualLoginPage();
+      await Utils.showView(tester, Login());
       await Utils.click(tester, CreateNewAccountButton);
 
       //when
@@ -243,7 +256,7 @@ void main() {
         'In the registration view, the back arrow button should go back to the login view',
         (WidgetTester tester) async {
       //given
-      await Utils.showView(tester,  Login());
+      await Utils.showView(tester, Login());
       await Utils.click(tester, CreateNewAccountButton);
 
       //when
