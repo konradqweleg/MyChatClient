@@ -33,10 +33,15 @@ class TokenManagerImpl extends TokenManager {
     _savedAuthData.saveRefreshToken(token);
   }
 
+
+
   @override
   Future<Result<SavedTokenStatus>> checkSavedTokens() async {
     String? accessToken = await  getAccessToken();
     String? refreshToken = await getRefreshToken();
+
+    print(accessToken) ;
+    print(refreshToken);
 
 
     if (accessToken != null) {
@@ -48,6 +53,16 @@ class TokenManagerImpl extends TokenManager {
     } else {
       return Result.error(SavedTokenStatus.error);
     }
+  }
+
+  @override
+  Future<void> deleteAccessToken() async {
+    await _savedAuthData.deleteAccessToken();
+  }
+
+  @override
+  Future<void> deleteRefreshToken() async {
+    await _savedAuthData.deleteRefreshToken();
   }
 
 }

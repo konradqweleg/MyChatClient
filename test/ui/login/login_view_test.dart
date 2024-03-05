@@ -1,13 +1,23 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get_it/get_it.dart';
+import 'package:my_chat_client/database/db_services/messages/messages_service.dart';
+import 'package:my_chat_client/database/db_services/messages/messages_service_sqlite.dart';
+import 'package:my_chat_client/di/di_factory_impl.dart';
+import 'package:my_chat_client/di/register_di.dart';
 import 'package:my_chat_client/login_and_registration/login/button/create_new_account.dart';
 import 'package:my_chat_client/login_and_registration/login/button/reset_password_button.dart';
 import 'package:my_chat_client/login_and_registration/login/login.dart';
 import 'package:my_chat_client/login_and_registration/register/register.dart';
 import 'package:my_chat_client/login_and_registration/reset_password/reset_password.dart';
 import 'package:my_chat_client/main_conversations_list/main_conversation_list.dart';
+import 'package:my_chat_client/main_conversations_list/requests/RequestLastMessage.dart';
+import 'package:my_chat_client/main_conversations_list/requests/RequestLastMessageWithFriendsImpl.dart';
+import 'package:my_chat_client/tokens/token_manager.dart';
+import 'package:my_chat_client/tokens/token_manager_factory.dart';
 import '../helping/utils.dart';
+import '../mock/di/auth_request/mock_make_auth_requests/mock_di_auth_request_return_always_no_internet_connection.dart';
 import '../mock/di/di_utils.dart';
 import '../mock/di/login/di_mock_validate_tokens_request.dart';
 
@@ -19,12 +29,13 @@ Future<void> clickResetPassword(WidgetTester tester) async {
   await Utils.click(tester, ResetPasswordButton);
 }
 
-DiMockValidateTokensRequest diMockValidateTokensRequest = DiMockValidateTokensRequest();
+DiMockValidateTokensRequest diMockValidateTokensRequest =
+    DiMockValidateTokensRequest();
 
 void main() {
   group('Login', () {
-
-    tearDown(() async =>await DiUtils.unregisterAll() );
+    tearDown(() async => await DiUtils.unregisterAll()
+    );
 
 
     testWidgets(
@@ -43,11 +54,11 @@ void main() {
     testWidgets(
         'The application should transition from the login view to the main conversation view when it has valid tokens stored or when their state cannot be determined.',
         (WidgetTester tester) async {
-      //given
-      diMockValidateTokensRequest
-          .registerMockDiRequestGoToMainConversationPage();
 
-      //when
+      //given
+      diMockValidateTokensRequest.registerMockDiRequestGoToMainConversationPage();
+
+       //when
       await Utils.showView(tester, Login());
 
       //then

@@ -74,6 +74,11 @@ class ListConversationsState extends State<ListConversations> {
   Future<void> _downloadLastMessages() async {
     int data = await getIt<InfoAboutMeService>().getId();
     Result lastMessages = await getIt<RequestLastMessage>().getLastMessagesWithFriends(data);
+
+    if(lastMessages.isError()) {
+      return;
+    }
+
     var tagObjsJson = jsonDecode(lastMessages.data as String) as List;
     List<LastMessageWithFriendsData> tagObjs = tagObjsJson.map((tagJson) => LastMessageWithFriendsData.fromMap(tagJson)).toList();
     for(var element in tagObjs) {

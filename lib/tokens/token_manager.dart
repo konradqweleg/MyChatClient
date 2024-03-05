@@ -7,5 +7,7 @@ abstract class TokenManager {
   void saveAccessToken(String token);
   void saveRefreshToken(String token);
   Future<Result<SavedTokenStatus>> checkSavedTokens();
+  Future<void> deleteAccessToken();
+  Future<void> deleteRefreshToken();
   void clear();
 }

@@ -1,3 +1,4 @@
+import 'package:get_it/get_it.dart';
 import 'package:my_chat_client/login_and_registration/login/request/request_is_correct_tokens.dart';
 
 import '../../../http/http_helper_auth.dart';
@@ -7,11 +8,19 @@ import '../../../requests/requests_url.dart';
 import '../../common/result.dart';
 
 class RequestIsCorrectTokensHttp extends RequestIsCorrectTokens {
-  HttpHelperAuth httpHelperAuth = HttpHelperFactory.createHttpHelperAuth();
+  final GetIt _getIt = GetIt.instance;
+
+  RequestIsCorrectTokensHttp(){
+    httpHelperAuth = _getIt<HttpHelperAuth>();
+  }
+
+  //_getIt<RequestIsCorrectTokens>().isCorrectSavedTokens()
+
+  HttpHelperAuth? httpHelperAuth ;//= HttpHelperFactory.createHttpHelperAuth();
 
   @override
   Future<bool> isCorrectSavedTokens() async {
-    Result isValidTryUsageAlreadySavedTokens = await httpHelperAuth.get(RequestsURL.isValidTokens);
+    Result isValidTryUsageAlreadySavedTokens = await httpHelperAuth!.get(RequestsURL.isValidTokens);
 
     if (isValidTryUsageAlreadySavedTokens.isSuccess()) {
       return true;

@@ -17,7 +17,7 @@ class SavedAuthData{
    // return Future(() => null);
   }
 
-   void deleteAccessToken() async {
+   Future<void> deleteAccessToken() async {
     FlutterSecureStorage storage = const FlutterSecureStorage();
     await storage.delete(key: _KEY_ACCESS_TOKKEN);
   }
@@ -32,7 +32,7 @@ class SavedAuthData{
     return await storage.read(key: _KEY_REFRESH_TOKEN);
   }
 
-   void deleteRefreshToken() async {
+  Future<void> deleteRefreshToken() async {
     FlutterSecureStorage storage = const FlutterSecureStorage();
     await storage.delete(key: _KEY_REFRESH_TOKEN);
   }

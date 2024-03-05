@@ -13,8 +13,9 @@ class SavedAuthDataMock implements SavedAuthData {
   String? _password;
 
   @override
-  void deleteAccessToken() {
+  Future<void> deleteAccessToken() {
     _accessToken = null;
+    return Future.value();
   }
 
   @override
@@ -34,8 +35,9 @@ class SavedAuthDataMock implements SavedAuthData {
   }
 
   @override
-  void deleteRefreshToken() {
+  Future<void> deleteRefreshToken() {
     _refreshToken = null;
+    return Future.value();
   }
 
   @override

@@ -48,6 +48,7 @@ class HttpHelperAuthImpl implements HttpHelperAuth {
 
   Future<Result> _requestWithCheckToken(_TypeOfRequest requestType, String url, dynamic body, {Duration timeoutDuration = const Duration(seconds: 3),}) async {
     Result<SavedTokenStatus> savedTokenStatus = await tokenManager.checkSavedTokens();
+
     bool isRedirectToLoginPageDueLackOfAnyTokens = _isRedirectToLoginPageDueLackOfTokens(savedTokenStatus);
     if (isRedirectToLoginPageDueLackOfAnyTokens) {
       return Result.error(AuthRequestStatus.redirectToLoginPage);
