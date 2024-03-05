@@ -11,6 +11,7 @@ import 'package:my_chat_client/login_and_registration/register/request/register_
 import 'package:my_chat_client/login_and_registration/register/user_register_data.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:my_chat_client/style/main_style.dart';
+import '../mock/di/di_utils.dart';
 import '../mock/di/login/di_mock_validate_tokens_request.dart';
 
 
@@ -95,6 +96,9 @@ DiMockValidateTokensRequest diMockValidateTokensRequest = DiMockValidateTokensRe
 
 void main() {
   group('ConfirmCodeRegister', () {
+
+    tearDown(() async =>await DiUtils.unregisterAll() );
+
     testWidgets(
         'Checking that the confirm create account view contains all the required elements',
         (WidgetTester tester) async {

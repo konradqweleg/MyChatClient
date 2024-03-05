@@ -16,6 +16,7 @@ import 'package:my_chat_client/login_and_registration/confirm_code/request/resen
 
 import 'package:my_chat_client/login_and_registration/register/user_register_data.dart';
 import '../helping/utils.dart';
+import '../mock/di/di_utils.dart';
 
 
 Future<void> clickExitButton(WidgetTester tester) async {
@@ -67,6 +68,10 @@ class ResendAndShowMesssageAccountCodeRequestMock implements ResendConfirmAccoun
 }
 void main() {
   group('ConfirmCodeRegisterForm', () {
+
+
+
+
     testWidgets(
         'Checking if the user is logged in after entering the correct code',
         (WidgetTester tester) async {

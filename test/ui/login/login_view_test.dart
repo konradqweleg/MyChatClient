@@ -19,14 +19,13 @@ Future<void> clickResetPassword(WidgetTester tester) async {
   await Utils.click(tester, ResetPasswordButton);
 }
 
-DiMockValidateTokensRequest diMockValidateTokensRequest =
-    DiMockValidateTokensRequest();
+DiMockValidateTokensRequest diMockValidateTokensRequest = DiMockValidateTokensRequest();
 
 void main() {
   group('Login', () {
-    tearDown(() async {
-      await DiUtils.unregisterAll();
-    });
+
+    tearDown(() async =>await DiUtils.unregisterAll() );
+
 
     testWidgets(
         'The application should remain on the login view when tokens are rejected.',

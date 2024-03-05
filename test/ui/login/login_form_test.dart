@@ -14,6 +14,7 @@ import 'package:my_chat_client/login_and_registration/login/request/response/tok
 import 'package:my_chat_client/main_conversations_list/list_friends/list_conversations.dart';
 
 import '../helping/utils.dart';
+import '../mock/di/di_utils.dart';
 
 Future<void> enterEmail(WidgetTester tester, String text) async {
   await Utils.enterText(tester, find.byType(TextFormField).first, text);
@@ -48,6 +49,8 @@ class MockLoginRequest implements LoginRequest {
 }
 
 void main() {
+
+
   group('LoginFormTests', () {
     testWidgets(
         "When the user does not enter an email address, a message should appear asking the user to enter an email address",

@@ -9,6 +9,7 @@ import 'package:my_chat_client/login_and_registration/reset_password/new_passwor
 import 'package:my_chat_client/login_and_registration/reset_password/new_password/request/request_change_password.dart';
 import 'package:my_chat_client/login_and_registration/reset_password/new_password/request/request_change_password_status.dart';
 import '../../helping/utils.dart';
+import '../../mock/di/di_utils.dart';
 import '../../mock/di/login/di_mock_validate_tokens_request.dart';
 
 
@@ -34,6 +35,8 @@ DiMockValidateTokensRequest();
 
 void main() {
   group('New Password test', () {
+
+    tearDown(() async => await DiUtils.unregisterAll());
 
     testWidgets(
         'When the user does  provide a new password, the system should display a message that the password has  been changed',

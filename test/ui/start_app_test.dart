@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_chat_client/start_app.dart';
 
+import 'mock/di/di_utils.dart';
 import 'mock/di/login/di_mock_validate_tokens_request.dart';
 
 
-DiMockValidateTokensRequest diMockValidateTokensRequest =
-DiMockValidateTokensRequest();
+DiMockValidateTokensRequest diMockValidateTokensRequest = DiMockValidateTokensRequest();
 
 void main() {
 
 
+  group('Start App tests', () {
+
+  tearDown(() => DiUtils.unregisterAll());
 
   testWidgets('Verify that the applications start screen contains the applications logo and name', (WidgetTester tester) async {
 
@@ -27,6 +30,11 @@ void main() {
     await tester.pump(const Duration(seconds: 2));
 
   });
+
+  });
+
+
+
 
 
 }

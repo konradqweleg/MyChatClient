@@ -6,6 +6,7 @@ import 'package:my_chat_client/login_and_registration/common/button/main_action_
 import 'package:my_chat_client/login_and_registration/login/login.dart';
 import 'package:my_chat_client/login_and_registration/reset_password/new_password/new_password.dart';
 import '../../helping/utils.dart';
+import '../../mock/di/di_utils.dart';
 import '../../mock/di/login/di_mock_validate_tokens_request.dart';
 
 
@@ -30,6 +31,8 @@ DiMockValidateTokensRequest();
 
 void main() {
   group('New Password test', () {
+
+    tearDown(() async => await DiUtils.unregisterAll());
 
     testWidgets(
         'Checking that the ui back button takes you to the login screen.',

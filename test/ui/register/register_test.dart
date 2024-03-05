@@ -11,6 +11,7 @@ import 'package:my_chat_client/login_and_registration/register/request/register_
 import 'package:my_chat_client/login_and_registration/register/request/register_user_request.dart';
 import 'package:my_chat_client/login_and_registration/register/user_register_data.dart';
 import '../helping/utils.dart';
+import '../mock/di/di_utils.dart';
 import '../mock/di/login/di_mock_validate_tokens_request.dart';
 
 
@@ -45,6 +46,9 @@ DiMockValidateTokensRequest diMockValidateTokensRequest = DiMockValidateTokensRe
 
 void main() {
   group('Register', () {
+
+    tearDown(() => DiUtils.unregisterAll());
+
     testWidgets(
         'Checking that the register view contains all the required elements',
         (WidgetTester tester) async {
@@ -256,6 +260,7 @@ void main() {
         'In the registration view, the back arrow button should go back to the login view',
         (WidgetTester tester) async {
       //given
+      diMockValidateTokensRequest.registerMockDiRequestStayOnActualLoginPage();
       await Utils.showView(tester, Login());
       await Utils.click(tester, CreateNewAccountButton);
 
