@@ -6,13 +6,14 @@ import 'package:my_chat_client/login_and_registration/common/button/main_action_
 import 'package:my_chat_client/login_and_registration/confirm_code/confirm_register_code.dart';
 import 'package:my_chat_client/login_and_registration/login/button/create_new_account.dart';
 import 'package:my_chat_client/login_and_registration/login/login.dart';
+import 'package:my_chat_client/login_and_registration/login/request/request_is_correct_tokens.dart';
 import 'package:my_chat_client/login_and_registration/register/register.dart';
 import 'package:my_chat_client/login_and_registration/register/request/register_response_status.dart';
 import 'package:my_chat_client/login_and_registration/register/request/register_user_request.dart';
 import 'package:my_chat_client/login_and_registration/register/user_register_data.dart';
 import '../helping/utils.dart';
 import '../mock/di/di_utils.dart';
-import '../mock/di/login/di_mock_validate_tokens_request.dart';
+import '../mock/di/login/mock_saved_tokens_request/mock_request_is_correct_tokens_bad.dart';
 
 
 Future<void> enterTextEmail(WidgetTester tester, String text) async {
@@ -42,12 +43,11 @@ class MockRegisterUserRequestRegisterAllRequests extends RegisterUserRequest {
   }
 }
 
-DiMockValidateTokensRequest diMockValidateTokensRequest = DiMockValidateTokensRequest();
 
 void main() {
   group('Register', () {
 
-    tearDown(() => DiUtils.unregisterAll());
+    setUp(() => DiUtils.registerDefaultDi());
 
     testWidgets(
         'Checking that the register view contains all the required elements',
@@ -245,7 +245,7 @@ void main() {
         'In the registration view, the os back button should go back to the login view',
         (WidgetTester tester) async {
       //given
-      diMockValidateTokensRequest.registerMockDiRequestStayOnActualLoginPage();
+      DiUtils.get().registerSingleton<RequestIsCorrectTokens>(MockIsCorrectSavedTokensBadTokens());
       await Utils.showView(tester, Login());
       await Utils.click(tester, CreateNewAccountButton);
 
@@ -260,7 +260,7 @@ void main() {
         'In the registration view, the back arrow button should go back to the login view',
         (WidgetTester tester) async {
       //given
-      diMockValidateTokensRequest.registerMockDiRequestStayOnActualLoginPage();
+      DiUtils.get().registerSingleton<RequestIsCorrectTokens>(MockIsCorrectSavedTokensBadTokens());
       await Utils.showView(tester, Login());
       await Utils.click(tester, CreateNewAccountButton);
 

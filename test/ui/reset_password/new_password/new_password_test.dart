@@ -4,10 +4,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:my_chat_client/common/exit_button.dart';
 import 'package:my_chat_client/login_and_registration/common/button/main_action_button.dart';
 import 'package:my_chat_client/login_and_registration/login/login.dart';
+import 'package:my_chat_client/login_and_registration/login/request/request_is_correct_tokens.dart';
 import 'package:my_chat_client/login_and_registration/reset_password/new_password/new_password.dart';
 import '../../helping/utils.dart';
 import '../../mock/di/di_utils.dart';
-import '../../mock/di/login/di_mock_validate_tokens_request.dart';
+import '../../mock/di/login/mock_saved_tokens_request/mock_request_is_correct_tokens_bad.dart';
 
 
 Future<void> clickExitButton(WidgetTester tester) async {
@@ -26,19 +27,18 @@ Future<void> clickResetPasswordButton(WidgetTester tester) async {
   await tester.pumpAndSettle();
 }
 
-DiMockValidateTokensRequest diMockValidateTokensRequest =
-DiMockValidateTokensRequest();
+
 
 void main() {
   group('New Password test', () {
 
-    tearDown(() async => await DiUtils.unregisterAll());
+    tearDown(() async =>  DiUtils.registerDefaultDi());
 
     testWidgets(
         'Checking that the ui back button takes you to the login screen.',
             (WidgetTester tester) async {
           //given
-          diMockValidateTokensRequest.registerMockDiRequestStayOnActualLoginPage();
+          DiUtils.get().registerSingleton<RequestIsCorrectTokens>(MockIsCorrectSavedTokensBadTokens());
           await Utils.showView(tester, NewPassword("example@mail", "0000"));
           //when
           await clickExitButton(tester);

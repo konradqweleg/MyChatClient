@@ -6,13 +6,14 @@ import 'package:my_chat_client/login_and_registration/common/result.dart';
 import 'package:my_chat_client/login_and_registration/common/button/main_action_button.dart';
 import 'package:my_chat_client/login_and_registration/confirm_code/confirm_register_code.dart';
 import 'package:my_chat_client/login_and_registration/login/login.dart';
+import 'package:my_chat_client/login_and_registration/login/request/request_is_correct_tokens.dart';
 import 'package:my_chat_client/login_and_registration/register/request/register_response_status.dart';
 import 'package:my_chat_client/login_and_registration/register/request/register_user_request.dart';
 import 'package:my_chat_client/login_and_registration/register/user_register_data.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:my_chat_client/style/main_style.dart';
 import '../mock/di/di_utils.dart';
-import '../mock/di/login/di_mock_validate_tokens_request.dart';
+import '../mock/di/login/mock_saved_tokens_request/mock_request_is_correct_tokens_bad.dart';
 
 
 class Utils {
@@ -92,12 +93,12 @@ class RegisterUserRequestMock extends RegisterUserRequest{
 
 }
 
-DiMockValidateTokensRequest diMockValidateTokensRequest = DiMockValidateTokensRequest();
+
 
 void main() {
   group('ConfirmCodeRegister', () {
 
-    tearDown(() async =>await DiUtils.unregisterAll() );
+    setUp(() async => DiUtils.registerDefaultDi() );
 
     testWidgets(
         'Checking that the confirm create account view contains all the required elements',
@@ -123,7 +124,7 @@ void main() {
         'Checking that the ui back button takes you to the login screen.',
         (WidgetTester tester) async {
       //given
-      diMockValidateTokensRequest.registerMockDiRequestStayOnActualLoginPage();
+      DiUtils.get().registerSingleton<RequestIsCorrectTokens>(MockIsCorrectSavedTokensBadTokens());
 
       UserRegisterData registerData =
           UserRegisterData("", "name", "surname", "password");

@@ -14,7 +14,7 @@ import 'package:my_chat_client/login_and_registration/login/request/response/tok
 import 'package:my_chat_client/main_conversations_list/list_friends/list_conversations.dart';
 
 import '../helping/utils.dart';
-import '../mock/di/di_utils.dart';
+
 
 Future<void> enterEmail(WidgetTester tester, String text) async {
   await Utils.enterText(tester, find.byType(TextFormField).first, text);
@@ -121,7 +121,7 @@ void main() {
       expect(find.text("Please enter your password"), findsOneWidget);
     });
 
-    //Update then after create main view app
+
     testWidgets(
         "When the user entered the correct login details he was logged into the system",
         (tester) async {
@@ -143,7 +143,7 @@ void main() {
 
       //then
       expect(find.byType(ListConversations), findsOneWidget);
-      // expect(find.text("Logged"), findsOneWidget);
+
     });
 
     testWidgets(

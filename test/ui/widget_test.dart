@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:my_chat_client/login_and_registration/login/request/request_is_correct_tokens.dart';
 
 import 'package:my_chat_client/start_app.dart';
 import 'mock/di/di_utils.dart';
-import 'mock/di/login/di_mock_validate_tokens_request.dart';
+import 'mock/di/login/mock_saved_tokens_request/mock_request_is_correct_tokens_bad.dart';
 
-DiMockValidateTokensRequest diMockValidateTokensRequest =
-    DiMockValidateTokensRequest();
+
 
 void main() {
   group('Start App view tests', () {
-    tearDown(() => DiUtils.unregisterAll());
+    setUp(() => DiUtils.registerDefaultDi());
 
     testWidgets('Test if first widget contains name app and logo',
         (WidgetTester tester) async {
       //given
       //when
-      diMockValidateTokensRequest.registerMockDiRequestStayOnActualLoginPage();
+      DiUtils.get().registerSingleton<RequestIsCorrectTokens>(MockIsCorrectSavedTokensBadTokens());
       await tester.pumpWidget(const App());
 
       //then

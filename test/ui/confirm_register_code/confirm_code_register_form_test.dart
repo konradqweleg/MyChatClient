@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_chat_client/common/exit_button.dart';
@@ -16,8 +15,6 @@ import 'package:my_chat_client/login_and_registration/confirm_code/request/resen
 
 import 'package:my_chat_client/login_and_registration/register/user_register_data.dart';
 import '../helping/utils.dart';
-import '../mock/di/di_utils.dart';
-
 
 Future<void> clickExitButton(WidgetTester tester) async {
   await Utils.click(tester, ExitButton);
@@ -36,42 +33,33 @@ Future<void> clickRegisterButton(WidgetTester tester) async {
 }
 
 class RequestAcceptCode9999AsCorrect implements ConfirmAccountRequest {
-
   @override
   Future<Result> confirmAccount(ConfirmAccountData confirmAccountData) {
-    if(confirmAccountData.code == "9999"){
+    if (confirmAccountData.code == "9999") {
       return Future.value(Result.success(ConfirmAccountRequestStatus.ok));
-    }
-    else{
+    } else {
       return Future.value(Result.error(ConfirmAccountRequestStatus.badCode));
     }
   }
 }
 
-class ResendAccountCodeRequestMock implements ResendConfirmAccountCodeRequest{
-
-  @override
-  Future<Result> resendActiveAccountCode(EmailData emailData) {
-   return Future.value(Result.success(ResendConfirmAccountCodeStatus.ok));
-  }
-
-}
-
-
-class ResendAndShowMesssageAccountCodeRequestMock implements ResendConfirmAccountCodeRequest{
-
+class ResendAccountCodeRequestMock implements ResendConfirmAccountCodeRequest {
   @override
   Future<Result> resendActiveAccountCode(EmailData emailData) {
     return Future.value(Result.success(ResendConfirmAccountCodeStatus.ok));
   }
-
 }
+
+class ResendAndShowMesssageAccountCodeRequestMock
+    implements ResendConfirmAccountCodeRequest {
+  @override
+  Future<Result> resendActiveAccountCode(EmailData emailData) {
+    return Future.value(Result.success(ResendConfirmAccountCodeStatus.ok));
+  }
+}
+
 void main() {
   group('ConfirmCodeRegisterForm', () {
-
-
-
-
     testWidgets(
         'Checking if the user is logged in after entering the correct code',
         (WidgetTester tester) async {
@@ -81,7 +69,8 @@ void main() {
 
       await Utils.showView(
         tester,
-        ConfirmCodeRegisterForm(registerData, RequestAcceptCode9999AsCorrect(),ResendAccountCodeRequestMock()),
+        ConfirmCodeRegisterForm(registerData, RequestAcceptCode9999AsCorrect(),
+            ResendAccountCodeRequestMock()),
       );
 
       await enterConfirmCode(tester, "9999");
@@ -92,75 +81,71 @@ void main() {
       expect(find.byType(Conversation), findsOneWidget);
     });
 
-
-
     testWidgets(
         'Checking if the user is not logged in after entering the bad code',
-            (WidgetTester tester) async {
-          //given
-          UserRegisterData registerData =
+        (WidgetTester tester) async {
+      //given
+      UserRegisterData registerData =
           UserRegisterData("correct@mail.pl", "name", "surname", "password");
 
-          await Utils.showView(
-            tester,
-            ConfirmCodeRegisterForm(registerData, RequestAcceptCode9999AsCorrect(),ResendAccountCodeRequestMock()),
-          );
+      await Utils.showView(
+        tester,
+        ConfirmCodeRegisterForm(registerData, RequestAcceptCode9999AsCorrect(),
+            ResendAccountCodeRequestMock()),
+      );
 
-          await enterConfirmCode(tester, "0000");
+      await enterConfirmCode(tester, "0000");
 
-          //when
-          await clickRegisterButton(tester);
-          //then
-          expect(find.byType(Conversation), findsNothing);
-          expect(find.text("Invalid account activation code"), findsOneWidget);
-        });
-
-
+      //when
+      await clickRegisterButton(tester);
+      //then
+      expect(find.byType(Conversation), findsNothing);
+      expect(find.text("Invalid account activation code"), findsOneWidget);
+    });
 
     testWidgets(
         "When the registration button was clicked with a code that was ok length, the system no should display a message from validator ",
-            (tester) async {
-          //given
-              UserRegisterData registerData =
-              UserRegisterData("correct@mail.pl", "name", "surname", "password");
+        (tester) async {
+      //given
+      UserRegisterData registerData =
+          UserRegisterData("correct@mail.pl", "name", "surname", "password");
 
-              await Utils.showView(
-                tester,
-                ConfirmCodeRegisterForm(registerData, RequestAcceptCode9999AsCorrect(),ResendAccountCodeRequestMock()),
-              );
+      await Utils.showView(
+        tester,
+        ConfirmCodeRegisterForm(registerData, RequestAcceptCode9999AsCorrect(),
+            ResendAccountCodeRequestMock()),
+      );
 
-          //when
-          await enterConfirmCode(tester, "3455");
-          await clickRegisterButton(tester);
+      //when
+      await enterConfirmCode(tester, "3455");
+      await clickRegisterButton(tester);
 
-          //then
-          expect(find.text("Not enough characters in the code"), findsNothing);
-          expect(find.text("Please enter code"), findsNothing);
-
-        });
+      //then
+      expect(find.text("Not enough characters in the code"), findsNothing);
+      expect(find.text("Please enter code"), findsNothing);
+    });
   });
-
 
   testWidgets(
       "When the resend code is clicked, the system should display a message to the user that the code has been sent",
-          (tester) async {
-        //given
-            UserRegisterData registerData =
-            UserRegisterData("correct@mail.pl", "name", "surname", "password");
+      (tester) async {
+    //given
+    UserRegisterData registerData =
+        UserRegisterData("correct@mail.pl", "name", "surname", "password");
 
-            await Utils.showView(
-              tester,
-              ConfirmCodeRegisterForm(registerData, RequestAcceptCode9999AsCorrect(),ResendAccountCodeRequestMock()),
-            );
-        final textFinder = find.text(
-            "We sent you an email with a 4-digit code. Enter it to create an account. Resend code",
-            findRichText: true);
+    await Utils.showView(
+      tester,
+      ConfirmCodeRegisterForm(registerData, RequestAcceptCode9999AsCorrect(),
+          ResendAccountCodeRequestMock()),
+    );
+    final textFinder = find.text(
+        "We sent you an email with a 4-digit code. Enter it to create an account. Resend code",
+        findRichText: true);
 
-        //when
-        await Utils.fireOnTapOnTextSpan(tester,textFinder, ' Resend code');
+    //when
+    await Utils.fireOnTapOnTextSpan(tester, textFinder, ' Resend code');
 
-        //then
-        expect(find.text('Send confirm code'), findsOneWidget);
-
-      });
+    //then
+    expect(find.text('Send confirm code'), findsOneWidget);
+  });
 }
