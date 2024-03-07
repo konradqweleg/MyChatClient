@@ -50,6 +50,7 @@ class HttpHelperAuthImpl implements HttpHelperAuth {
     Result<SavedTokenStatus> savedTokenStatus = await tokenManager.checkSavedTokens();
 
     bool isRedirectToLoginPageDueLackOfAnyTokens = _isRedirectToLoginPageDueLackOfTokens(savedTokenStatus);
+
     if (isRedirectToLoginPageDueLackOfAnyTokens) {
       return Result.error(AuthRequestStatus.redirectToLoginPage);
     }
@@ -59,6 +60,7 @@ class HttpHelperAuthImpl implements HttpHelperAuth {
       String? accessToken =  await tokenManager.getAccessToken();
 
       Result resultRequestWithAccessToken = await _request(requestType, url, accessToken!, body: body, timeoutDuration: timeoutDuration);
+
 
       if (resultRequestWithAccessToken.isSuccess()) {
         return resultRequestWithAccessToken;
@@ -138,12 +140,16 @@ class HttpHelperAuthImpl implements HttpHelperAuth {
     } on TimeoutException {
       return Result.error(AuthRequestStatus.timeout);
     } catch (e) {
+      print(e);
       return Result.error(AuthRequestStatus.error);
     }
 
 
 
+
     if (response is http.Response) {
+      print(response.body);
+      print(response.statusCode);
       if (response.statusCode == 200 || response.statusCode == 400) {
         return Result.success(response.body);
       } else if (response.statusCode == 401) {

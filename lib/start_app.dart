@@ -14,6 +14,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 Future<void> main() async {
   RegisterDI registerDI = RegisterDI(DiFactoryImpl());
   registerDI.register();
+  //MUSISZ POBIERAC ID USERA
 
 
   runApp(

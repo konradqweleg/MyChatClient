@@ -5,6 +5,7 @@ import 'package:my_chat_client/login_and_registration/login/button/reset_passwor
 import 'package:my_chat_client/login_and_registration/login/other_form_login/login_with_google_or_facebook.dart';
 import 'package:my_chat_client/login_and_registration/login/request/login_request_http.dart';
 import 'package:my_chat_client/login_and_registration/login/request/request_is_correct_tokens.dart';
+import '../../database/db_services/info_about_me/info_about_me_service.dart';
 import '../../main_conversations_list/main_conversation_list.dart';
 import '../../style/main_style.dart';
 import 'login_form.dart';
@@ -29,12 +30,20 @@ class LoginState extends State<Login> {
     _redirectToMainConversationWhenValidRefreshToken();
   }
 
-  void _redirectToMainConversationWhenValidRefreshToken() {
-    _getIt<RequestIsCorrectTokens>().isCorrectSavedTokens().then((isValidTokens) {
+  Future<void> _redirectToMainConversationWhenValidRefreshToken() async {
+
+    bool isAlreadySavedDataAboutUser =
+        await _getIt<InfoAboutMeService>().isInfoAboutMeExist();
+
+    if(isAlreadySavedDataAboutUser){
+      _getIt<RequestIsCorrectTokens>().isCorrectSavedTokens().then((isValidTokens) {
         if (isValidTokens) {
           _redirectToMainConversationView();
         }
-    });
+      });
+    }
+
+
   }
 
   void _redirectToMainConversationView() {

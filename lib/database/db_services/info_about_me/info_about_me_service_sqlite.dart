@@ -8,25 +8,36 @@ import 'info_about_me_service.dart';
 class InfoAboutMeServiceSqlite implements InfoAboutMeService{
   DbCreateService dbCreateService = DbCreateService();
 
-  InfoAboutMeServiceSqlite() {
-   insertFirstInfoAboutMe();
-  }
-
-  Future<void> insertFirstInfoAboutMe() async {
-    InfoAboutMe defaultInfoAboutMe = InfoAboutMe(id: -1, name: '', surname: '');
-
+  // InfoAboutMeServiceSqlite() {
+  //  insertFirstInfoAboutMe();
+  // }
+  //
+  @override
+  Future<void> insertFirstInfoAboutMe(InfoAboutMe infoAboutMe) async {
     return dbCreateService.initializeDB().then((db) {
       return db.query(InfoAboutMeSchema.tableName);
     }).then((List<Map<String, dynamic>> maps) {
-      if(maps.isEmpty){
+      if (maps.isEmpty) {
         return dbCreateService.initializeDB().then((db) {
-           db.insert(InfoAboutMeSchema.tableName, defaultInfoAboutMe.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
+          return db.insert(InfoAboutMeSchema.tableName, infoAboutMe.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
+        });
+      } else {
+        // Zaktualizuj istniejący rekord
+        final Map<String, dynamic> updateValues = infoAboutMe.toMap();
+        return dbCreateService.initializeDB().then((db) {
+          return db.update(
+            InfoAboutMeSchema.tableName,
+            updateValues,
+            where: "${InfoAboutMeSchema.idCol} = ?",
+            whereArgs: [1], // Identyfikator wiersza do aktualizacji (zakładając, że istnieje tylko jeden wiersz w tabeli)
+          );
         });
       }
     });
-
-
   }
+  //
+  //
+  // }
 
   @override
   Future<int> getId() async {
@@ -82,6 +93,33 @@ class InfoAboutMeServiceSqlite implements InfoAboutMeService{
       InfoAboutMeSchema.tableName,
       {InfoAboutMeSchema.surnameCol: surname},
     );
+  }
+
+  @override
+  Future<String> getEmail() {
+    return dbCreateService.initializeDB().then((db) {
+      return db.query(InfoAboutMeSchema.tableName);
+    }).then((List<Map<String, dynamic>> maps) {
+      return maps[0][InfoAboutMeSchema.emailCol];
+    });
+  }
+
+  @override
+  Future<void> setEmail(String email) async {
+    Database db = await dbCreateService.initializeDB();
+    await db.update(
+      InfoAboutMeSchema.tableName,
+      {InfoAboutMeSchema.emailCol: email},
+    );
+  }
+
+  @override
+  Future<bool> isInfoAboutMeExist() {
+   return dbCreateService.initializeDB().then((db) {
+      return db.query(InfoAboutMeSchema.tableName);
+    }).then((List<Map<String, dynamic>> maps) {
+      return maps.isNotEmpty;
+    });
   }
 
 }
