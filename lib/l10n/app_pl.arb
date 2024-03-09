@@ -46,5 +46,6 @@
   "accountNotActive": "Konto użytkownika nie zostało aktywowane",
   "badLoginCredentials": "Błędne dane logowania",
   "search": "Szukaj",
-  "messages": "Konwersacje"
+  "messages": "Konwersacje",
+  "errorDownloadInfoDataAboutUserFromServer": "Nie udało się pobrać informacji o użytkowniku z serwera"
 }

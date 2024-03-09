@@ -241,6 +241,12 @@
         "description": "The text describing list the messages"
   },
 
+  "errorDownloadInfoDataAboutUserFromServer": "Error downloading user data from the server",
+  "@errorDownloadInfoDataAboutUserFromServer": {
+    "description": "The text describing the situation in which the user data could not be downloaded from the server."
+  },
+
+
   "helloWorld": "Hello World!",
   "@helloWorld": {
     "description": "The conventional newborn programmer greeting"
