@@ -10,7 +10,7 @@ abstract class InfoAboutMeService{
   Future<int> getId();
   Future<String> getEmail();
   Future<bool> isInfoAboutMeExist();
-  Future<void> insertFirstInfoAboutMe(InfoAboutMe infoAboutMe);
+  Future<void> updateAllInfoAboutMe(InfoAboutMe infoAboutMe);
 
 
 }

@@ -110,7 +110,7 @@ class _LoginFormState extends State<LoginForm> {
 
       if (resultLoginRequest.isSuccess()) {
         _saveUserLoginAuth(resultLoginRequest);
-        _saveUserDataInDb(emailController.text);
+        _savedDataAboutUser(emailController.text);
         _logIn();
       } else if (resultLoginRequest.isError()) {
         _initMatchedErrorToErrorMessage();
@@ -122,37 +122,37 @@ class _LoginFormState extends State<LoginForm> {
     });
   }
 
-  Future<void> _saveUserDataInDb(String userEmail) async {
-    bool isAlreadySavedDataAboutUser =
-        await _getIt<InfoAboutMeService>().isInfoAboutMeExist();
-    print("czy zapisane"+isAlreadySavedDataAboutUser.toString());
-    print("mail"+userEmail);
 
+  Future<void> _savedDataAboutUser(String userEmail)   async {
+    bool isAlreadySavedDataAboutUser = await _getIt<InfoAboutMeService>().isInfoAboutMeExist();
     if (!isAlreadySavedDataAboutUser) {
-      Result userDataResult = await _getIt<GetUserDataRequest>().getUserDataWithEmail(EmailData(email: userEmail));
-
-      print(userDataResult);
-
-      if (userDataResult.isSuccess()) {
-        UserData userData = userDataResult.getData();
-
-        _getIt<InfoAboutMeService>().insertFirstInfoAboutMe(InfoAboutMe(id: userData.id!, name: userData.name!, surname: userData.surname!, email: userData.email!));
-
-
-        _getIt<InfoAboutMeService>().setId(userData.id!);
-        _getIt<InfoAboutMeService>().setName(userData.name!);
-        _getIt<InfoAboutMeService>().setSurname(userData.surname!);
-        _getIt<InfoAboutMeService>().setEmail(userData.email!);
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            behavior: SnackBarBehavior.floating,
-            margin: const EdgeInsets.only(bottom: 100, right: 20, left: 20),
-            backgroundColor: MainAppStyle.mainColorApp,
-            content: Text(AppLocalizations.of(context)!.passwordHasBenReset)));
-
-        _redirectToLoginView();
-      }
+      _downloadDataAboutUserFromServerBasedOnEmail(userEmail);
     }
+  }
+
+
+  void _downloadDataAboutUserFromServerBasedOnEmail(String userEmail) async {
+    Result userDataResult = await _getIt<GetUserDataRequest>().getUserDataWithEmail(EmailData(email: userEmail));
+
+    if (userDataResult.isSuccess()) {
+       UserData userData = userDataResult.getData();
+      _savedUserDataInDb(userData);
+    } else {
+      _showErrorDownloadInfoDataAboutUserFromServer();
+      _redirectToLoginView();
+    }
+  }
+
+  void _savedUserDataInDb(UserData userData) async {
+    _getIt<InfoAboutMeService>().updateAllInfoAboutMe(InfoAboutMe(id: userData.id!, name: userData.name!, surname: userData.surname!, email: userData.email!));
+  }
+
+  void _showErrorDownloadInfoDataAboutUserFromServer() {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.only(bottom: 100, right: 20, left: 20),
+        backgroundColor: MainAppStyle.mainColorApp,
+        content: Text(AppLocalizations.of(context)!.errorDownloadInfoDataAboutUserFromServer)));
   }
 
   void _redirectToLoginView() {

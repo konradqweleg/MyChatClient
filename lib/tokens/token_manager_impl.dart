@@ -40,10 +40,6 @@ class TokenManagerImpl extends TokenManager {
     String? accessToken = await  getAccessToken();
     String? refreshToken = await getRefreshToken();
 
-    print(accessToken) ;
-    print(refreshToken);
-
-
     if (accessToken != null) {
       return Result.success(SavedTokenStatus.accessibleAccessToken);
     } else if (accessToken == null && refreshToken != null) {

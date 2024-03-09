@@ -8,36 +8,36 @@ import 'info_about_me_service.dart';
 class InfoAboutMeServiceSqlite implements InfoAboutMeService{
   DbCreateService dbCreateService = DbCreateService();
 
-  // InfoAboutMeServiceSqlite() {
-  //  insertFirstInfoAboutMe();
-  // }
-  //
   @override
-  Future<void> insertFirstInfoAboutMe(InfoAboutMe infoAboutMe) async {
+  Future<void> updateAllInfoAboutMe(InfoAboutMe infoAboutMe) async {
     return dbCreateService.initializeDB().then((db) {
       return db.query(InfoAboutMeSchema.tableName);
     }).then((List<Map<String, dynamic>> maps) {
       if (maps.isEmpty) {
-        return dbCreateService.initializeDB().then((db) {
-          return db.insert(InfoAboutMeSchema.tableName, infoAboutMe.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
-        });
+        _insertInfoAboutMe(infoAboutMe);
       } else {
-        // Zaktualizuj istniejący rekord
-        final Map<String, dynamic> updateValues = infoAboutMe.toMap();
-        return dbCreateService.initializeDB().then((db) {
-          return db.update(
-            InfoAboutMeSchema.tableName,
-            updateValues,
-            where: "${InfoAboutMeSchema.idCol} = ?",
-            whereArgs: [1], // Identyfikator wiersza do aktualizacji (zakładając, że istnieje tylko jeden wiersz w tabeli)
-          );
-        });
+        _updateInfoAboutMe(infoAboutMe);
       }
     });
   }
-  //
-  //
-  // }
+
+  Future<void> _insertInfoAboutMe(InfoAboutMe infoAboutMe) async {
+     dbCreateService.initializeDB().then((db) {
+       db.insert(InfoAboutMeSchema.tableName, infoAboutMe.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
+    });
+  }
+
+  Future<void> _updateInfoAboutMe(InfoAboutMe infoAboutMe) async {
+    dbCreateService.initializeDB().then((db) {
+      db.update(
+        InfoAboutMeSchema.tableName,
+        infoAboutMe.toMap(),
+        where: "${InfoAboutMeSchema.idCol} = ?",
+        whereArgs: [1],
+      );
+    });
+  }
+
 
   @override
   Future<int> getId() async {

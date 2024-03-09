@@ -91,8 +91,6 @@ class HttpHelperAuthImpl implements HttpHelperAuth {
     String? refreshToken = await tokenManager.getRefreshToken();
     RequestRefreshAccessTokenHttp requestRefreshAccessTokenHttp = RequestRefreshAccessTokenHttp(httpClient);
     Result resultRefreshAccessToken = await requestRefreshAccessTokenHttp.refreshAccessToken(refreshToken);
-    print("a");
-    print(resultRefreshAccessToken);
     if (resultRefreshAccessToken.isSuccess()) {
       AccessTokenData tokens = resultRefreshAccessToken.getData() as AccessTokenData;
       tokenManager.saveAccessToken(tokens.accessToken);
@@ -140,7 +138,7 @@ class HttpHelperAuthImpl implements HttpHelperAuth {
     } on TimeoutException {
       return Result.error(AuthRequestStatus.timeout);
     } catch (e) {
-      print(e);
+
       return Result.error(AuthRequestStatus.error);
     }
 
@@ -148,8 +146,7 @@ class HttpHelperAuthImpl implements HttpHelperAuth {
 
 
     if (response is http.Response) {
-      print(response.body);
-      print(response.statusCode);
+
       if (response.statusCode == 200 || response.statusCode == 400) {
         return Result.success(response.body);
       } else if (response.statusCode == 401) {

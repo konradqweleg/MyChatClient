@@ -22,7 +22,6 @@ class GetUserDataRequestImpl extends GetUserDataRequest {
   Future<Result> _getUserDataByEmail(String email) async {
     Result userData = await httpHelperAuth!.get(RequestsURL.getUserDataByEmail+email);
 
-    print(userData.data);
 
     if (userData.isSuccess()) {
       Map parsedResponse = json.decode(userData.data);

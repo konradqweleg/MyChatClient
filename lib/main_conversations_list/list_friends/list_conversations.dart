@@ -9,13 +9,13 @@ import 'package:my_chat_client/database/db_services/info_about_me/info_about_me_
 import 'package:my_chat_client/database/db_services/messages/messages_service.dart';
 
 import 'package:my_chat_client/main_conversations_list/list_friends/user_my_chat.dart';
-import 'package:my_chat_client/main_conversations_list/requests/LastMessagesWithFriendsData.dart';
+import 'package:my_chat_client/main_conversations_list/requests/last_messages_with_friends_data.dart';
 
 import '../../database/model/friend.dart';
 import '../../database/model/message.dart';
 import '../../login_and_registration/common/result.dart';
 import '../one_person/one_person_widget.dart';
-import '../requests/RequestLastMessage.dart';
+import '../requests/request_last_message.dart';
 
 class ListConversations extends StatefulWidget {
   const ListConversations({super.key});
@@ -35,8 +35,8 @@ class ListConversationsState extends State<ListConversations> {
   @override
   void initState() {
     super.initState();
-    _getFriends();
-    _downloadLastMessages();
+    _showAllFriends();
+    _downloadLastMessagesWithFriends();
     _startTimer();
   }
 
@@ -49,9 +49,8 @@ class ListConversationsState extends State<ListConversations> {
   void _startTimer() {
     _timer = Timer.periodic(const Duration(minutes: 1), (_) {
 
-      _downloadLastMessages();
-      _getFriends();
-        print('Timer executed');
+      _downloadLastMessagesWithFriends();
+      _showAllFriends();
 
     });
   }
@@ -60,30 +59,34 @@ class ListConversationsState extends State<ListConversations> {
     _timer?.cancel();
   }
 
-  void _getFriends() async {
-    List<Friend> data = await getIt<FriendsService>().getFriends();
-    for (var element in data) {
-      Message lastMessage = await getIt<MessagesService>().getLastMessageWithFriendId(element.idFriend);
+  void _showAllFriends() async {
+    setState(() {
+      friendsConversations.clear();
+    });
+
+    List<Friend> friendsFromDb = await getIt<FriendsService>().getFriends();
+    for (var friend in friendsFromDb) {
+      Message friendLastMessage = await getIt<MessagesService>().getLastMessageWithFriendId(friend.idFriend);
       setState(() {
-        friendsConversations.clear();
-        friendsConversations.add(UserMyChat("${element.name} ${element.surname}", lastMessage.message, element.idFriend));
+        friendsConversations.add(UserMyChat("${friend.name} ${friend.surname}", friendLastMessage.message, friend.idFriend));
       });
     }
+
   }
 
-  Future<void> _downloadLastMessages() async {
-    int data = await getIt<InfoAboutMeService>().getId();
-    Result lastMessages = await getIt<RequestLastMessage>().getLastMessagesWithFriends(data);
+  Future<void> _downloadLastMessagesWithFriends() async {
+    int idUser = await getIt<InfoAboutMeService>().getId();
+    Result lastMessages = await getIt<RequestLastMessage>().getLastMessagesWithFriendsForUserAboutId(idUser);
 
     if(lastMessages.isError()) {
       return;
     }
 
-    var tagObjsJson = jsonDecode(lastMessages.data as String) as List;
-    List<LastMessageWithFriendsData> tagObjs = tagObjsJson.map((tagJson) => LastMessageWithFriendsData.fromMap(tagJson)).toList();
-    for(var element in tagObjs) {
-      print(element);
-      await getIt<MessagesService>().addMessage(Message(idMessage: element.idMessage, message: element.lastMessage, idSender: element.idUser, idReceiver: element.idUser, date: element.date));
+    var listConversationsRawData = jsonDecode(lastMessages.data as String) as List;
+    List<LastMessageWithFriendsData> lastMessagesWithFriends = listConversationsRawData.map((tagJson) => LastMessageWithFriendsData.fromMap(tagJson)).toList();
+
+    for(var element in lastMessagesWithFriends) {
+      await getIt<MessagesService>().addMessage(Message(idMessage: element.idMessage, message: element.lastMessage, idSender: element.idSender, idReceiver: element.idReceiver, date: element.date));
     }
   }
 

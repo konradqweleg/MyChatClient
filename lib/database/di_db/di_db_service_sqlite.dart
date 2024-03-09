@@ -1,6 +1,6 @@
 import 'package:get_it/get_it.dart';
-import 'package:my_chat_client/main_conversations_list/requests/RequestLastMessage.dart';
-import 'package:my_chat_client/main_conversations_list/requests/RequestLastMessageWithFriendsImpl.dart';
+import 'package:my_chat_client/main_conversations_list/requests/request_last_message.dart';
+import 'package:my_chat_client/main_conversations_list/requests/request_last_message_with_friends_impl.dart';
 
 import '../db_services/friends/friends_service.dart';
 import '../db_services/friends/friends_service_sqlite.dart';
