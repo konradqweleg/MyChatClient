@@ -6,7 +6,6 @@ import 'package:my_chat_client/main_conversations_list/search_bar/search_person_
 import '../style/main_style.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 void main() {
   RegisterDI registerDI = RegisterDI(DiFactoryImpl());
   registerDI.register();
@@ -54,7 +53,7 @@ class _MainConversationListState extends State<MainConversationList> {
                   height: 60,
                   width: MediaQuery.of(context).size.width,
                   padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-                  child:  Row(
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
@@ -63,9 +62,7 @@ class _MainConversationListState extends State<MainConversationList> {
                       ),
                     ],
                   )),
-              SizedBox(
-                  height: MediaQuery.of(context).size.height - 165,
-                  child: const ListConversations())
+              const Expanded(child: ListConversations())
             ],
           )),
     );

@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:my_chat_client/conversation/conversation.dart';
+import 'package:get_it/get_it.dart';
 import 'package:my_chat_client/login_and_registration/common/button/main_action_button.dart';
 import 'package:my_chat_client/login_and_registration/confirm_code/request/confirm_account/confirm_account_data.dart';
 import 'package:my_chat_client/login_and_registration/confirm_code/request/confirm_account/confirm_account_request.dart';
@@ -9,14 +9,13 @@ import 'package:my_chat_client/login_and_registration/confirm_code/request/confi
 import 'package:my_chat_client/login_and_registration/common/error_message.dart';
 import 'package:my_chat_client/login_and_registration/confirm_code/request/resend_active_account_code/email_data.dart';
 import 'package:my_chat_client/login_and_registration/confirm_code/request/resend_active_account_code/resend_confirm_account_code_request.dart';
-import 'package:my_chat_client/login_and_registration/confirm_code/request/resend_active_account_code/resend_confirm_account_code_status.dart';
 import 'package:my_chat_client/style/main_style.dart';
-import '../../navigation/page_route_navigation.dart';
 import '../../common/name_app.dart';
 import '../common/result.dart';
 import '../common/errors.dart';
 import '../common/input/input_code.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../login/login.dart';
 import '../register/user_register_data.dart';
 
 class LocalizationsInject extends StatelessWidget {
@@ -62,7 +61,7 @@ class _ConfirmCodeRegisterFormState extends State<ConfirmCodeRegisterForm> {
   TextEditingController controller = TextEditingController();
   Result _confirmAccountRequestStatus = Result.empty();
   final Errors _matchedErrorToErrorMessage = Errors();
-
+  static final GetIt _getIt = GetIt.instance;
 
   void _initMatchedErrorToErrorMessage() {
     if(_matchedErrorToErrorMessage.isInit()) {
@@ -130,7 +129,7 @@ class _ConfirmCodeRegisterFormState extends State<ConfirmCodeRegisterForm> {
 
     requestActiveAccountResult.then((value) {
 
-      setState(() {
+      setState(()  {
         _confirmAccountRequestStatus = value;
         if (_confirmAccountRequestStatus.isError()) {
           _initMatchedErrorToErrorMessage();
@@ -138,16 +137,20 @@ class _ConfirmCodeRegisterFormState extends State<ConfirmCodeRegisterForm> {
               _confirmAccountRequestStatus);
         }
         if (_confirmAccountRequestStatus.isSuccess()) {
-          _logIn();
+           _goToLoginPage();
         }
       });
     });
   }
 
-  void _logIn() {
-    PageRouteNavigation.navigationTransitionSlideFromDown(
-        context: context, destination: const Conversation());
+
+  void _goToLoginPage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Login()),
+    );
   }
+
 
   void _checkIsCorrectCode() {
     bool isValidFormat = _isValidFormatCode();

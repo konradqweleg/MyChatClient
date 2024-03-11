@@ -143,8 +143,6 @@ class HttpHelperAuthImpl implements HttpHelperAuth {
     }
 
 
-
-
     if (response is http.Response) {
 
       if (response.statusCode == 200 || response.statusCode == 400) {

@@ -28,6 +28,8 @@ import '../common/error_message.dart';
 import '../common/errors.dart';
 import '../common/result.dart';
 import '../confirm_code/request/resend_active_account_code/email_data.dart';
+import 'action/save_data_about_user.dart';
+import 'action/save_data_about_user_status.dart';
 import 'login.dart';
 
 class LoginForm extends StatefulWidget {
@@ -125,27 +127,39 @@ class _LoginFormState extends State<LoginForm> {
 
 
   Future<void> _savedDataAboutUser(String userEmail)   async {
-    bool isAlreadySavedDataAboutUser = await _getIt<InfoAboutMeService>().isInfoAboutMeExist();
-    if (!isAlreadySavedDataAboutUser) {
-      await _downloadDataAboutUserFromServerBasedOnEmail(userEmail);
-    }
-  }
+    Result<SaveDataAboutUserStatus> saveDataAboutUserStatus = await _getIt<SaveDataAboutUser>().saveUserData(userEmail);
 
-
-  Future<void> _downloadDataAboutUserFromServerBasedOnEmail(String userEmail) async {
-    Result userDataResult = await _getIt<GetUserDataRequest>().getUserDataWithEmail(EmailData(email: userEmail));
-    if (userDataResult.isSuccess()) {
-       UserData userData = userDataResult.getData();
-       await  _savedUserDataInDb(userData);
-    } else {
+    if(saveDataAboutUserStatus.isError()) {
       _showErrorDownloadInfoDataAboutUserFromServer();
       _redirectToLoginView();
+    }else{
+      _logIn();
     }
+
+
+
+
+    // bool isAlreadySavedDataAboutUser = await _getIt<InfoAboutMeService>().isInfoAboutMeExist();
+    // if (!isAlreadySavedDataAboutUser) {
+    //   await _downloadDataAboutUserFromServerBasedOnEmail(userEmail);
+    // }
   }
 
-  Future<void> _savedUserDataInDb(UserData userData) async {
-    return _getIt<InfoAboutMeService>().updateAllInfoAboutMe(InfoAboutMe(id: userData.id!, name: userData.name!, surname: userData.surname!, email: userData.email!));
-  }
+
+  // Future<void> _downloadDataAboutUserFromServerBasedOnEmail(String userEmail) async {
+  //   Result userDataResult = await _getIt<GetUserDataRequest>().getUserDataWithEmail(EmailData(email: userEmail));
+  //   if (userDataResult.isSuccess()) {
+  //      UserData userData = userDataResult.getData();
+  //      await  _savedUserDataInDb(userData);
+  //   } else {
+  //     _showErrorDownloadInfoDataAboutUserFromServer();
+  //     _redirectToLoginView();
+  //   }
+  // }
+  //
+  // Future<void> _savedUserDataInDb(UserData userData) async {
+  //   return _getIt<InfoAboutMeService>().updateAllInfoAboutMe(InfoAboutMe(id: userData.id!, name: userData.name!, surname: userData.surname!, email: userData.email!));
+  // }
 
   void _showErrorDownloadInfoDataAboutUserFromServer() {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
