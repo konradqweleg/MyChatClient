@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:my_chat_client/database/db_services/info_about_me/info_about_me_service.dart';
@@ -105,12 +106,12 @@ class _LoginFormState extends State<LoginForm> {
 
     Future<Result> requestLoginResult = widget.loginRequest.login(loginData);
 
-    requestLoginResult.then((value) {
+    requestLoginResult.then((value) async {
       Result resultLoginRequest = value;
 
       if (resultLoginRequest.isSuccess()) {
         _saveUserLoginAuth(resultLoginRequest);
-        _savedDataAboutUser(emailController.text);
+       await _savedDataAboutUser(emailController.text);
         _logIn();
       } else if (resultLoginRequest.isError()) {
         _initMatchedErrorToErrorMessage();
@@ -126,25 +127,24 @@ class _LoginFormState extends State<LoginForm> {
   Future<void> _savedDataAboutUser(String userEmail)   async {
     bool isAlreadySavedDataAboutUser = await _getIt<InfoAboutMeService>().isInfoAboutMeExist();
     if (!isAlreadySavedDataAboutUser) {
-      _downloadDataAboutUserFromServerBasedOnEmail(userEmail);
+      await _downloadDataAboutUserFromServerBasedOnEmail(userEmail);
     }
   }
 
 
-  void _downloadDataAboutUserFromServerBasedOnEmail(String userEmail) async {
+  Future<void> _downloadDataAboutUserFromServerBasedOnEmail(String userEmail) async {
     Result userDataResult = await _getIt<GetUserDataRequest>().getUserDataWithEmail(EmailData(email: userEmail));
-
     if (userDataResult.isSuccess()) {
        UserData userData = userDataResult.getData();
-      _savedUserDataInDb(userData);
+       await  _savedUserDataInDb(userData);
     } else {
       _showErrorDownloadInfoDataAboutUserFromServer();
       _redirectToLoginView();
     }
   }
 
-  void _savedUserDataInDb(UserData userData) async {
-    _getIt<InfoAboutMeService>().updateAllInfoAboutMe(InfoAboutMe(id: userData.id!, name: userData.name!, surname: userData.surname!, email: userData.email!));
+  Future<void> _savedUserDataInDb(UserData userData) async {
+    return _getIt<InfoAboutMeService>().updateAllInfoAboutMe(InfoAboutMe(id: userData.id!, name: userData.name!, surname: userData.surname!, email: userData.email!));
   }
 
   void _showErrorDownloadInfoDataAboutUserFromServer() {

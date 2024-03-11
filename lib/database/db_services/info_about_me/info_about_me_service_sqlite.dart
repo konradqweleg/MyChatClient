@@ -10,6 +10,7 @@ class InfoAboutMeServiceSqlite implements InfoAboutMeService{
 
   @override
   Future<void> updateAllInfoAboutMe(InfoAboutMe infoAboutMe) async {
+
     return dbCreateService.initializeDB().then((db) {
       return db.query(InfoAboutMeSchema.tableName);
     }).then((List<Map<String, dynamic>> maps) {
@@ -22,7 +23,7 @@ class InfoAboutMeServiceSqlite implements InfoAboutMeService{
   }
 
   Future<void> _insertInfoAboutMe(InfoAboutMe infoAboutMe) async {
-     dbCreateService.initializeDB().then((db) {
+   return  dbCreateService.initializeDB().then((db) {
        db.insert(InfoAboutMeSchema.tableName, infoAboutMe.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
     });
   }
@@ -41,11 +42,9 @@ class InfoAboutMeServiceSqlite implements InfoAboutMeService{
 
   @override
   Future<int> getId() async {
-    return dbCreateService.initializeDB().then((db) {
-      return db.query(InfoAboutMeSchema.tableName);
-    }).then((List<Map<String, dynamic>> maps) {
-      return maps[0][InfoAboutMeSchema.idCol];
-    });
+    Database db = await dbCreateService.initializeDB();
+    List<Map<String, dynamic>> maps = await db.query(InfoAboutMeSchema.tableName);
+    return maps[0][InfoAboutMeSchema.idCol];
   }
 
   @override

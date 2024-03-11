@@ -28,18 +28,18 @@ class DbCreateService {
   }
 
 
-  // Future<void> deleteDB() async {
-  //   String path = await getDatabasesPath();
-  //   String dbPath = join(path, _nameDbFile);
-  //   await deleteDatabase(dbPath);
-  // }
+  Future<void> deleteDB() async {
+    String path = await getDatabasesPath();
+    String dbPath = join(path, _nameDbFile);
+    await deleteDatabase(dbPath);
+  }
 
   Future<Database> initializeDB() async {
   //  sqfliteFfiInit();  //WINDOWS
   //  databaseFactory = databaseFactoryFfi; //WINDOWS
 
 
-    // deleteDB();
+    //deleteDB();
 
     String path = await getDatabasesPath();
 

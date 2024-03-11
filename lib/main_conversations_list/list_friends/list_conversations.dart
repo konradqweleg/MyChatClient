@@ -85,8 +85,9 @@ class ListConversationsState extends State<ListConversations> {
     var listConversationsRawData = jsonDecode(lastMessages.data as String) as List;
     List<LastMessageWithFriendsData> lastMessagesWithFriends = listConversationsRawData.map((tagJson) => LastMessageWithFriendsData.fromMap(tagJson)).toList();
 
-    for(var element in lastMessagesWithFriends) {
-      await getIt<MessagesService>().addMessage(Message(idMessage: element.idMessage, message: element.lastMessage, idSender: element.idSender, idReceiver: element.idReceiver, date: element.date));
+    for(var message in lastMessagesWithFriends) {
+      await getIt<FriendsService>().addFriendWhenNotExists(Friend(idFriend: message.idFriend, name: message.name, surname: message.surname));
+      await getIt<MessagesService>().addMessage(Message(idMessage: message.idMessage, message: message.lastMessage, idSender: message.idSender, idReceiver: message.idReceiver, date: message.date));
     }
   }
 

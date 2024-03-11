@@ -33,6 +33,7 @@ class App extends StatelessWidget{
 
 
     final GetIt _getIt = GetIt.instance;
+
      // _getIt<FriendsService>().removeFriend(Friend( idFriend: 772, name: 'addasfadsf', surname: 'dasfadsf'));
      // _getIt<FriendsService>().removeFriend(Friend( idFriend: 774, name: 'sadsf', surname: 'dsafdsaf'));
      // _getIt<FriendsService>().removeFriend(Friend( idFriend: 779, name: 'Konrad', surname: 'Groń'));

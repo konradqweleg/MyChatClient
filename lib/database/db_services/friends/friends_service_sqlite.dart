@@ -38,4 +38,13 @@ class FriendServiceSqlite implements FriendsService {
     );
   }
 
+  @override
+  Future<void> addFriendWhenNotExists(Friend friend) async {
+    Database db = await dbCreateService.initializeDB();
+    List<Friend> friends = await getFriends();
+    if (!friends.contains(friend)) {
+      await db.insert(FriendSchema.tableName, friend.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
+    }
+  }
+
 }
