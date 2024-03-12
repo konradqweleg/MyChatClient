@@ -22,36 +22,36 @@ class Login extends StatefulWidget {
 }
 
 class LoginState extends State<Login> {
-  final GetIt _getIt = GetIt.instance;
+  // final GetIt _getIt = GetIt.instance;
 
-  @override
-  void initState() {
-    super.initState();
-    _redirectToMainConversationWhenValidRefreshToken();
-  }
-
-  Future<void> _redirectToMainConversationWhenValidRefreshToken() async {
-
-    bool isAlreadySavedDataAboutUser =
-        await _getIt<InfoAboutMeService>().isInfoAboutMeExist();
-
-    if(isAlreadySavedDataAboutUser){
-      _getIt<RequestIsCorrectTokens>().isCorrectSavedTokens().then((isValidTokens) {
-        if (isValidTokens) {
-          _redirectToMainConversationView();
-        }
-      });
-    }
-
-
-  }
-
-  void _redirectToMainConversationView() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const MainConversationList()),
-    );
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _redirectToMainConversationWhenValidRefreshToken();
+  // }
+  //
+  // Future<void> _redirectToMainConversationWhenValidRefreshToken() async {
+  //
+  //   bool isAlreadySavedDataAboutUser =
+  //       await _getIt<InfoAboutMeService>().isInfoAboutMeExist();
+  //
+  //   if(isAlreadySavedDataAboutUser){
+  //     _getIt<RequestIsCorrectTokens>().isCorrectSavedTokens().then((isValidTokens) {
+  //       if (isValidTokens) {
+  //         _redirectToMainConversationView();
+  //       }
+  //     });
+  //   }
+  //
+  //
+  // }
+  //
+  // void _redirectToMainConversationView() {
+  //   Navigator.push(
+  //     context,
+  //     MaterialPageRoute(builder: (context) => const MainConversationList()),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {

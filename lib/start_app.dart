@@ -6,8 +6,11 @@ import 'package:my_chat_client/tokens/token_manager.dart';
 import 'package:my_chat_client/tokens/token_manager_factory.dart';
 
 import 'database/db_services/friends/friends_service.dart';
+import 'database/db_services/info_about_me/info_about_me_service.dart';
 import 'database/model/friend.dart';
 import 'di/register_di.dart';
+import 'login_and_registration/login/request/request_is_correct_tokens.dart';
+import 'main_conversations_list/main_conversation_list.dart';
 import 'navigation/page_route_navigation.dart';
 import 'login_and_registration/login/login.dart';
 import 'common/big_app_logo.dart';
@@ -18,26 +21,20 @@ Future<void> main() async {
   RegisterDI registerDI = RegisterDI(DiFactoryImpl());
   registerDI.register();
 
-
-
-  runApp(
-    const App()
-  );
+  runApp(const App());
 }
 
-class App extends StatelessWidget{
+class App extends StatelessWidget {
   const App({super.key});
 
   @override
   Widget build(BuildContext context) {
-
-
     final GetIt _getIt = GetIt.instance;
 
-     // _getIt<FriendsService>().removeFriend(Friend( idFriend: 772, name: 'addasfadsf', surname: 'dasfadsf'));
-     // _getIt<FriendsService>().removeFriend(Friend( idFriend: 774, name: 'sadsf', surname: 'dsafdsaf'));
-     // _getIt<FriendsService>().removeFriend(Friend( idFriend: 779, name: 'Konrad', surname: 'Groń'));
-     // _getIt<FriendsService>().removeFriend(Friend( idFriend: 773, name: 'asdasda', surname: 'asdfasd'));
+    // _getIt<FriendsService>().removeFriend(Friend( idFriend: 772, name: 'addasfadsf', surname: 'dasfadsf'));
+    // _getIt<FriendsService>().removeFriend(Friend( idFriend: 774, name: 'sadsf', surname: 'dsafdsaf'));
+    // _getIt<FriendsService>().removeFriend(Friend( idFriend: 779, name: 'Konrad', surname: 'Groń'));
+    // _getIt<FriendsService>().removeFriend(Friend( idFriend: 773, name: 'asdasda', surname: 'asdfasd'));
 
     //
     // _getIt<FriendsService>().addFriend(Friend( idFriend: 772, name: 'asd', surname: 'sadsadasa'));
@@ -48,21 +45,18 @@ class App extends StatelessWidget{
     // _getIt<FriendsService>().addFriend(Friend( idFriend: 777, name: 'Konrad', surname: 'Groń'));
     // _getIt<FriendsService>().addFriend(Friend( idFriend: 778, name: 'Konrad', surname: 'Groń'));
 
-
-     return MaterialApp(
-     title: "MY CHAT",
-     localizationsDelegates: AppLocalizations.localizationsDelegates,
-     supportedLocales: AppLocalizations.supportedLocales,
-     theme: ThemeData(
-       colorScheme: ColorScheme.fromSeed(seedColor: MainAppStyle.mainColorApp),
-       useMaterial3: true,
-     ),
-     home: const Scaffold(body: StartPanel()),
-   );
+    return MaterialApp(
+      title: "MY CHAT",
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: MainAppStyle.mainColorApp),
+        useMaterial3: true,
+      ),
+      home: const Scaffold(body: StartPanel()),
+    );
   }
-
 }
-
 
 class StartPanel extends StatefulWidget {
   const StartPanel({super.key});
@@ -74,15 +68,44 @@ class StartPanel extends StatefulWidget {
 }
 
 class _StartPanelState extends State<StartPanel> {
+  final GetIt _getIt = GetIt.instance;
+
   @override
   void initState() {
     super.initState();
+    _redirectToSuitablePage();
+  }
 
+  Future<void> _redirectToSuitablePage() async {
+    bool isAlreadySavedDataAboutUser =
+        await _getIt<InfoAboutMeService>().isInfoAboutMeExist();
+
+    if (isAlreadySavedDataAboutUser) {
+      _getIt<RequestIsCorrectTokens>()
+          .isCorrectSavedTokens()
+          .then((isValidTokens) {
+        if (isValidTokens) {
+          _redirectToMainConversationView();
+        }
+      });
+    }else{
+      _redirectToLoginView();
+    }
+
+  }
+
+  void _redirectToLoginView() {
     PageRouteNavigation.navigationTransitionSlideFromDown(
-      context: context,
-      destination:  Login(),
-      delayInSeconds: 1,
-      isClearBackStack: true
+        context: context,
+        destination: Login(),
+        delayInSeconds: 1,
+        isClearBackStack: true);
+  }
+
+  void _redirectToMainConversationView() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const MainConversationList()),
     );
   }
 

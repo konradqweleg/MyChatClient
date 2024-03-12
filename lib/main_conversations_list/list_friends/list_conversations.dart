@@ -10,6 +10,7 @@ import 'package:my_chat_client/database/db_services/messages/messages_service.da
 
 import 'package:my_chat_client/main_conversations_list/list_friends/user_my_chat.dart';
 import 'package:my_chat_client/main_conversations_list/requests/last_messages_with_friends_data.dart';
+import 'package:my_chat_client/main_conversations_list/utils/ListUtils.dart';
 
 import '../../database/model/friend.dart';
 import '../../database/model/message.dart';
@@ -32,12 +33,13 @@ class ListConversationsState extends State<ListConversations> {
   List<UserMyChat> friendsConversations = [];
   List<OnePersonWidget> friendsConversationsWidget = [];
 
+  ListUtils listUtils = ListUtils();
+
   @override
   void initState() {
     super.initState();
-    _showAllFriends();
     _downloadLastMessagesWithFriends();
-    _startTimer();
+    _updateLastMessagesWithFriendsEveryMinutes();
   }
 
   @override
@@ -46,12 +48,9 @@ class ListConversationsState extends State<ListConversations> {
     super.dispose();
   }
 
-  void _startTimer() {
+  void _updateLastMessagesWithFriendsEveryMinutes() {
     _timer = Timer.periodic(const Duration(minutes: 1), (_) {
-
       _downloadLastMessagesWithFriends();
-      _showAllFriends();
-
     });
   }
 
@@ -59,18 +58,28 @@ class ListConversationsState extends State<ListConversations> {
     _timer?.cancel();
   }
 
-  void _showAllFriends() async {
-    setState(() {
-      friendsConversations.clear();
-    });
+
+  void _updateFriendsListView() async {
+
 
     List<Friend> friendsFromDb = await getIt<FriendsService>().getFriends();
+
+
+    List<UserMyChat> potentialUpdatedFriendsConversations = [];
     for (var friend in friendsFromDb) {
       Message friendLastMessage = await getIt<MessagesService>().getLastMessageWithFriendId(friend.idFriend);
       setState(() {
-        friendsConversations.add(UserMyChat("${friend.name} ${friend.surname}", friendLastMessage.message, friend.idFriend));
+        potentialUpdatedFriendsConversations.add(UserMyChat("${friend.name} ${friend.surname}", friendLastMessage.message, friend.idFriend));
       });
     }
+
+    if(!listUtils.isEqualsAllListElements(potentialUpdatedFriendsConversations, friendsConversations)) {
+      setState(() {
+        friendsConversations.clear();
+        friendsConversations.addAll(potentialUpdatedFriendsConversations);
+      });
+    }
+
 
   }
 
@@ -89,6 +98,8 @@ class ListConversationsState extends State<ListConversations> {
       await getIt<FriendsService>().addFriendWhenNotExists(Friend(idFriend: message.idFriend, name: message.name, surname: message.surname));
       await getIt<MessagesService>().addMessage(Message(idMessage: message.idMessage, message: message.lastMessage, idSender: message.idSender, idReceiver: message.idReceiver, date: message.date));
     }
+
+    _updateFriendsListView();
   }
 
   String _trimText(String text) {
@@ -101,7 +112,7 @@ class ListConversationsState extends State<ListConversations> {
 
   @override
   Widget build(BuildContext context) {
-    // Transformuj friendsConversations do friendsConversationsWidget
+
     friendsConversationsWidget = friendsConversations.map((user) => OnePersonWidget(Colors.blue, user.name, _trimText(user.lastMessage))).toList();
 
     return LayoutBuilder(
