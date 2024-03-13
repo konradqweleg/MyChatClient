@@ -8,4 +8,5 @@ class MessageSchema{
 
 
   static const String createTableQuery = "CREATE TABLE Messages(idMessage INTEGER PRIMARY KEY, idSender INTEGER NOT NULL, idReceiver INTEGER NOT NULL, message TEXT NOT NULL, date TEXT NOT NULL)";
+  static const String clearAllDataQuery = "DELETE FROM Messages";
 }

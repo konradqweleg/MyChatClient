@@ -1,8 +1,7 @@
 import 'package:get_it/get_it.dart';
 
 
-import '../action/save_data_about_user.dart';
-import '../action/save_data_about_user_impl.dart';
+
 import '../request/get_user_data_request.dart';
 import '../request/get_user_data_request_impl.dart';
 import '../request/request_is_correct_tokens.dart';
@@ -15,7 +14,6 @@ class LoginDiRegisterImpl extends LoginDiRegister {
   @override
   void register() {
     _registerRequests();
-    _registerActions();
   }
 
   void _registerRequests(){
@@ -23,8 +21,6 @@ class LoginDiRegisterImpl extends LoginDiRegister {
     _getIt.registerSingleton<GetUserDataRequest>(GetUserDataRequestImpl());
   }
 
-  void _registerActions(){
-     _getIt.registerSingleton<SaveDataAboutUser>(SaveDataAboutUserImpl());
-  }
+
 
 }

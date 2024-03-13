@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:my_chat_client/database/create_db/db_create_service.dart';
+import 'package:my_chat_client/database/db_services/info_about_me/info_about_me_service.dart';
+import 'package:my_chat_client/database/schema/friend_schema.dart';
+import 'package:my_chat_client/database/schema/info_about_me_schema.dart';
+import 'package:my_chat_client/database/schema/message_schema.dart';
 import 'package:my_chat_client/di/di_factory_impl.dart';
 import 'package:my_chat_client/di/register_di.dart';
 import 'package:my_chat_client/login_and_registration/common/button/main_action_button.dart';
 import 'package:my_chat_client/login_and_registration/common/result.dart';
+
 import 'package:my_chat_client/login_and_registration/login/check_credentials.dart';
 import 'package:my_chat_client/login_and_registration/login/login_form.dart';
 
@@ -12,8 +18,14 @@ import 'package:my_chat_client/login_and_registration/login/request/login_reques
 import 'package:my_chat_client/login_and_registration/login/request/request_data/login_data.dart';
 import 'package:my_chat_client/login_and_registration/login/request/response/tokens_data.dart';
 import 'package:my_chat_client/main_conversations_list/list_friends/list_conversations.dart';
+import 'package:my_chat_client/main_conversations_list/main_conversation_list.dart';
+import 'package:my_chat_client/main_conversations_list/requests/request_last_message.dart';
 
+import '../helping/db_utils.dart';
 import '../helping/utils.dart';
+import '../mock/di/di_utils.dart';
+import 'mock/mock_download_last_messages_with_friends.dart';
+import 'mock/mock_info_about_me_service.dart';
 
 
 Future<void> enterEmail(WidgetTester tester, String text) async {
@@ -40,8 +52,8 @@ class MockLoginRequest implements LoginRequest {
   Future<Result> login(LoginData loginData) {
     if (loginData.email == "example@mail.pl" &&
         loginData.password == "password123") {
-      return Future.value(Result.success(
-          TokensData(accessToken: 'accessToken', refreshToken: 'requestToken')));
+      return Future.value(Result.success(TokensData(
+          accessToken: 'accessToken', refreshToken: 'requestToken')));
     } else {
       return Future.value(Result.error(LoginRequestErrorStatus.badCredentials));
     }
@@ -49,7 +61,9 @@ class MockLoginRequest implements LoginRequest {
 }
 
 void main() {
-
+  setUp(() async {
+    DiUtils.registerDefaultDi();
+  });
 
   group('LoginFormTests', () {
     testWidgets(
@@ -121,13 +135,16 @@ void main() {
       expect(find.text("Please enter your password"), findsOneWidget);
     });
 
-
     testWidgets(
         "When the user entered the correct login details he was logged into the system",
         (tester) async {
       //given
-      RegisterDI registerDI = RegisterDI( DiFactoryImpl());
-      registerDI.register();
+
+      DbUtils dbUtils = DbUtils();
+      await dbUtils.cleanAllDataInDatabase();
+
+      DiUtils.get().registerSingleton<InfoAboutMeService>(MockInfoAboutMeService());
+      DiUtils.get().registerSingleton<RequestLastMessage>(MockDownloadLastMessagesWithFriends());
 
       await Utils.showView(
           tester,
@@ -142,8 +159,7 @@ void main() {
       await tester.pumpAndSettle();
 
       //then
-      expect(find.byType(ListConversations), findsOneWidget);
-
+      expect(find.byType(MainConversationList), findsOneWidget);
     });
 
     testWidgets(

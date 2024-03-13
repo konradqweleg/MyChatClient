@@ -1,13 +1,11 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:my_chat_client/di/di_factory_impl.dart';
 import 'package:my_chat_client/style/main_style.dart';
-import 'package:my_chat_client/tokens/token_manager.dart';
-import 'package:my_chat_client/tokens/token_manager_factory.dart';
-
-import 'database/db_services/friends/friends_service.dart';
+import 'package:window_manager/window_manager.dart';
 import 'database/db_services/info_about_me/info_about_me_service.dart';
-import 'database/model/friend.dart';
 import 'di/register_di.dart';
 import 'login_and_registration/login/request/request_is_correct_tokens.dart';
 import 'main_conversations_list/main_conversation_list.dart';
@@ -17,9 +15,24 @@ import 'common/big_app_logo.dart';
 import 'common/name_app.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+
+Future<void> setMinWidthAndHeightForWindows() async {
+
+  if (Platform.isWindows) {
+    WidgetsFlutterBinding.ensureInitialized();
+    await windowManager.ensureInitialized();
+    WindowManager.instance.setMinimumSize(const Size(550, 900));
+    WindowManager.instance.setMaximumSize(const Size(550, 900));
+  }
+}
+
+
+
 Future<void> main() async {
   RegisterDI registerDI = RegisterDI(DiFactoryImpl());
   registerDI.register();
+
+  await setMinWidthAndHeightForWindows();
 
   runApp(const App());
 }
@@ -29,21 +42,6 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GetIt _getIt = GetIt.instance;
-
-    // _getIt<FriendsService>().removeFriend(Friend( idFriend: 772, name: 'addasfadsf', surname: 'dasfadsf'));
-    // _getIt<FriendsService>().removeFriend(Friend( idFriend: 774, name: 'sadsf', surname: 'dsafdsaf'));
-    // _getIt<FriendsService>().removeFriend(Friend( idFriend: 779, name: 'Konrad', surname: 'Groń'));
-    // _getIt<FriendsService>().removeFriend(Friend( idFriend: 773, name: 'asdasda', surname: 'asdfasd'));
-
-    //
-    // _getIt<FriendsService>().addFriend(Friend( idFriend: 772, name: 'asd', surname: 'sadsadasa'));
-    // _getIt<FriendsService>().addFriend(Friend( idFriend: 774, name: 'sadsf', surname: 'dsafdsaf'));
-    // _getIt<FriendsService>().addFriend(Friend( idFriend: 773, name: 'asdasda', surname: 'asdfasd'));
-    // _getIt<FriendsService>().addFriend(Friend( idFriend: 775, name: 'Konrad', surname: 'Groń'));
-    // _getIt<FriendsService>().addFriend(Friend( idFriend: 776, name: 'Konrad', surname: 'Groń'));
-    // _getIt<FriendsService>().addFriend(Friend( idFriend: 777, name: 'Konrad', surname: 'Groń'));
-    // _getIt<FriendsService>().addFriend(Friend( idFriend: 778, name: 'Konrad', surname: 'Groń'));
 
     return MaterialApp(
       title: "MY CHAT",

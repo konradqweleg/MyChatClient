@@ -38,8 +38,9 @@ dependencies:
   shared_preferences: ^2.0.6
   flutter_secure_storage: ^9.0.0
   get_it: ^7.6.7
-#  sqflite_common_ffi: 2.3.2  #WINDOWS
+  sqflite_common_ffi: 2.3.2  #WINDOWS
   sqlite3_flutter_libs: ^0.5.20 #ANDROID
+  window_manager: ^0.3.8
   flutter_localizations:
     sdk: flutter
 

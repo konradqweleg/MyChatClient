@@ -6,6 +6,7 @@ class FriendSchema{
   static const String surnameCol = "surname";
 
   static const String createTableQuery = "CREATE TABLE $tableName($idFriendCol INTEGER PRIMARY KEY, $nameCol TEXT NOT NULL, $surnameCol TEXT NOT NULL)";
+  static const String clearAllDataQuery = "DELETE FROM $tableName";
 
 
 }

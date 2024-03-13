@@ -1,6 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:my_chat_client/database/create_db/db_create_service.dart';
+import 'package:my_chat_client/database/schema/friend_schema.dart';
+import 'package:my_chat_client/database/schema/info_about_me_schema.dart';
+import 'package:my_chat_client/database/schema/message_schema.dart';
 import 'package:my_chat_client/login_and_registration/login/button/create_new_account.dart';
 import 'package:my_chat_client/login_and_registration/login/button/reset_password_button.dart';
 import 'package:my_chat_client/login_and_registration/login/login.dart';
@@ -59,19 +63,7 @@ void main() {
       expect(find.byType(Login), findsOneWidget);
     });
 
-    testWidgets(
-        'The application should transition from the login view to the main conversation view when it has valid tokens stored or when their state cannot be determined.',
-        (WidgetTester tester) async {
 
-      //given
-      DiUtils.get().registerSingleton<RequestIsCorrectTokens>(MockRequestIsCorrectSavedTokensCorrectTokens());
-
-      //when
-      await Utils.showView(tester, Login());
-
-      //then
-      expect(find.byType(MainConversationList), findsOneWidget);
-    });
 
     testWidgets(
         'Checking that the login view contains all the required elements',

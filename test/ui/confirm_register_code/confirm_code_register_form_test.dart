@@ -12,6 +12,7 @@ import 'package:my_chat_client/login_and_registration/confirm_code/request/confi
 import 'package:my_chat_client/login_and_registration/confirm_code/request/resend_active_account_code/email_data.dart';
 import 'package:my_chat_client/login_and_registration/confirm_code/request/resend_active_account_code/resend_confirm_account_code_request.dart';
 import 'package:my_chat_client/login_and_registration/confirm_code/request/resend_active_account_code/resend_confirm_account_code_status.dart';
+import 'package:my_chat_client/login_and_registration/login/login.dart';
 
 import 'package:my_chat_client/login_and_registration/register/user_register_data.dart';
 import '../helping/utils.dart';
@@ -61,7 +62,7 @@ class ResendAndShowMesssageAccountCodeRequestMock
 void main() {
   group('ConfirmCodeRegisterForm', () {
     testWidgets(
-        'Checking if the user is logged in after entering the correct code',
+        'When the user enters the correct code, they should be redirected to the login page',
         (WidgetTester tester) async {
       //given
       UserRegisterData registerData =
@@ -78,7 +79,7 @@ void main() {
       //when
       await clickRegisterButton(tester);
       //then
-      expect(find.byType(Conversation), findsOneWidget);
+      expect(find.byType(Login), findsOneWidget);
     });
 
     testWidgets(
