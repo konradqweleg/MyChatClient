@@ -1,4 +1,5 @@
 import 'dart:io' show Platform;
+import 'package:flutter/cupertino.dart';
 import 'package:my_chat_client/database/create_db/platform_specific_init_db/platform_specific_init_db.dart';
 import 'package:my_chat_client/database/create_db/platform_specific_init_db/platform_specific_init_db_windows.dart';
 import 'package:my_chat_client/database/schema/friend_schema.dart';
@@ -43,21 +44,17 @@ class DbCreateService {
     }
   }
 
-  Database? database;
-
+  static Database? database;
   Future<Database> initializeDB() async {
 
-    print("1");
-    if(database != null){
+    if(database != null) {
       return database!;
     }
 
-    print("2");
     runCodeInitialiseSqLiteDbSpecificOnPlatform();
-    //deleteDB();
-    print("3");
+
     String path = await getDatabasesPath();
-    print("4");
+
     database = await openDatabase(
       join(path, _nameDbFile),
       onCreate: (database, version) async {
@@ -68,7 +65,6 @@ class DbCreateService {
       version: _versionDb,
     );
 
-    print("5");
     return database!;
   }
 }

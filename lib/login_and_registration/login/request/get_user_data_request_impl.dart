@@ -18,23 +18,18 @@ class GetUserDataRequestImpl extends GetUserDataRequest {
 
   HttpHelperAuth? httpHelperAuth ;
 
-  @override
-  Future<Result> _getUserDataByEmail(String email) async {
-    Result userData = await httpHelperAuth!.get(RequestsURL.getUserDataByEmail+email);
 
+  @override
+  Future<Result> getUserDataWithEmail(EmailData loginData) async {
+    String fullUrlGetUserLoginData = RequestsURL.getUserDataByEmail + loginData.email;
+    Result userData = await httpHelperAuth!.get(fullUrlGetUserLoginData);
 
     if (userData.isSuccess()) {
       Map parsedResponse = json.decode(userData.data);
       return Result.success(UserData.fromJson(parsedResponse) );
     } else {
-      return Result.error("Error getting user data");
+      return Result.error("Error when try to get user data.");
     }
-  }
-
-
-  @override
-  Future<Result> getUserDataWithEmail(EmailData loginData) {
-    return _getUserDataByEmail(loginData.email);
   }
 
 }

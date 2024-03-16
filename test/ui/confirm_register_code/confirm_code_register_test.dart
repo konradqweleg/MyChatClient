@@ -85,7 +85,7 @@ Future<void> clickRegisterButton(WidgetTester tester) async {
   await tester.pumpAndSettle();
 }
 
-class RegisterUserRequestMock extends RegisterUserRequest{
+class RegisterUserRequestMockOk extends RegisterUserRequest{
   @override
   Future<Result> register(UserRegisterData userRegisterData) {
     throw Future.value(Result.success(RegisterResponseStatus.ok));

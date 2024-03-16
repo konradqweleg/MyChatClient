@@ -16,14 +16,12 @@ import '../../database/db_services/info_about_me/info_about_me_service.dart';
 import '../../database/model/info_about_me.dart';
 import '../../navigation/page_route_navigation.dart';
 import '../../style/main_style.dart';
-import '../../tokens/saved_login_data.dart';
 import '../../tokens/token_manager_factory.dart';
 import '../common/button/main_action_button.dart';
 import '../common/error_message.dart';
 import '../common/errors.dart';
 import '../common/result.dart';
 import '../confirm_code/request/resend_active_account_code/email_data.dart';
-
 
 class LoginForm extends StatefulWidget {
   const LoginForm({required this.loginRequest, super.key});
@@ -78,9 +76,7 @@ class _LoginFormState extends State<LoginForm> {
     return _loginFormKey.currentState!.validate();
   }
 
-
-  void _logIn() {
-
+  void _goToMainConversationList() {
     PageRouteNavigation.navigation(
       context: context,
       destination: const MainConversationList(),
@@ -88,76 +84,68 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  void _checkLoginData() async {
-
+  void _clearErrorMessagesOnView() {
     setState(() {
       _matchedErrorToErrorMessageLoginRequest.clearError();
     });
+  }
+
+  void _checkLoginData() async {
+    _clearErrorMessagesOnView();
 
     bool isPassValidationLoginData = _validateLoginData();
     if (!isPassValidationLoginData) {
       return;
     }
 
-    LoginData loginData = LoginData(email: emailController.text, password: passwordController.text);
+    LoginData loginData = LoginData(
+        email: emailController.text, password: passwordController.text);
+    Result requestLoginResult = await widget.loginRequest.login(loginData);
 
-    Result requestLoginResult = await  widget.loginRequest.login(loginData);
     if (requestLoginResult.isSuccess()) {
-      _saveUserLoginAuth(requestLoginResult);
-      await _savedDataAboutUser(emailController.text);
-      bool isCorrectlySavedDataAboutUser = await _isSavedDataAboutUser(emailController.text);
+      _saveAuthenticateCredentials(requestLoginResult);
+
+      await _downloadBaseDataAboutUser(emailController.text);
+      bool isCorrectlySavedDataAboutUser =
+          await _getIt<InfoAboutMeService>().isInfoAboutMeExist();
+
       if (isCorrectlySavedDataAboutUser) {
-        _logIn();
+        _goToMainConversationList();
       }
-    } else if (requestLoginResult.isError()) {
+
+    } else {
       _initMatchedErrorToErrorMessage();
       setState(() {
         _matchedErrorToErrorMessageLoginRequest
             .setActualError(requestLoginResult);
       });
     }
-
-
   }
 
-  Future<bool> _isSavedDataAboutUser(String userEmail) async {
-    return await _getIt<InfoAboutMeService>().isInfoAboutMeExist();
-  }
-
-
-
-  Future<void> _savedDataAboutUser(String userEmail) async {
-    Result<SaveDataAboutUserStatus> saveDataAboutUserStatus = await _savedDataAboutUser2(userEmail);
-
-    if (saveDataAboutUserStatus.isError()) {
-      _showErrorDownloadInfoDataAboutUserFromServer();
-    }
-  }
-
-    Future<Result<SaveDataAboutUserStatus>> _savedDataAboutUser2(String userEmail)   async {
+  Future<void> _downloadBaseDataAboutUser(String userEmail) async {
     bool isAlreadySavedDataAboutUser = await _getIt<InfoAboutMeService>().isInfoAboutMeExist();
-    if (!isAlreadySavedDataAboutUser) {
-      return await _downloadDataAboutUserFromServerBasedOnEmail(userEmail);
-    }else{
-      return Result.success(SaveDataAboutUserStatus.success);
-    }
 
+    if (!isAlreadySavedDataAboutUser) {
+      Result resultBaseInfoAboutUser = await  _getIt<GetUserDataRequest>().getUserDataWithEmail(EmailData(email: userEmail));
+
+      if (resultBaseInfoAboutUser.isSuccess()) {
+          UserData userData = resultBaseInfoAboutUser.getData();
+          await _savedUserDataInDb(userData);
+      }else{
+        _showErrorDownloadInfoDataAboutUserFromServer();
+      }
+
+    }
   }
 
   Future<void> _savedUserDataInDb(UserData userData) async {
-    return _getIt<InfoAboutMeService>().updateAllInfoAboutMe(InfoAboutMe(id: userData.id!, name: userData.name!, surname: userData.surname!, email: userData.email!));
+    return _getIt<InfoAboutMeService>().updateAllInfoAboutMe(InfoAboutMe(
+        id: userData.id!,
+        name: userData.name!,
+        surname: userData.surname!,
+        email: userData.email!));
   }
 
-    Future<Result<SaveDataAboutUserStatus>> _downloadDataAboutUserFromServerBasedOnEmail(String userEmail) async {
-    Result userDataResult = await _getIt<GetUserDataRequest>().getUserDataWithEmail(EmailData(email: userEmail));
-    if (userDataResult.isSuccess()) {
-      UserData userData = userDataResult.getData();
-      await  _savedUserDataInDb(userData);
-      return Result.success(SaveDataAboutUserStatus.success);
-    } else {
-      return Result.error(SaveDataAboutUserStatus.error);
-    }
-  }
 
   void _showErrorDownloadInfoDataAboutUserFromServer() {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -168,8 +156,7 @@ class _LoginFormState extends State<LoginForm> {
             .errorDownloadInfoDataAboutUserFromServer)));
   }
 
-
-  void _saveUserLoginAuth(Result resultLoginRequest) async {
+  void _saveAuthenticateCredentials(Result resultLoginRequest) {
     TokensData tokens = resultLoginRequest.getData() as TokensData;
 
     TokenManager tokenManager = TokenManagerFactory.getTokenManager();

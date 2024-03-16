@@ -51,13 +51,7 @@ class ResendAccountCodeRequestMock implements ResendConfirmAccountCodeRequest {
   }
 }
 
-class ResendAndShowMesssageAccountCodeRequestMock
-    implements ResendConfirmAccountCodeRequest {
-  @override
-  Future<Result> resendActiveAccountCode(EmailData emailData) {
-    return Future.value(Result.success(ResendConfirmAccountCodeStatus.ok));
-  }
-}
+
 
 void main() {
   group('ConfirmCodeRegisterForm', () {
@@ -65,8 +59,7 @@ void main() {
         'When the user enters the correct code, they should be redirected to the login page',
         (WidgetTester tester) async {
       //given
-      UserRegisterData registerData =
-          UserRegisterData("correct@mail.pl", "name", "surname", "password");
+      UserRegisterData registerData = UserRegisterData("correct@mail.pl", "name", "surname", "password");
 
       await Utils.showView(
         tester,
@@ -107,9 +100,9 @@ void main() {
     testWidgets(
         "When the registration button was clicked with a code that was ok length, the system no should display a message from validator ",
         (tester) async {
+
       //given
-      UserRegisterData registerData =
-          UserRegisterData("correct@mail.pl", "name", "surname", "password");
+      UserRegisterData registerData = UserRegisterData("correct@mail.pl", "name", "surname", "password");
 
       await Utils.showView(
         tester,
