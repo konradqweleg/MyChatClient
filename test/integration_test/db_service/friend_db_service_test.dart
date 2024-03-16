@@ -15,6 +15,8 @@ void main() {
       await dbUtils.cleanAllDataInDatabase();
     });
 
+
+
     testWidgets('Operation add friend should add friend to database',
         (WidgetTester tester) async {
       //given
@@ -28,9 +30,9 @@ void main() {
       List<Friend> friends = await friendsService.getFriends();
 
       expect(friends.length, 1);
-      expect(friends[0].idFriend, 1);
-      expect(friends[0].name, 'John');
-      expect(friends[0].surname, 'Doe');
+      expect(friends[0].idFriend, friendToAdd.idFriend);
+      expect(friends[0].name, friendToAdd.name);
+      expect(friends[0].surname, friendToAdd.surname);
     });
 
     testWidgets('Operation delete friend should delete friend',
@@ -62,9 +64,9 @@ void main() {
           List<Friend> friends = await friendsService.getFriends();
 
           expect(friends.length, 1);
-          expect(friends[0].idFriend, 1);
-          expect(friends[0].name, 'John');
-          expect(friends[0].surname, 'Doe');
+          expect(friends[0].idFriend, friendToAdd.idFriend);
+          expect(friends[0].name, friendToAdd.name);
+          expect(friends[0].surname,friendToAdd.surname);
         });
 
     testWidgets('The operation add a user when it does not exist should ignore added the same user twice',
@@ -81,9 +83,9 @@ void main() {
           List<Friend> friends = await friendsService.getFriends();
 
           expect(friends.length, 1);
-          expect(friends[0].idFriend, 1);
-          expect(friends[0].name, 'John');
-          expect(friends[0].surname, 'Doe');
+          expect(friends[0].idFriend, friendToAdd.idFriend);
+          expect(friends[0].name, friendToAdd.name);
+          expect(friends[0].surname, friendToAdd.surname);
         });
 
 

@@ -15,54 +15,7 @@ class MessagesServiceSqLite extends MessagesService {
     });
   }
 
-  //
-  // @override
-  // Future<void> addMessage2(Message message) {
-  //   return dbCreateService.initializeDB().then((db) {
-  //     // Sprawdź, czy wiadomość już istnieje w bazie danych
-  //     return db.query(
-  //       MessageSchema.tableName,
-  //       where: 'field1 = ? AND field2 = ?', // Tutaj możesz określić warunki, które definiują unikalność danych
-  //       whereArgs: [message.idMessage, message.idMessage], // Przykładowe wartości pól dla warunków
-  //     ).then((existingMessages) {
-  //       if (existingMessages.isEmpty) {
-  //         // Jeśli nie ma istniejących rekordów, dodaj nową wiadomość
-  //         return db.insert(MessageSchema.tableName, message.toMap());
-  //       } else {
-  //         // W przeciwnym razie zwróć pustą przyszłość, nie dodając niczego nowego
-  //         return Future.value();
-  //       }
-  //     });
-  //   });
-  // }
 
-
-  @override
-  Future<List<Message>> getLastMessagesWithEachFriend() {
-    return dbCreateService.initializeDB().then((db) {
-      return db.rawQuery('''
-      SELECT * FROM ${MessageSchema.tableName} 
-      WHERE (${MessageSchema.idMessageCol}, ${MessageSchema.idReceiverCol}) 
-      IN (SELECT ${MessageSchema.idMessageCol}, ${MessageSchema.idReceiverCol} 
-          FROM ${MessageSchema.tableName} 
-          GROUP BY ${MessageSchema.idSenderCol}, ${MessageSchema.idReceiverCol}) 
-      OR (${MessageSchema.idMessageCol}, ${MessageSchema.idSenderCol}) 
-      IN (SELECT ${MessageSchema.idMessageCol}, ${MessageSchema.idSenderCol} 
-          FROM ${MessageSchema.tableName} 
-          GROUP BY ${MessageSchema.idSenderCol}, ${MessageSchema.idReceiverCol})
-      ''');
-    }).then((List<Map<String, dynamic>> maps) {
-      return List.generate(maps.length, (i) {
-        return Message(
-          idMessage: maps[i][MessageSchema.idMessageCol],
-          message: maps[i][MessageSchema.messageCol],
-          date: maps[i][MessageSchema.dateCol],
-          idSender: maps[i][MessageSchema.idSenderCol],
-          idReceiver: maps[i][MessageSchema.idReceiverCol],
-        );
-      });
-    });
-  }
 
   @override
   Future<List<Message>> getMessages() {

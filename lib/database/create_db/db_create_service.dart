@@ -1,5 +1,4 @@
 import 'dart:io' show Platform;
-import 'package:flutter/cupertino.dart';
 import 'package:my_chat_client/database/create_db/platform_specific_init_db/platform_specific_init_db.dart';
 import 'package:my_chat_client/database/create_db/platform_specific_init_db/platform_specific_init_db_windows.dart';
 import 'package:my_chat_client/database/schema/friend_schema.dart';
@@ -50,6 +49,28 @@ class DbCreateService {
     if(database != null) {
       return database!;
     }
+
+    runCodeInitialiseSqLiteDbSpecificOnPlatform();
+
+    String path = await getDatabasesPath();
+
+    database = await openDatabase(
+      join(path, _nameDbFile),
+      onCreate: (database, version) async {
+        await createFriendsTable(database);
+        await createInfoAboutMeTable(database);
+        await createMessageTable(database);
+      },
+      onConfigure: (Database db) async {
+        await db.execute('PRAGMA busy_timeout = 5000');
+      },
+      version: _versionDb,
+    );
+
+    return database!;
+  }
+
+  Future<Database> initializeDBAlwaysOpenNewConnection() async {
 
     runCodeInitialiseSqLiteDbSpecificOnPlatform();
 

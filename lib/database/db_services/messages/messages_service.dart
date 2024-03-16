@@ -6,6 +6,5 @@ abstract class MessagesService {
   Future<List<Message>> getMessages();
   Future<List<Message>> getMessagesWithFriendId(int friendId);
   Future<Message> getLastMessageWithFriendId(int friendId);
-  Future<List<Message>> getLastMessagesWithEachFriend();
   Future<void> updateMessage(Message message);
 }
