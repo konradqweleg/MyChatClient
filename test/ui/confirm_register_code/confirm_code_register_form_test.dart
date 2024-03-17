@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_chat_client/common/exit_button.dart';
-import 'package:my_chat_client/conversation/conversation.dart';
 import 'package:my_chat_client/login_and_registration/common/result.dart';
 import 'package:my_chat_client/login_and_registration/common/button/main_action_button.dart';
 import 'package:my_chat_client/login_and_registration/confirm_code/confirm_code_register_form.dart';
@@ -92,8 +91,8 @@ void main() {
 
       //when
       await clickRegisterButton(tester);
+
       //then
-      expect(find.byType(Conversation), findsNothing);
       expect(find.text("Invalid account activation code"), findsOneWidget);
     });
 

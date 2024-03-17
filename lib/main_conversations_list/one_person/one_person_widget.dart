@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class OnePersonWidget extends StatefulWidget {
@@ -68,7 +67,7 @@ class ColoredCircleWithText extends StatelessWidget {
   final String letters;
   final double size;
 
-  ColoredCircleWithText({super.key, required this.color, required this.letters, required this.size});
+  const ColoredCircleWithText({super.key, required this.color, required this.letters, required this.size});
 
   @override
   Widget build(BuildContext context) {

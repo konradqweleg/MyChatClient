@@ -66,33 +66,6 @@ class InfoAboutMeServiceSqlite implements InfoAboutMeService{
     });
   }
 
-  @override
-  Future<void> setId(int id) async{
-    Database db = await dbCreateService.initializeDB();
-    await db.update(
-      InfoAboutMeSchema.tableName,
-      {InfoAboutMeSchema.idCol: id},
-    );
-
-  }
-
-  @override
-  Future<void> setName(String name) async {
-    Database db = await dbCreateService.initializeDB();
-    await db.update(
-      InfoAboutMeSchema.tableName,
-      {InfoAboutMeSchema.nameCol: name},
-    );
-  }
-
-  @override
-  Future<void> setSurname(String surname) async {
-    Database db = await dbCreateService.initializeDB();
-    await db.update(
-      InfoAboutMeSchema.tableName,
-      {InfoAboutMeSchema.surnameCol: surname},
-    );
-  }
 
   @override
   Future<String> getEmail() {

@@ -50,6 +50,7 @@ class ListConversationsState extends State<ListConversations> {
 
   void _updateLastMessagesWithFriendsEveryMinutes() {
     _timer = Timer.periodic(const Duration(minutes: 1), (_) {
+
       _downloadLastMessagesWithFriends();
     });
   }
@@ -60,10 +61,7 @@ class ListConversationsState extends State<ListConversations> {
 
 
   void _updateFriendsListView() async {
-
-
     List<Friend> friendsFromDb = await getIt<FriendsService>().getFriends();
-
 
     List<UserMyChat> potentialUpdatedFriendsConversations = [];
     for (var friend in friendsFromDb) {
@@ -79,7 +77,6 @@ class ListConversationsState extends State<ListConversations> {
         friendsConversations.addAll(potentialUpdatedFriendsConversations);
       });
     }
-
 
   }
 
