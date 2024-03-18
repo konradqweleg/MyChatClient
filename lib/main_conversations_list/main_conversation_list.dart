@@ -62,7 +62,7 @@ class _MainConversationListState extends State<MainConversationList> {
                       ),
                     ],
                   )),
-              const Expanded(child: ListConversations())
+               Expanded(child: ListConversations(refreshTime: const Duration(minutes: 1),))
             ],
           )),
     );

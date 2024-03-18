@@ -75,13 +75,10 @@ class _StartPanelState extends State<StartPanel> {
   }
 
   Future<void> _redirectToSuitablePage() async {
-    bool isAlreadySavedDataAboutUser =
-        await _getIt<InfoAboutMeService>().isInfoAboutMeExist();
+    bool isAlreadySavedDataAboutUser = await _getIt<InfoAboutMeService>().isInfoAboutMeExist();
 
     if (isAlreadySavedDataAboutUser) {
-      _getIt<RequestIsCorrectTokens>()
-          .isCorrectSavedTokens()
-          .then((isValidTokens) {
+      _getIt<RequestIsCorrectTokens>().isCorrectSavedTokens().then((isValidTokens) {
         if (isValidTokens) {
           _redirectToMainConversationView();
         }
@@ -101,10 +98,16 @@ class _StartPanelState extends State<StartPanel> {
   }
 
   void _redirectToMainConversationView() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const MainConversationList()),
-    );
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(builder: (context) => const MainConversationList()),
+    // );
+
+    PageRouteNavigation.navigationTransitionSlideFromDown(
+        context: context,
+        destination: MainConversationList(),
+        delayInSeconds: 1,
+        isClearBackStack: true);
   }
 
   @override

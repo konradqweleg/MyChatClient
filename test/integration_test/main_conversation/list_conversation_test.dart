@@ -5,11 +5,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:my_chat_client/database/db_services/friends/friends_service.dart';
-import 'package:my_chat_client/database/db_services/friends/friends_service_sqlite.dart';
 import 'package:my_chat_client/database/db_services/info_about_me/info_about_me_service.dart';
-import 'package:my_chat_client/database/db_services/info_about_me/info_about_me_service_sqlite.dart';
 import 'package:my_chat_client/database/db_services/messages/messages_service.dart';
-import 'package:my_chat_client/database/db_services/messages/messages_service_sqlite.dart';
 import 'package:my_chat_client/database/model/friend.dart';
 import 'package:my_chat_client/database/model/info_about_me.dart';
 import 'package:my_chat_client/database/model/message.dart';
@@ -149,7 +146,11 @@ void main() {
       DiUtils.get().registerSingleton<RequestLastMessage>(
           MockRequestGetLastMessageReturnCorrectMessage());
       //when
-      await Utils.showView(tester, const ListConversations());
+      await Utils.showView(
+          tester,
+          ListConversations(
+            refreshTime: const Duration(minutes: 1),
+          ));
 
       //then
       expect(find.text("John Walker"), findsOneWidget);
@@ -170,7 +171,11 @@ void main() {
           id: 1, name: 'Joe', surname: 'Doe', email: 'example@mail.pl'));
       DiUtils.get().registerSingleton<RequestLastMessage>(
           MockRequestGetLastMessageReturnCorrectMessage());
-      await Utils.showView(tester, const ListConversations());
+      await Utils.showView(
+          tester,
+          ListConversations(
+            refreshTime: const Duration(minutes: 1),
+          ));
 
       //when
       List<Friend> friends = await getIt<FriendsService>().getFriends();
@@ -203,7 +208,11 @@ void main() {
           MockRequestGetLastMessageReturnVeryLongOneMessage());
 
       //when
-      await Utils.showView(tester, const ListConversations());
+      await Utils.showView(
+          tester,
+          ListConversations(
+            refreshTime: const Duration(minutes: 1),
+          ));
 
       //then
       expect(find.text("Lorem ipsum dolor sit amet, consectetur adipiscing..."),
@@ -219,7 +228,11 @@ void main() {
           MockRequestGetLastMessageReturnError());
 
       //when
-      await Utils.showView(tester, const ListConversations());
+      await Utils.showView(
+          tester,
+          ListConversations(
+            refreshTime: const Duration(minutes: 1),
+          ));
 
       //then
       // NO EXPECTED ERRORS
@@ -228,33 +241,78 @@ void main() {
     testWidgets(
         "When the second call to the request for the latest messages from friends returns different data, the view should be updated.",
         (widgetTester) async {
-      fakeAsync((fakeAsync) async {
-        //given
-        await getIt<InfoAboutMeService>().updateAllInfoAboutMe(InfoAboutMe(
-            id: 1, name: 'Joe', surname: 'Doe', email: 'example@mail.pl'));
-        DiUtils.get().registerSingleton<RequestLastMessage>(
-            MockRequestGetLastMessageReturnDifferentResponseFirstAndSecondCall());
+      //given
+      await getIt<InfoAboutMeService>().updateAllInfoAboutMe(InfoAboutMe(
+          id: 1, name: 'Joe', surname: 'Doe', email: 'example@mail.pl'));
+      DiUtils.get().registerSingleton<RequestLastMessage>(
+          MockRequestGetLastMessageReturnDifferentResponseFirstAndSecondCall());
 
-        await Utils.showView(widgetTester, const ListConversations());
+      await Utils.showView(
+          widgetTester,
+          ListConversations(
+            refreshTime: const Duration(milliseconds: 500),
+          ));
 
-        expect(find.text("John Walker"), findsOneWidget);
-        expect(find.text("Message First"), findsOneWidget);
+      expect(find.text("John Walker"), findsOneWidget);
+      expect(find.text("Message First"), findsOneWidget);
 
-        expect(find.text("Adam Czajka"), findsNothing);
-        expect(find.text("Message Second"), findsNothing);
-        expect(find.text("Message Third"), findsNothing);
+      expect(find.text("Adam Czajka"), findsNothing);
+      expect(find.text("Message Second"), findsNothing);
+      expect(find.text("Message Third"), findsNothing);
 
-        //when
-        fakeAsync.elapse(const Duration(minutes: 1));
+      //when
+      await widgetTester.pump(const Duration(milliseconds: 500));
 
-        // then
-        expect(find.text("Adam Czajka"), findsOneWidget);
-        expect(find.text("Message Third"), findsOneWidget);
-        expect(find.text("John Walker"), findsOneWidget);
-        expect(find.text("Message Second"), findsOneWidget);
-        expect(find.text("Message First"), findsNothing);
+      // then
+      expect(find.text("Adam Czajka"), findsOneWidget);
+      expect(find.text("Message Third"), findsOneWidget);
+      expect(find.text("John Walker"), findsOneWidget);
+      expect(find.text("Message Second"), findsOneWidget);
+      expect(find.text("Message First"), findsNothing);
+    });
 
-      });
+    testWidgets(
+        "When the request returns an error, the view should be statically loaded from the database of saved messages.",
+        (widgetTester) async {
+      //given
+      DiUtils.get().registerSingleton<RequestLastMessage>(
+          MockRequestGetLastMessageReturnError());
+
+      await getIt<InfoAboutMeService>().updateAllInfoAboutMe(InfoAboutMe(
+          id: 1, name: 'John', surname: 'Doe', email: 'example@mail.pl'));
+
+      await getIt<FriendsService>()
+          .addFriend(Friend(idFriend: 2, name: "John", surname: "Walker"));
+      await getIt<FriendsService>()
+          .addFriend(Friend(idFriend: 3, name: "Adam", surname: "Czajka"));
+
+      await getIt<MessagesService>().addMessage(Message(
+          idMessage: 1,
+          message: 'Message First',
+          idSender: 1,
+          idReceiver: 3,
+          date: ''));
+
+      await getIt<MessagesService>().addMessage(Message(
+          idMessage: 2,
+          message: 'Message Second',
+          idSender: 1,
+          idReceiver: 2,
+          date: ''));
+
+      //when
+      await Utils.showView(
+          widgetTester,
+          ListConversations(
+            refreshTime: const Duration(minutes: 1),
+          ));
+
+      //then
+      expect(find.text("John Walker"), findsOneWidget);
+      expect(find.text("Message First"), findsOneWidget);
+
+      expect(find.text("Adam Czajka"), findsOneWidget);
+      expect(find.text("Message Second"), findsOneWidget);
     });
   });
 }

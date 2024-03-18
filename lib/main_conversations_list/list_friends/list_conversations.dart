@@ -19,7 +19,8 @@ import '../one_person/one_person_widget.dart';
 import '../requests/request_last_message.dart';
 
 class ListConversations extends StatefulWidget {
-  const ListConversations({super.key});
+  ListConversations({super.key,required this.refreshTime});
+  Duration refreshTime;
 
   @override
   State<StatefulWidget> createState() {
@@ -40,6 +41,7 @@ class ListConversationsState extends State<ListConversations> {
     super.initState();
     _downloadLastMessagesWithFriends();
     _updateLastMessagesWithFriendsEveryMinutes();
+    _updateFriendsListView();
   }
 
   @override
@@ -49,7 +51,7 @@ class ListConversationsState extends State<ListConversations> {
   }
 
   void _updateLastMessagesWithFriendsEveryMinutes() {
-    _timer = Timer.periodic(const Duration(minutes: 1), (_) {
+    _timer = Timer.periodic(widget.refreshTime, (_) {
 
       _downloadLastMessagesWithFriends();
     });
@@ -109,7 +111,6 @@ class ListConversationsState extends State<ListConversations> {
 
   @override
   Widget build(BuildContext context) {
-
     friendsConversationsWidget = friendsConversations.map((user) => OnePersonWidget(Colors.blue, user.name, _trimText(user.lastMessage))).toList();
 
     return LayoutBuilder(
