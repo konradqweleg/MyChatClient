@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import '../style/main_style.dart';
 
 class UndoButton extends StatelessWidget {
-  const UndoButton({super.key});
+
+  Color? color;
+
+  UndoButton({super.key, this.color = MainAppStyle.darkMainColorApp});
 
   @override
   Widget build(BuildContext context) {
@@ -10,9 +13,9 @@ class UndoButton extends StatelessWidget {
       onTap: () {
         Navigator.of(context).pop();
       },
-      child: const Icon(
+      child:  Icon(
         Icons.arrow_back,
-        color: MainAppStyle.darkMainColorApp,
+        color: color,
       ),
     );
   }

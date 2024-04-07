@@ -246,6 +246,15 @@
     "description": "The text describing the situation in which the user data could not be downloaded from the server."
   },
 
+  "writeMessage": "Write message... ",
+  "@writeMessage": {
+    "description": "Description of the message asking to enter a message."
+  },
+
+  "sendMessage": "Send",
+  "@sendMessage": {
+    "description": "Description of the command sending message."
+  },
 
   "helloWorld": "Hello World!",
   "@helloWorld": {

@@ -111,7 +111,7 @@ class ListConversationsState extends State<ListConversations> {
 
   @override
   Widget build(BuildContext context) {
-    friendsConversationsWidget = friendsConversations.map((user) => OnePersonWidget(Colors.blue, user.name, _trimText(user.lastMessage))).toList();
+    friendsConversationsWidget = friendsConversations.map((user) => OnePersonWidget(Colors.blue, user.name, _trimText(user.lastMessage),user.idUser)).toList();
 
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints viewportConstraints) {

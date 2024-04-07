@@ -49,6 +49,7 @@ class DbCreateService {
     if(database != null) {
       return database!;
     }
+   // await deleteDB();
 
     runCodeInitialiseSqLiteDbSpecificOnPlatform();
 
@@ -62,11 +63,12 @@ class DbCreateService {
         await createMessageTable(database);
       },
       onConfigure: (Database db) async {
-        await db.execute('PRAGMA busy_timeout = 5000');
+        // Tylko specyficzna platforma wykonuj
+        //await db.execute('PRAGMA busy_timeout = 5000');
       },
       version: _versionDb,
     );
-
+//    await deleteDB();
     return database!;
   }
 

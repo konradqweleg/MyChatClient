@@ -38,12 +38,13 @@ class _ResetPasswordState extends State<ResetPassword> {
                     Container(
                         height: 20,
                         alignment: Alignment.topLeft,
-                        child: const UndoButton()),
+                        child: UndoButton()),
                     Container(
                       // Another fixed-height child.
                       height: 600.0,
                       alignment: Alignment.topLeft,
-                      child:  ResetPasswordForm(IsCorrectPasswordCodeHttp(),SendResetPasswordCodeHttp()),
+                      child: ResetPasswordForm(IsCorrectPasswordCodeHttp(),
+                          SendResetPasswordCodeHttp()),
                     ),
                   ],
                 ),

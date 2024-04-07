@@ -47,5 +47,7 @@
   "badLoginCredentials": "Błędne dane logowania",
   "search": "Szukaj",
   "messages": "Konwersacje",
+  "writeMessage": "Napisz wiadomość... ",
+  "sendMessage": "Wyślij ",
   "errorDownloadInfoDataAboutUserFromServer": "Nie udało się pobrać informacji o użytkowniku z serwera"
 }
