@@ -19,8 +19,8 @@ void main() {
 
           await Utils.showView(
               tester,
-              const OnePersonWidget(
-                  Colors.blue, "John Doe", "Hello, how are you?"
+               const OnePersonWidget(
+                  Colors.blue, "John Doe", "Hello, how are you?",1
               ));
 
           //then
@@ -35,7 +35,7 @@ void main() {
       await Utils.showView(
           tester,
           const OnePersonWidget(
-              Colors.blue, "John Doe", "Hello, how are you?"
+              Colors.blue, "John Doe", "Hello, how are you?",1
           ));
 
       //then

@@ -49,5 +49,6 @@
   "messages": "Konwersacje",
   "writeMessage": "Napisz wiadomość... ",
   "sendMessage": "Wyślij ",
+  "noMessages": "Brak wiadomości",
   "errorDownloadInfoDataAboutUserFromServer": "Nie udało się pobrać informacji o użytkowniku z serwera"
 }

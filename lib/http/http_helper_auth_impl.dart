@@ -10,9 +10,6 @@ import '../tokens/saved_token_status.dart';
 import 'http_helper_auth.dart';
 import 'request_data/acess_token_data.dart';
 
-
-
-
 enum _TypeOfRequest {
   get,
   post,

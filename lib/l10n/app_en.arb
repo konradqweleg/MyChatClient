@@ -1,261 +1,209 @@
 {
   "nameApp": "MY CHAT",
-
   "forgotPassword": "I FORGOT MY PASSWORD",
   "@forgotPassword": {
     "description": "Text indicating that the user has forgotten his password"
   },
-
   "incorrectLoginDetails": "Incorrect login details",
   "@incorrectLoginDetails": {
     "description": "Information about entering incorrect login data"
   },
-
   "login": "Login",
   "@login": {
     "description": "Text of the button that causes the login attempt"
   },
-
   "createNewAccount": "CREATE NEW \n ACCOUNT",
   "@createNewAccount": {
     "description": "Text of the button that causes navigate to register form"
   },
-
   "enterEmail": "Please enter an email",
   "@enterEmail": {
     "description": "Text describing the need for the user to enter an email in the form"
   },
-
   "invalidEmailFormat": "The email address is in an invalid format",
   "@invalidEmailFormat": {
     "description": "Text informing the user that they entered an email address in the wrong format"
   },
-
   "descriptionInputEnterEmail": "Enter your email",
   "@descriptionInputEnterEmail": {
     "description": "Text describing the email input field"
   },
-
-
   "pleaseEnterPassword": "Please enter your password",
   "@pleaseEnterPassword": {
     "description": "Text describing the need for the user to enter password in the form"
   },
-
   "enterPassword": "Enter your password",
   "@enterPassword": {
     "description": "Text describing the password input field"
   },
-
   "pleaseEnterCode": "Please enter code",
   "@pleaseEnterCode": {
     "description": "Text informing the user that he has not entered the code"
   },
-
   "notEnoughCharactersInCode": "Not enough characters in the code",
   "@notEnoughCharactersInCode": {
     "description": "Text informing the user that the code he provided is too short"
   },
-
   "descriptionInputCodeForm": "Enter code",
   "@descriptionInputCodeForm": {
     "description": "Text describing the code entry form"
   },
-
   "notEnoughLettersEntered": "Please enter data",
   "@notEnoughLettersEntered": {
     "description": "Test describing that user entered too few characters"
   },
-
   "notEnteredCharacters": "Please enter text",
   "@notEnteredCharacters": {
     "description": "Text informing the user that he has not entered characters"
   },
-
   "informUserAboutSendCodeOnMail": "We sent you an email with a 4-digit code. Enter it to create an account.",
   "@informUserAboutSendCodeOnMail": {
     "description": "Text informing the user that a confirmation code has been sent to the email address"
   },
-
   "resendCode": "Resend code",
   "@resendCode": {
     "description": "Text informing the user that a confirmation code has been resent to the email address"
   },
-
   "sendConfirmCode": "Send confirm code",
   "@sendConfirmCode": {
     "description": "Text informing the user that a confirmation code has been  sent a moment ago to the email address"
   },
-
   "errorConfirmCode": "Error confirm code",
   "@errorConfirmCode": {
     "description": "Text informing the user that the wrong code has been entered"
   },
-
-
   "username": "Username",
   "@username": {
     "description": "Username label"
   },
-
   "surname": "Surname",
   "@surname": {
     "description": "Surname label"
   },
-
   "registerButtonText": "Register",
   "@registerButtonText": {
     "description": "Description of the user registration action button"
   },
-
   "alreadyUseEmail": "The email address is already used on the site",
   "@alreadyUseEmail": {
     "description": "Message informing the user that an account with this email address already exists "
   },
-
   "enterNewPassword": "Enter a new password",
   "@enterNewPassword": {
     "description": "Message asking the user to enter a new password"
   },
-
   "descriptionSendMailWithResetPasswordCode": "Enter the email address of the account for which you want to reset the password. ",
   "@descriptionSendMailWithResetPasswordCode": {
     "description": "Text informing the user that a password reset code has been sent to them"
   },
-
   "sendResetPasswordCode": "Send code",
   "@sendResetPasswordCode": {
     "description": "Description of the button that sends the code to restart the password"
   },
-
   "noUserWithThisEmail": "A user with such an email address is not in the application database",
   "@noUserWithThisEmail": {
     "description": "Message about the lack of a user with the specified email registered in the service"
   },
-
   "passwordResetCodeSend": "Password reset code has been sent",
   "@passwordResetCodeSend": {
     "description": "Information that a password reset code has been sent"
   },
-
-
-  "enterCodeReceivedOnEmail" : "Enter the code\n received in the email",
+  "enterCodeReceivedOnEmail": "Enter the code\n received in the email",
   "@enterCodeReceivedOnEmail": {
     "description": "Text asking the user to enter the code received by e-mail"
   },
-
-  "resetPassword" : "Reset password",
+  "resetPassword": "Reset password",
   "@resetPassword": {
     "description": "Text for the password change button"
   },
-  "errorCode" : "Invalid code entered",
+  "errorCode": "Invalid code entered",
   "@errorCode": {
     "description": "Text informing that the user has entered an incorrect code"
   },
-
   "sendPasswordResetCode": "A password reset code has been sent",
   "@sendPasswordResetCode": {
     "description": "Text informing the user that a code needed to reset their password has been sent"
   },
-
   "passwordHasBenReset": "Password has been changed",
   "@passwordHasBenReset": {
     "description": "Text explaining to the user that the password has been changed"
   },
-
-
   "emailOccupiedError": "The email address is already associated with an existing account.",
   "@emailOccupiedError": {
     "description": "A message explaining to the user that the email address used for registration is already taken"
   },
-
-
   "alreadyExistsEmailAccountNotActive": "The provided email address is already used for an inactive account.",
   "@alreadyExistsEmailAccountNotActive": {
     "description": "Information for the user when filling out the registration form with the email of an inactive user account."
   },
-
   "goToActiveAccountPanel": "Proceed to account activation",
   "@goToActiveAccountPanel": {
     "description": "Information for the user about the option to proceed to account activation."
   },
-
   "errorRequestInformationOnInternetAccessCheck": "The unexpected error. Please check your internet connection.",
   "@errorRequestInformationOnInternetAccessCheck": {
     "description": "Text informing the user about the request error "
   },
-
   "badCreateAccountConfirmCode": "Invalid account activation code",
   "@badCreateAccountConfirmCode": {
     "description": "The message informing the user during registration that they entered an incorrect account activation code"
   },
-
   "notSendActiveAccountCodeForThisUser": "For this user, the account activation code was not sent.",
   "@notSendActiveAccountCodeForThisUser": {
     "description": "The message informing the user about the lack of sending the account activation code"
   },
-
-
   "passwordTooShort": "The password must consist of at least 6 characters.",
   "@passwordTooShort": {
     "description": "Message informing the user that they have entered a password that is too short."
   },
-
   "tooShortText": "The entered text must have a minimum of two characters.",
   "@tooShortText": {
     "description": "Message informing the user that the entered text in the field must consist of at least two characters."
   },
-
   "userWithSpecifiedEmailNotExist": "The user with the provided email address does not exist.",
   "@userWithSpecifiedEmailNotExist": {
     "description": "Information that a user with such an email does not exist in the service's user database"
   },
-
   "accountNotActive": "The user account has not been activated.",
   "@accountNotActive": {
     "description": "The text describing the situation in which the user account has not been activated."
   },
-
   "userOrResetPasswordCodeNotFound": "No password reset code found for the user. Try starting the registration process again.",
   "@userOrResetPasswordCodeNotFound": {
-        "description": "The text describing the situation in which the user or password reset code was not found in the service."
+    "description": "The text describing the situation in which the user or password reset code was not found in the service."
   },
-
   "badChangePasswordCode": "Wrong password reset code. Try starting the password reset process again.",
   "@badChangePasswordCode": {
-        "description": "The text describing the situation in which the user has entered an incorrect password reset code."
+    "description": "The text describing the situation in which the user has entered an incorrect password reset code."
   },
-
   "badLoginCredentials": "Incorrect login credentials",
-    "@badLoginCredentials": {
-        "description": "The text describing the situation in which the user has entered an incorrect login credentials."
-    },
-
+  "@badLoginCredentials": {
+    "description": "The text describing the situation in which the user has entered an incorrect login credentials."
+  },
   "search": "Search",
   "@search": {
     "description": "The text describing the search action"
   },
-
   "messages": "Message",
   "@messages": {
-        "description": "The text describing list the messages"
+    "description": "The text describing list the messages"
   },
-
   "errorDownloadInfoDataAboutUserFromServer": "Error downloading user data from the server",
   "@errorDownloadInfoDataAboutUserFromServer": {
     "description": "The text describing the situation in which the user data could not be downloaded from the server."
   },
-
   "writeMessage": "Write message... ",
   "@writeMessage": {
     "description": "Description of the message asking to enter a message."
   },
-
   "sendMessage": "Send",
   "@sendMessage": {
     "description": "Description of the command sending message."
   },
-
+  "noMessages": "No messages",
+  "@noMessages": {
+    "description": "The text describing the situation in which there are no messages with user."
+  },
   "helloWorld": "Hello World!",
   "@helloWorld": {
     "description": "The conventional newborn programmer greeting"

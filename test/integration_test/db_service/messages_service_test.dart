@@ -208,12 +208,12 @@ void main() {
       await messagesService.addMessage(secondMessageWithFriend);
 
       //when
-      Message lastMessageWithFriend =
+      Message? lastMessageWithFriend =
           await messagesService.getLastMessageWithFriendId(2);
 
       //then
       expect(
-          lastMessageWithFriend.idMessage, secondMessageWithFriend.idMessage);
+          lastMessageWithFriend!.idMessage, secondMessageWithFriend.idMessage);
       expect(lastMessageWithFriend.message, secondMessageWithFriend.message);
       expect(lastMessageWithFriend.idSender, secondMessageWithFriend.idSender);
       expect(

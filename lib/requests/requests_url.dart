@@ -21,6 +21,7 @@ class RequestsURL{
   static String getLastMessagesWithFriends = "http://$ipAddress:8083/api/v1/message/getLastMessageWithAllFriendsUser?idUser=";
   static String isValidTokens = "http://$ipAddress:8083/api/v1/auth/isCorrectAccessToken";
   static String getUserDataByEmail = "http://$ipAddress:8083/api/v1/user/getUserAboutEmail?email=";
+  static String getUserFriends = "http://$ipAddress:8083/api/v1/friends/getUserFriends?idUser=";
 
 
 }

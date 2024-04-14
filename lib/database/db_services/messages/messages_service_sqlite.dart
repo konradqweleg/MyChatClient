@@ -75,10 +75,14 @@ class MessagesServiceSqLite extends MessagesService {
   }
 
   @override
-  Future<Message> getLastMessageWithFriendId(int friendId) {
+  Future<Message?> getLastMessageWithFriendId(int friendId) {
     return dbCreateService.initializeDB().then((db) {
       return db.query(MessageSchema.tableName, where: '${MessageSchema.idReceiverCol} = ? OR ${MessageSchema.idSenderCol} = ?', whereArgs: [friendId, friendId], orderBy: '${MessageSchema.idMessageCol} DESC');
     }).then((List<Map<String, dynamic>> maps) {
+      if(maps.isEmpty){
+        return null;
+      }
+
       return Message(
         idMessage: maps[0][MessageSchema.idMessageCol],
         message: maps[0][MessageSchema.messageCol],

@@ -16,8 +16,10 @@ import '../../database/model/friend.dart';
 import '../../database/model/message.dart';
 import '../../login_and_registration/common/result.dart';
 import '../one_person/one_person_widget.dart';
+import '../requests/friend_data.dart';
+import '../requests/request_get_user_friends.dart';
 import '../requests/request_last_message.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class ListConversations extends StatefulWidget {
   ListConversations({super.key,required this.refreshTime});
   Duration refreshTime;
@@ -40,6 +42,7 @@ class ListConversationsState extends State<ListConversations> {
   void initState() {
     super.initState();
     _downloadLastMessagesWithFriends();
+    _downloadUserFriends();
     _updateLastMessagesWithFriendsEveryMinutes();
     _updateFriendsListView();
   }
@@ -54,6 +57,7 @@ class ListConversationsState extends State<ListConversations> {
     _timer = Timer.periodic(widget.refreshTime, (_) {
 
       _downloadLastMessagesWithFriends();
+      _downloadUserFriends();
     });
   }
 
@@ -62,14 +66,25 @@ class ListConversationsState extends State<ListConversations> {
   }
 
 
+
   void _updateFriendsListView() async {
     List<Friend> friendsFromDb = await getIt<FriendsService>().getFriends();
 
     List<UserMyChat> potentialUpdatedFriendsConversations = [];
     for (var friend in friendsFromDb) {
-      Message friendLastMessage = await getIt<MessagesService>().getLastMessageWithFriendId(friend.idFriend);
+      print(friend);
+      Message? friendLastMessage = await getIt<MessagesService>().getLastMessageWithFriendId(friend.idFriend);
+      print(friendLastMessage);
       setState(() {
-        potentialUpdatedFriendsConversations.add(UserMyChat("${friend.name} ${friend.surname}", friendLastMessage.message, friend.idFriend));
+        if(friendLastMessage != null) {
+          potentialUpdatedFriendsConversations.add(UserMyChat(
+              "${friend.name} ${friend.surname}", friendLastMessage.message,
+              friend.idFriend));
+        }else{
+          potentialUpdatedFriendsConversations.add(UserMyChat(
+              "${friend.name} ${friend.surname}", AppLocalizations.of(context)!.noMessages,
+              friend.idFriend));
+        }
       });
     }
 
@@ -81,6 +96,27 @@ class ListConversationsState extends State<ListConversations> {
     }
 
   }
+
+
+  Future<void> _downloadUserFriends() async {
+    int idUser = await getIt<InfoAboutMeService>().getId();
+    Result userFriends = await getIt<RequestGetUserFriends>().getUserFriends(idUser);
+
+    print(userFriends.data);
+    if(userFriends.isError()) {
+      return;
+    }
+
+    var listFriendsRawData = jsonDecode(userFriends.data as String) as List;
+    List<FriendData> friends = listFriendsRawData.map((tagJson) => FriendData.fromMap(tagJson)).toList();
+
+    for(var friend in friends) {
+      await getIt<FriendsService>().addFriendWhenNotExists(Friend(idFriend: friend.id, name: friend.name, surname: friend.surname));
+    }
+
+    _updateFriendsListView();
+  }
+
 
   Future<void> _downloadLastMessagesWithFriends() async {
     int idUser = await getIt<InfoAboutMeService>().getId();

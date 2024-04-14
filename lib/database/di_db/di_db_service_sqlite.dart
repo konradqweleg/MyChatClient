@@ -1,7 +1,9 @@
 import 'package:get_it/get_it.dart';
+import 'package:my_chat_client/main_conversations_list/requests/request_get_user_friends.dart';
 import 'package:my_chat_client/main_conversations_list/requests/request_last_message.dart';
 import 'package:my_chat_client/main_conversations_list/requests/request_last_message_with_friends_impl.dart';
 
+import '../../main_conversations_list/requests/request_get_user_friends_impl.dart';
 import '../db_services/friends/friends_service.dart';
 import '../db_services/friends/friends_service_sqlite.dart';
 import '../db_services/info_about_me/info_about_me_service.dart';
@@ -18,6 +20,7 @@ class DiDbServiceSqlite extends DiDbService {
     getIt.registerSingleton<InfoAboutMeService>(InfoAboutMeServiceSqlite());
     getIt.registerSingleton<MessagesService>(MessagesServiceSqLite());
     getIt.registerSingleton<RequestLastMessage>(RequestLastMessagesWithFriendsImpl());
+    getIt.registerSingleton<RequestGetUserFriends>(RequestGetUserFriendsImpl());
   }
 
 }
