@@ -14,18 +14,17 @@ class ConversationFriendIcon extends StatefulWidget {
 class _ConversationFriendIconState extends State<ConversationFriendIcon> {
 
   String getInitials(String name) {
-
-
-    int maxInitialsCharacters = name.split(" ").length;
     List<String> names = name.split(" ");
     String initials = "";
 
     if (name.isEmpty) {
-      maxInitialsCharacters = 0;
+      return initials;
     }
 
-    for (var i = 0; i < maxInitialsCharacters; i++) {
-      initials += names[i][0].toUpperCase();
+    for (var i = 0; i < names.length; i++) {
+      if (names[i].isNotEmpty) {
+        initials += names[i][0].toUpperCase();
+      }
     }
 
     return initials;

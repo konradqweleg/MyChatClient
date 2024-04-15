@@ -64,6 +64,7 @@ class _ConversationState extends State<Conversation> {
   List<MessageOnViewData> messages = [];
   GetIt getIt = GetIt.instance;
   String friendName = "";
+  String friendSurname = "";
 
   Future<void> readFriendNameFromId(int id)  async {
    List<Friend> friendsFromDb = await getIt<FriendsService>().getFriends();
@@ -71,6 +72,7 @@ class _ConversationState extends State<Conversation> {
 
       List<Friend> friendWithMatchId = friendsFromDb.where((element) => element.idFriend == id).toList();
       friendName = friendWithMatchId.isNotEmpty ? friendWithMatchId.first.name : "";
+      friendSurname = friendWithMatchId.isNotEmpty ? friendWithMatchId.first.surname : "";
 
     });
 
@@ -85,11 +87,12 @@ class _ConversationState extends State<Conversation> {
           .map((e) => MessageOnViewData(
               message: e.message, isMessageFromFromFriend: e.idSender != idUser))
           .toList();
-      // messages = List<MessageOnViewData>.generate(
-      //     10,
-      //     (index) => MessageOnViewData(
-      //         message: "lorem ipsum", isMessageFromFromFriend: true));
     });
+  }
+
+  Future<void> downloadMessageWithFriends() async {
+
+
   }
 
   List<Widget> createMessageWidgetWithAlignment(
@@ -149,7 +152,7 @@ class _ConversationState extends State<Conversation> {
                   Align(
                     alignment: Alignment.center,
                     child: ConversationFriendIcon(
-                      friendName,
+                      friendName +" "+ friendSurname,
                     ),
                   ),
                 ],
@@ -175,7 +178,7 @@ class _ConversationState extends State<Conversation> {
                   ),
                 ),
               ),
-              const SendMessageWidget()
+               SendMessageWidget(idFriend: widget.idFriend,updateMessages: (){},)
             ],
           )),
     );
