@@ -7,4 +7,5 @@ abstract class MessagesService {
   Future<List<Message>> getMessagesWithFriendId(int friendId);
   Future<Message?> getLastMessageWithFriendId(int friendId);
   Future<void> updateMessage(Message message);
+  Future<void> addMessagesWhenNoExists(List<Message> messages);
 }

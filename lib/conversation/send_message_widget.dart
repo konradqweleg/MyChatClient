@@ -25,7 +25,7 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
 
   Future<void> _sendMessage() async {
     int idUser = await getIt<InfoAboutMeService>().getId();
-    getIt.get<SendMessageRequest>().sendMessage(MessageData(message: _textInField, idUserSender: idUser, idUserReceiver: widget.idFriend));
+    await getIt.get<SendMessageRequest>().sendMessage(MessageData(message: _textInField, idUserSender: idUser, idUserReceiver: widget.idFriend));
     widget.updateMessages();
     _controller.clear();
   }

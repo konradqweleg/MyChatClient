@@ -10,7 +10,7 @@ class RequestGetMessagesWithFriendsImpl extends RequestGetMessagesWithFriend {
 
   @override
   Future<Result> getMessagesWithFriend(int idUser,int idFriend) async {
-    Result userFriends =   await httpHelperAuth.get("${RequestsURL.getMessagesWithFriend}$idUser&idFriend=$idFriend");
+    Result userFriends =  await httpHelperAuth.get("${RequestsURL.getMessagesWithFriend}$idUser&idFriend=$idFriend");
     return userFriends;
   }
 
