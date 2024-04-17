@@ -93,5 +93,14 @@ class MessagesServiceSqLite extends MessagesService {
     });
   }
 
+  @override
+  Future<void> addMessagesWhenNoExists(List<Message> messages) {
+    return dbCreateService.initializeDB().then((db) {
+      for(var message in messages) {
+        db.insert(MessageSchema.tableName, message.toMap(), conflictAlgorithm: ConflictAlgorithm.ignore);
+      }
+    });
+  }
+
 
 }
