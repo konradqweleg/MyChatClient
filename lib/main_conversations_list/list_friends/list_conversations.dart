@@ -72,9 +72,7 @@ class ListConversationsState extends State<ListConversations> {
 
     List<UserMyChat> potentialUpdatedFriendsConversations = [];
     for (var friend in friendsFromDb) {
-      print(friend);
       Message? friendLastMessage = await getIt<MessagesService>().getLastMessageWithFriendId(friend.idFriend);
-      print(friendLastMessage);
       setState(() {
         if(friendLastMessage != null) {
           potentialUpdatedFriendsConversations.add(UserMyChat(
@@ -102,7 +100,6 @@ class ListConversationsState extends State<ListConversations> {
     int idUser = await getIt<InfoAboutMeService>().getId();
     Result userFriends = await getIt<RequestGetUserFriends>().getUserFriends(idUser);
 
-    print(userFriends.data);
     if(userFriends.isError()) {
       return;
     }
