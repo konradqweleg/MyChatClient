@@ -21,6 +21,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'conversation_friend_icon.dart';
 import 'message_view.dart';
 import 'package:intl/intl.dart';
+
 void main() {
   RegisterDI registerDI = RegisterDI(DiFactoryImpl());
   registerDI.register();
@@ -60,20 +61,22 @@ class Conversation extends StatefulWidget {
 
 class MessageOnViewData {
   String message;
-  bool isMessageFromFromFriend;
+  bool isMessageFromFriend;
+  int idMessage;
 
   MessageOnViewData(
-      {required this.message, required this.isMessageFromFromFriend});
+      {required this.message, required this.isMessageFromFriend,required this.idMessage});
 }
 
 class _ConversationState extends State<Conversation> {
-  List<MessageOnViewData> messages = [];
-  GetIt getIt = GetIt.instance;
-  String friendName = "";
-  String friendSurname = "";
-
+  final List<MessageOnViewData> _messages = [];
+  final GetIt _getIt = GetIt.instance;
+  String _friendName = "";
+  String _friendSurname = "";
   Timer? _timer;
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
+  final Duration refreshMessagesDuration = const Duration(seconds: 45);
+  final Duration scrollDurationToEndConversationInMilliseconds = const Duration(milliseconds: 300);
 
   @override dispose() {
     _timer?.cancel();
@@ -82,101 +85,108 @@ class _ConversationState extends State<Conversation> {
 
   @override initState() {
     super.initState();
-    _timer = Timer.periodic(Duration(seconds: 45), (_) {
-      downloadMessageWithFriends();
-
-
-
-    });
-
-
+   _initTimerDownloadMessages();
 
   }
 
-  Future<void> readFriendNameFromId(int id)  async {
-   List<Friend> friendsFromDb = await getIt<FriendsService>().getFriends();
-    setState(() {
+  void _initTimerDownloadMessages() {
+    _timer = Timer.periodic(refreshMessagesDuration, (_) {
+      _downloadMessageWithFriends();
+    });
+  }
 
-      List<Friend> friendWithMatchId = friendsFromDb.where((element) => element.idFriend == id).toList();
-      friendName = friendWithMatchId.isNotEmpty ? friendWithMatchId.first.name : "";
-      friendSurname = friendWithMatchId.isNotEmpty ? friendWithMatchId.first.surname : "";
+
+  Future<void> _readFriendNameFromId(int id)  async {
+   List<Friend> allFriendsInLocalDatabase = await _getIt<FriendsService>().getFriends();
+    setState(() {
+      List<Friend> friendWithMatchId = allFriendsInLocalDatabase.where((element) => element.idFriend == id).toList();
+      _friendName = friendWithMatchId.isNotEmpty ? friendWithMatchId.first.name : "";
+      _friendSurname = friendWithMatchId.isNotEmpty ? friendWithMatchId.first.surname : "";
 
     });
 
     return Future.value();
   }
 
-  Future<void> readMessagesWithFriends(int id) async {
-    List<Message> friendsFromDb = await getIt<MessagesService>().getMessagesWithFriendId(id);
-    int idUser = await getIt<InfoAboutMeService>().getId();
+  Future<void> _readMessagesWithFriendsFromDbToView(int id) async {
+    List<Message> messageWithFriend = await _getIt<MessagesService>().getMessagesWithFriendId(id);
+    int idUser = await _getIt<InfoAboutMeService>().getId();
 
-    List<MessageOnViewData> newMessages = friendsFromDb
-        .map((e) => MessageOnViewData(
-        message: e.message, isMessageFromFromFriend: e.idSender != idUser))
+    List<MessageOnViewData> messagesOnViewWithFriends = messageWithFriend
+        .map((e) => MessageOnViewData(message: e.message, isMessageFromFriend: e.idSender != idUser,idMessage: e.idMessage))
         .toList();
 
-    List<MessageOnViewData> updatedMessages = newMessages.where((newMessage) {
-      return !messages.any((oldMessage) =>
+    List<MessageOnViewData> newMessagesNoExistsOnViewAlready = messagesOnViewWithFriends.where((newMessage) {
+      return !_messages.any((oldMessage) =>
       oldMessage.message == newMessage.message &&
-          oldMessage.isMessageFromFromFriend == newMessage.isMessageFromFromFriend);
+          oldMessage.idMessage == newMessage.idMessage);
     }).toList();
 
-    if (updatedMessages.isNotEmpty) {
+    if (newMessagesNoExistsOnViewAlready.isNotEmpty) {
       setState(() {
-        messages.addAll(updatedMessages);
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          _scrollController.animateTo(
-            _scrollController.position.maxScrollExtent,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeOut,
-          );
-        });
+        _messages.addAll(newMessagesNoExistsOnViewAlready);
+        _scrollToEndConversation();
       });
     }
   }
 
-  Future<void> downloadMessageWithFriends() async {
-    int idUser = await getIt<InfoAboutMeService>().getId();
-    Result lastMessages = await getIt<RequestGetMessagesWithFriend>().getMessagesWithFriend(idUser,widget.idFriend);
+  void _scrollToEndConversation() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: scrollDurationToEndConversationInMilliseconds,
+        curve: Curves.easeOut,
+      );
+    });
+  }
+
+  String _convertTimestampToFormattedDate(int timestamp) {
+    DateTime date = DateTime.fromMillisecondsSinceEpoch(timestamp);
+    return DateFormat('yyyy-MM-dd – kk:mm').format(date);
+  }
+
+
+
+  Future<Result> _downloadMessageViaHttp() async {
+    int idUser = await _getIt<InfoAboutMeService>().getId();
+    Result lastMessages = await _getIt<RequestGetMessagesWithFriend>().getMessagesWithFriend(idUser,widget.idFriend);
+    return lastMessages;
+  }
+
+  List<MessageData> _convertRawMessagesToMessageData(Result lastMessages) {
+    var listConversationsRawData = jsonDecode(lastMessages.data as String) as List;
+    List<MessageData> lastMessagesWithFriends = listConversationsRawData.map((tagJson) => MessageData.fromMap(tagJson)).toList();
+    return lastMessagesWithFriends;
+  }
+
+  Future<void> _addDownloadedMessagesToDb(List<MessageData> lastMessagesWithFriends) async {
+    await _getIt<MessagesService>().addMessagesWhenNoExists(lastMessagesWithFriends.map((e) => Message(idMessage: e.idMessage, idSender: e.idSender, idReceiver: e.idReceiver, message: e.message, date: _convertTimestampToFormattedDate(e.dateTimeMessage))).toList());
+  }
+
+  Future<void> _downloadMessageWithFriends() async {
+    Result lastMessages = await _downloadMessageViaHttp();
 
     if(lastMessages.isError()) {
       return;
     }
 
-    var listConversationsRawData = jsonDecode(lastMessages.data as String) as List;
-    List<MessageData> lastMessagesWithFriends = listConversationsRawData.map((tagJson) => MessageData.fromMap(tagJson)).toList();
-
-    int timestamp = 1633024862000;
-    DateTime date = DateTime.fromMillisecondsSinceEpoch(timestamp);
-    String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(date);
-
-    await getIt<MessagesService>().addMessagesWhenNoExists(lastMessagesWithFriends.map((e) => Message(idMessage: e.idMessage, idSender: e.idSender, idReceiver: e.idReceiver, message: e.message, date: formattedDate)).toList());
-
-
-     await  readMessagesWithFriends(widget.idFriend);
-
-    _scrollController.animateTo(
-      _scrollController.position.maxScrollExtent+75,
-      duration: Duration(milliseconds: 500),
-      curve: Curves.easeOut,
-    );
-
-
-
-
+    List<MessageData> lastMessagesWithFriends = _convertRawMessagesToMessageData(lastMessages);
+    await _addDownloadedMessagesToDb(lastMessagesWithFriends);
+    await  _readMessagesWithFriendsFromDbToView(widget.idFriend);
+    _scrollToEndConversation();
   }
 
-  List<Widget> createMessageWidgetWithAlignment(
+  List<Widget> _createMessageWidgetWithAlignment(
       List<MessageOnViewData> messages) {
     List<Widget> messageView = messages
         .map((e) => Padding(
               padding: const EdgeInsets.only(top: 20.0),
               child: Align(
-                alignment: e.isMessageFromFromFriend
+                alignment: e.isMessageFromFriend
                     ? Alignment.centerLeft
                     : Alignment.centerRight,
                 child: MessageView(
-                  isMessageFromFromFriend: e.isMessageFromFromFriend,
+                  isMessageFromFromFriend: e.isMessageFromFriend,
                   message: e.message,
                 ),
               ),
@@ -192,8 +202,8 @@ class _ConversationState extends State<Conversation> {
 
   @override
   Widget build(BuildContext context) {
-    readMessagesWithFriends(widget.idFriend);
-    readFriendNameFromId(widget.idFriend);
+    _readMessagesWithFriendsFromDbToView(widget.idFriend);
+    _readFriendNameFromId(widget.idFriend);
     return Scaffold(
       appBar: null,
       backgroundColor: MainAppStyle.mainColorApp,
@@ -223,7 +233,7 @@ class _ConversationState extends State<Conversation> {
                   Align(
                     alignment: Alignment.center,
                     child: ConversationFriendIcon(
-                      friendName +" "+ friendSurname,
+                      "$_friendName $_friendSurname",
                     ),
                   ),
                 ],
@@ -243,14 +253,14 @@ class _ConversationState extends State<Conversation> {
                     child: SingleChildScrollView(
                       controller: _scrollController,
                       child: Column(
-                        children: createMessageWidgetWithAlignment(messages),
+                        children: _createMessageWidgetWithAlignment(_messages),
 
                       ),
                     ),
                   ),
                 ),
               ),
-               SendMessageWidget(idFriend: widget.idFriend,updateMessages: downloadMessageWithFriends,)
+               SendMessageWidget(idFriend: widget.idFriend,updateMessages: _downloadMessageWithFriends,)
             ],
           )),
     );

@@ -30,8 +30,6 @@ class HttpHelperAuthImpl implements HttpHelperAuth {
 
   @override
   Future<Result> post(String url, dynamic body) async {
-    print("body: $body");
-    print("url: $url");
     return _requestWithCheckToken(_TypeOfRequest.post,url, body);
   }
 
