@@ -59,6 +59,7 @@ class HttpHelperAuthImpl implements HttpHelperAuth {
       Result resultRequestWithAccessToken = await _request(requestType, url, accessToken!, body: body, timeoutDuration: timeoutDuration);
 
 
+
       if (resultRequestWithAccessToken.isSuccess()) {
         return resultRequestWithAccessToken;
       } else if (resultRequestWithAccessToken.isError() && resultRequestWithAccessToken.getData() == AuthRequestStatus.accessTokenExpired) {

@@ -1,7 +1,18 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:my_chat_client/main_conversations_list/add_friend/request_add_friend.dart';
 
 import '../../conversation/conversation.dart';
+import '../../database/db_services/friends/friends_service.dart';
+import '../../database/db_services/info_about_me/info_about_me_service.dart';
+import '../../database/model/friend.dart';
+import '../../http/request_response_general/status.dart';
+import '../../login_and_registration/common/result.dart';
 import '../../navigation/page_route_navigation.dart';
+import '../requests/friend_data.dart';
+import '../requests/request_get_user_friends.dart';
 
 class ElemAddFriendList extends StatefulWidget {
   final String _personName;
@@ -15,6 +26,38 @@ class ElemAddFriendList extends StatefulWidget {
 }
 
 class _ElemAddFriendListState extends State<ElemAddFriendList> {
+  GetIt getIt = GetIt.instance;
+
+  Future<void> _addFriends() async {
+
+    int idUser = await getIt<InfoAboutMeService>().getId();
+    Result usersMatchPattern = await getIt<RequestAddFriend>().requestAddFriend(idUser, widget._idFriend);
+
+    if(usersMatchPattern.isError()) {
+      return;
+    }
+
+    Map parsedResponse = json.decode(usersMatchPattern.data);
+    Status status = Status.fromJson(parsedResponse);
+
+
+
+    if(status.correctResponse) {
+      Result userFriends = await getIt<RequestGetUserFriends>().getUserFriends(idUser);
+
+      if(userFriends.isError()) {
+        return;
+      }
+
+      var listFriendsRawData = jsonDecode(userFriends.data as String) as List;
+      List<FriendData> friends = listFriendsRawData.map((tagJson) => FriendData.fromMap(tagJson)).toList();
+
+      for(var friend in friends) {
+        await getIt<FriendsService>().addFriendWhenNotExists(Friend(idFriend: friend.id, name: friend.name, surname: friend.surname));
+      }
+    }
+  }
+
 
   String getInitials(String name) {
     int maxInitialsCharacters = 2;
@@ -61,7 +104,9 @@ class _ElemAddFriendListState extends State<ElemAddFriendList> {
                   children: [
                     Text("${widget._personName} ${widget._personSurname}",style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold )),
                     ElevatedButton(
-                      onPressed: (){},
+                      onPressed: (){
+                         _addFriends();
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue, // Set the button color to blue
                         shape: RoundedRectangleBorder(
