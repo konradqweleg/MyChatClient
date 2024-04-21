@@ -24,6 +24,7 @@ class RequestsURL{
   static String getUserFriends = "http://$ipAddress:8083/api/v1/friends/getUserFriends?idUser=";
   static String postSendMessage= "http://$ipAddress:8083/api/v1/message/insertMessage";
   static String getMessagesWithFriend = "http://$ipAddress:8083/api/v1/message/getMessageBetweenUsers?idFirstUser=";
+  static String findUserMatchingPattern = "http://$ipAddress:8083/api/v1/user/getUsersMatchingNameSurname?patternName=";
 
 
 }

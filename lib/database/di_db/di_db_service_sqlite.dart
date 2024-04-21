@@ -7,6 +7,8 @@ import 'package:my_chat_client/main_conversations_list/requests/request_last_mes
 import '../../conversation/requests/request_get_messages_with_friend.dart';
 import '../../conversation/requests/send_message_request.dart';
 import '../../conversation/requests/send_message_request_impl.dart';
+import '../../main_conversations_list/add_friend/request_find_user_matching_pattern.dart';
+import '../../main_conversations_list/add_friend/request_find_user_matching_pattern_impl.dart';
 import '../../main_conversations_list/requests/request_get_user_friends_impl.dart';
 import '../db_services/friends/friends_service.dart';
 import '../db_services/friends/friends_service_sqlite.dart';
@@ -27,6 +29,7 @@ class DiDbServiceSqlite extends DiDbService {
     getIt.registerSingleton<RequestGetUserFriends>(RequestGetUserFriendsImpl());
     getIt.registerSingleton<SendMessageRequest>(SendMessageRequestImpl());
     getIt.registerSingleton<RequestGetMessagesWithFriend>(RequestGetMessagesWithFriendsImpl());
+    getIt.registerSingleton<RequestFindUserMatchingPattern>(RequestFindUserMatchingPatternImpl());
   }
 
 }
