@@ -3,7 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 import '../../navigation/page_route_navigation.dart';
-import '../add_friend/add_friend_view.dart';
+import '../add_friend/find_users_view.dart';
 
 class SearchPersonAndMessage extends StatefulWidget {
   const SearchPersonAndMessage({Key? key}) : super(key: key);

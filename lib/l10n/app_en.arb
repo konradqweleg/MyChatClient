@@ -204,6 +204,14 @@
   "@noMessages": {
     "description": "The text describing the situation in which there are no messages with user."
   },
+  "people": "People",
+  "@people": {
+    "description": "The text describing the list of people"
+  },
+  "addFriend": "Add friend",
+  "@addFriend": {
+    "description": "The text describing the action of adding a friend"
+  },
   "helloWorld": "Hello World!",
   "@helloWorld": {
     "description": "The conventional newborn programmer greeting"

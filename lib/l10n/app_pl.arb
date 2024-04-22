@@ -50,5 +50,7 @@
   "writeMessage": "Napisz wiadomość... ",
   "sendMessage": "Wyślij ",
   "noMessages": "Brak wiadomości",
+  "people": "Ludzie",
+  "addFriend": "Dodaj do znajomych",
   "errorDownloadInfoDataAboutUserFromServer": "Nie udało się pobrać informacji o użytkowniku z serwera"
 }
