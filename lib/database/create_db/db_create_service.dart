@@ -72,7 +72,11 @@ class DbCreateService {
     return database!;
   }
 
-  Future<Database> initializeDBAlwaysOpenNewConnection() async {
+  Future<Database> initializeDbForTests() async {
+
+    if(database != null) {
+      return database!;
+    }
 
     runCodeInitialiseSqLiteDbSpecificOnPlatform();
 
@@ -85,9 +89,11 @@ class DbCreateService {
         await createInfoAboutMeTable(database);
         await createMessageTable(database);
       },
+      onConfigure: (Database db) async {
+        await db.execute('PRAGMA busy_timeout = 5000');
+      },
       version: _versionDb,
     );
-
     return database!;
   }
 }

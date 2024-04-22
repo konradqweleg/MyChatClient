@@ -11,7 +11,7 @@ import 'package:my_chat_client/login_and_registration/login/login.dart';
 import 'package:my_chat_client/login_and_registration/login/request/request_is_correct_tokens.dart';
 import 'package:my_chat_client/login_and_registration/register/register.dart';
 import 'package:my_chat_client/login_and_registration/reset_password/reset_password.dart';
-import 'package:my_chat_client/main_conversations_list/main_conversation_list.dart';
+import 'package:my_chat_client/main_conversations_list/conversations_widget.dart';
 import '../helping/utils.dart';
 import '../mock/di/di_utils.dart';
 import '../mock/di/login/mock_saved_tokens_request/mock_request_is_correct_tokens_bad.dart';

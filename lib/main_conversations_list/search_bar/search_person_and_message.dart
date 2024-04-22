@@ -21,7 +21,7 @@ class _SearchPersonAndMessageState extends State<SearchPersonAndMessage> {
           onTap: () {
             PageRouteNavigation.navigation(
                 context: context,
-                destination: AddFriendView(),
+                destination: const AddFriendView(),
                 isClearBackStack: false);
           },
       child: Container(

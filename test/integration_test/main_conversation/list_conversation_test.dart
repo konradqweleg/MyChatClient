@@ -1,6 +1,7 @@
 import 'dart:async';
 
-import 'package:fake_async/fake_async.dart';
+
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:integration_test/integration_test.dart';
@@ -11,7 +12,9 @@ import 'package:my_chat_client/database/model/friend.dart';
 import 'package:my_chat_client/database/model/info_about_me.dart';
 import 'package:my_chat_client/database/model/message.dart';
 import 'package:my_chat_client/login_and_registration/common/result.dart';
-import 'package:my_chat_client/main_conversations_list/list_friends/list_conversations.dart';
+import 'package:my_chat_client/main_conversations_list/list_conversations/list_conversations.dart';
+import 'package:my_chat_client/main_conversations_list/requests/request_get_user_friends.dart';
+
 import 'package:my_chat_client/main_conversations_list/requests/request_last_message.dart';
 
 import '../../ui/confirm_register_code/confirm_code_register_test.dart';
@@ -130,6 +133,35 @@ class MockRequestGetLastMessageReturnError extends RequestLastMessage {
   }
 }
 
+
+
+
+class MockRequestGetFriendsReturnCorrectFriends extends RequestGetUserFriends {
+  @override
+  Future<Result> getUserFriends(int idUser) {
+    return Future.value(Result.success("""[
+        {
+        "id": 2,
+        "name": "John",
+        "surname": "Walker",
+        "email": "mail@mail"
+        },
+        {
+        "id": 3,
+        "name": "Adam",
+        "surname": "Czajka",
+        "email": "mail@mail"
+        },
+        {
+        "id": 4,
+        "name": "Wojtek",
+        "surname": "Szymanek",
+        "email": "mail@mail"
+        }]"""));
+  }
+}
+
+//await getIt<RequestGetUserFriends>().getUserFriends(idUser);
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   setUp(() async {
@@ -145,10 +177,14 @@ void main() {
           id: 1, name: 'Joe', surname: 'Doe', email: 'example@mail.pl'));
       DiUtils.get().registerSingleton<RequestLastMessage>(
           MockRequestGetLastMessageReturnCorrectMessage());
+
+      DiUtils.get().registerSingleton<RequestGetUserFriends>(
+          MockRequestGetFriendsReturnCorrectFriends());
+
       //when
       await Utils.showView(
           tester,
-          ListConversations(
+          ConversationsWidget(
             refreshTime: const Duration(minutes: 1),
           ));
 
@@ -173,7 +209,7 @@ void main() {
           MockRequestGetLastMessageReturnCorrectMessage());
       await Utils.showView(
           tester,
-          ListConversations(
+          ConversationsWidget(
             refreshTime: const Duration(minutes: 1),
           ));
 
@@ -210,7 +246,7 @@ void main() {
       //when
       await Utils.showView(
           tester,
-          ListConversations(
+          ConversationsWidget(
             refreshTime: const Duration(minutes: 1),
           ));
 
@@ -230,7 +266,7 @@ void main() {
       //when
       await Utils.showView(
           tester,
-          ListConversations(
+          ConversationsWidget(
             refreshTime: const Duration(minutes: 1),
           ));
 
@@ -249,7 +285,7 @@ void main() {
 
       await Utils.showView(
           widgetTester,
-          ListConversations(
+          ConversationsWidget(
             refreshTime: const Duration(milliseconds: 500),
           ));
 
@@ -303,7 +339,7 @@ void main() {
       //when
       await Utils.showView(
           widgetTester,
-          ListConversations(
+          ConversationsWidget(
             refreshTime: const Duration(minutes: 1),
           ));
 

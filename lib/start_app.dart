@@ -8,7 +8,7 @@ import 'package:window_manager/window_manager.dart';
 import 'database/db_services/info_about_me/info_about_me_service.dart';
 import 'di/register_di.dart';
 import 'login_and_registration/login/request/request_is_correct_tokens.dart';
-import 'main_conversations_list/main_conversation_list.dart';
+import 'main_conversations_list/conversations_widget.dart';
 import 'navigation/page_route_navigation.dart';
 import 'login_and_registration/login/login.dart';
 import 'common/big_app_logo.dart';
@@ -105,7 +105,7 @@ class _StartPanelState extends State<StartPanel> {
     //
     PageRouteNavigation.navigationTransitionSlideFromDown(
         context: context,
-        destination: MainConversationList(),
+        destination: ConversationsList(),
         delayInSeconds: 1,
         isClearBackStack: true);
   }

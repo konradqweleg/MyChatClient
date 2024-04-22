@@ -17,7 +17,7 @@ import 'package:my_chat_client/login_and_registration/login/request/login_reques
 import 'package:my_chat_client/login_and_registration/login/request/request_data/login_data.dart';
 import 'package:my_chat_client/login_and_registration/login/request/response/tokens_data.dart';
 
-import 'package:my_chat_client/main_conversations_list/main_conversation_list.dart';
+import 'package:my_chat_client/main_conversations_list/conversations_widget.dart';
 import 'package:my_chat_client/main_conversations_list/requests/request_last_message.dart';
 
 import '../../integration_test/db_utils/db_utils.dart';
@@ -160,7 +160,7 @@ void main() {
       await tester.pumpAndSettle();
 
       //then
-      expect(find.byType(MainConversationList), findsOneWidget);
+      expect(find.byType(ConversationsList), findsOneWidget);
     });
 
     testWidgets(

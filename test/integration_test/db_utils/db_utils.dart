@@ -9,7 +9,7 @@ import 'package:sqflite/sqflite.dart';
 class DbUtils {
   Future<void> cleanAllDataInDatabase() async {
     DbCreateService dbCreateService = DbCreateService();
-    Database db = await dbCreateService.initializeDB();
+    Database db = await dbCreateService.initializeDbForTests();
 
     await db.execute(FriendSchema.clearAllDataQuery);
     await db.execute(InfoAboutMeSchema.clearAllDataQuery);

@@ -6,7 +6,7 @@ import 'package:my_chat_client/login_and_registration/login/other_form_login/log
 import 'package:my_chat_client/login_and_registration/login/request/login_request_http.dart';
 import 'package:my_chat_client/login_and_registration/login/request/request_is_correct_tokens.dart';
 import '../../database/db_services/info_about_me/info_about_me_service.dart';
-import '../../main_conversations_list/main_conversation_list.dart';
+import '../../main_conversations_list/conversations_widget.dart';
 import '../../style/main_style.dart';
 import 'login_form.dart';
 

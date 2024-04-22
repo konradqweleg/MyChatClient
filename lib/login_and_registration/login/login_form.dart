@@ -8,7 +8,7 @@ import 'package:my_chat_client/login_and_registration/login/request/login_reques
 import 'package:my_chat_client/login_and_registration/login/request/request_data/login_data.dart';
 import 'package:my_chat_client/login_and_registration/login/request/response/tokens_data.dart';
 import 'package:my_chat_client/login_and_registration/login/request/response/user_data.dart';
-import 'package:my_chat_client/main_conversations_list/main_conversation_list.dart';
+import 'package:my_chat_client/main_conversations_list/conversations_widget.dart';
 import 'package:my_chat_client/tokens/token_manager.dart';
 import '../../common/name_app.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -79,7 +79,7 @@ class _LoginFormState extends State<LoginForm> {
   void _goToMainConversationList() {
     PageRouteNavigation.navigation(
       context: context,
-      destination: const MainConversationList(),
+      destination: const ConversationsList(),
       isClearBackStack: true,
     );
   }

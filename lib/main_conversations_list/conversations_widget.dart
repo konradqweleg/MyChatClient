@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:my_chat_client/di/di_factory_impl.dart';
 import 'package:my_chat_client/di/register_di.dart';
-import 'package:my_chat_client/main_conversations_list/list_friends/list_conversations.dart';
+
 import 'package:my_chat_client/main_conversations_list/search_bar/search_person_and_message.dart';
 import '../style/main_style.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import 'list_conversations/list_conversations.dart';
 
 void main() {
   RegisterDI registerDI = RegisterDI(DiFactoryImpl());
@@ -26,19 +28,19 @@ class App extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: MainAppStyle.mainColorApp),
         useMaterial3: true,
       ),
-      home: const Scaffold(body: MainConversationList()),
+      home: const Scaffold(body: ConversationsList()),
     );
   }
 }
 
-class MainConversationList extends StatefulWidget {
-  const MainConversationList({super.key});
+class ConversationsList extends StatefulWidget {
+  const ConversationsList({super.key});
 
   @override
-  State<MainConversationList> createState() => _MainConversationListState();
+  State<ConversationsList> createState() => _ConversationsListState();
 }
 
-class _MainConversationListState extends State<MainConversationList> {
+class _ConversationsListState extends State<ConversationsList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,7 +64,7 @@ class _MainConversationListState extends State<MainConversationList> {
                       ),
                     ],
                   )),
-               Expanded(child: ListConversations(refreshTime: const Duration(minutes: 1),))
+               Expanded(child: ConversationsWidget(refreshTime: const Duration(seconds: 5),))
             ],
           )),
     );
