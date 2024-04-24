@@ -78,12 +78,12 @@ class ConversationsWidgetState extends State<ConversationsWidget> {
       setState(() {
         if (friendLastMessage != null) {
           potentialUpdatedFriendsConversations.add(UserMyChat(
-              "${friend.name} ${friend.surname}",
+              "${friend.name.trim()} ${friend.surname.trim()}",
               friendLastMessage.message,
               friend.idFriend));
         } else {
           potentialUpdatedFriendsConversations.add(UserMyChat(
-              "${friend.name} ${friend.surname}",
+              "${friend.name.trim()} ${friend.surname.trim()}",
               AppLocalizations.of(context)!.noMessages,
               friend.idFriend));
         }

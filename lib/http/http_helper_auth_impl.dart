@@ -143,6 +143,8 @@ class HttpHelperAuthImpl implements HttpHelperAuth {
 
     if (response is http.Response) {
 
+      print(response.statusCode);
+      print(response.body);
       if (response.statusCode == 200 || response.statusCode == 400) {
         return Result.success(response.body);
       } else if (response.statusCode == 401) {

@@ -36,6 +36,7 @@ class _PersonViewState extends State<PersonView> {
     int idUser = await _getIt<InfoAboutMeService>().getId();
     Result resultAddFriend = await _getIt<RequestAddFriend>()
         .requestAddFriend(idUser, widget._idNewFriend);
+
     if (resultAddFriend.isError()) {
       return Future(() => Status(false));
     }
