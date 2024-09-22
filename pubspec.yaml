@@ -41,6 +41,7 @@ dependencies:
   sqflite_common_ffi: 2.3.2  #WINDOWS
   sqlite3_flutter_libs: ^0.5.20 #ANDROID
   window_manager: ^0.3.8
+  logger: ^2.4.0
   flutter_localizations:
     sdk: flutter
 
